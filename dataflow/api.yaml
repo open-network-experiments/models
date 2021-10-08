@@ -1,0 +1,53 @@
+openapi: 3.0.3
+
+info:
+  title: Distributed System Emulator Dataflow API and Data Models
+  description: |-
+    The Dataflow API and Data Models
+  version: 0.0.1
+  contact:
+    x-info: |-
+      Any feedback such as bugs/enhancements/questions regarding the 
+      Dataflow API and Data models is welcomed by using the contact url.
+    url: https://github.com/distributed-system-emulator/issues
+  license:
+    x-info: |-
+      The license url will be used by OpenApiArt to add that content into 
+      generated artifacts.
+    name: MIT
+    url: https://raw.githubusercontent.com/distributed-system-emulator/main/LICENSE
+
+servers: 
+  - url: /
+
+
+paths: 
+  /config:
+    post:
+      tags: ['Configuration']
+      operationId: set_config
+      description: >-
+        Sets dataflow configuration resources.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './config.yaml#/components/schemas/Config'
+      responses:
+        x-include:
+        - '../common.yaml#/components/responses/Success'
+        - '../common.yaml#/components/responses/Error400'
+        - '../common.yaml#/components/responses/Error500'
+    get:
+      tags: ['Configuration']
+      operationId: get_config
+      description: >-
+        Gets the current dataflow configuration.
+      responses:
+        '200':
+          description: The current configured dataflow configuration.
+          content:
+            application/json:
+              schema:
+                $ref: "./config.yaml#/components/schemas/Config"

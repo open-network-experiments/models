@@ -1,0 +1,273 @@
+components:
+  schemas:
+    Config:
+      description: |-
+        The resources that define a dataflow configuration. 
+      type: object
+      properties:
+        hosts:
+          description: A list of hosts
+          type: array
+          items:
+            $ref: "#/components/schemas/Host"
+        flow_profiles:
+          description: A list of host flow profiles
+          type: array
+          items:
+            $ref: "#/components/schemas/FlowProfile"
+        workload:
+          description: |-
+            A list of activities that make up a workload.
+          type: array
+          items:
+            $ref: "#/components/schemas/Activity"
+
+    Host:
+      type: object
+      required: [name, ipv4_address]
+      properties:
+        name:
+          type: string
+        ipv4_address:
+          type: string
+          format: ipv4
+        ipv6_address:
+          type: string
+          format: ipv6
+
+    ActivityBase:
+      x-include:
+      - "../common.yaml#/components/schemas/GlobalNamedObject"
+      properties:
+        child_execution:
+          description: |-
+            All activities whose parent_name points to this activity will be 
+            executed according to this property.
+          type: string
+          enum: [parallel, sequential]
+          default: sequential
+    
+    ChildActivity:
+      x-include:
+      - "#/components/schemas/ActivityBase"
+      properties:
+        parent_name:
+          description: |-
+            Used to create a graph of dataflow activities.
+            The name of a parent activity which determines its position in the 
+            graph of activities.
+            There can be only one activity with a missing or empty parent_name
+            and all other activities must point to at least one named Activity.
+          type: string
+          x-constraint:
+          - "#/components/schemas/Activity/properties/name"
+
+    Activity:
+      type: object
+      required: [choice]
+      properties:
+        choice:
+          description: |-
+            The type of dataflow activity.
+          type: string
+          enum: [root, many, compute, wait]
+        root:
+          $ref: "#/components/schemas/RootActivity"
+        many:
+          $ref: "#/components/schemas/ManyActivity"
+        compute:
+          $ref: "#/components/schemas/ComputeActivity"
+        wait:
+          $ref: "#/components/schemas/WaitActivity"
+
+    FlowBase:
+      type: object
+      required: [sources, destinations]
+      properties:
+        sources:
+          description: |-
+            A list of host names that will send
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/Host/properties/name'
+          minItems: 1
+        destinations:
+          description: |-
+            A list of host names that will receive
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/Host/properties/name'
+          minItems: 1
+
+    RootActivity:
+      x-include:
+      - "#/components/schemas/ActivityBase"
+      description: |-
+        There can be only one RootActivity
+      required: [child_execution]
+      properties:
+        child_execution:
+          description: |-
+            All activities whose parent_name points to this activity will be 
+            executed according to this property.
+          type: string
+          enum: [parallel, sequential]
+
+    ManyActivity:
+      x-include:
+      - "#/components/schemas/ActivityBase"
+      - "#/components/schemas/ChildActivity"
+      - '#/components/schemas/FlowBase'
+      description: |-
+        System MUST create flows between sources and destinations
+      required: [flow_profile_name]
+      properties:
+        flow_profile_name:
+          type: string
+          x-constraint:
+          - '#/components/schemas/FlowProfile/properties/name'
+
+    ComputeActivity:
+      x-include:
+      - "#/components/schemas/ActivityBase"
+      - "#/components/schemas/ChildActivity"
+      description: |-
+        System MUST create compute activity between sources and destinations
+      properties:
+        duration_ms:
+          type: integer
+          default: 1
+
+    WaitActivity:
+      x-include:
+      - "#/components/schemas/ActivityBase"
+      - "#/components/schemas/ChildActivity"
+      description: |-
+        System MUST wait for activity between sources and destinations to complete
+      properties:
+        wait_for_names:
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - "#/components/schemas/ManyActivity/properties/name"
+
+    FlowProfile:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        ipv6:
+          description: Use ipv6 addresses
+          type: boolean
+          default: false
+        ip:
+          $ref: '#/components/schemas/IpParameters'
+        choice:
+          type: string
+          enum: [tcp, udp]
+          default: tcp
+        tcp:
+          $ref: '#/components/schemas/TcpParameters'
+        udp:
+          $ref: '#/components/schemas/UdpParameters'
+
+    IpParameters:
+      type: object
+      properties:
+        mss:
+          description: |-
+            The maximum segment size
+          type: integer
+          default: 0
+        initcwnd:
+          description: |-
+            The maximum initial congestion window size in MSS of a TCP connection.
+          type: integer
+          default: 0
+        mtu:
+          description: |-
+            The maximum transmission unit
+          type: integer
+          default: 0
+        tos:
+          description: |-
+            The type of service
+          type: integer
+          default: 0
+
+    UdpParameters:
+      type: object
+      required: [src_port, dst_port]
+      properties:
+        src_port:
+          description: |-
+            The source port
+          type: integer
+        dst_port:
+          description: |-
+            The source port
+          type: integer
+
+    TcpParameters:
+      type: object
+      required: [src_port, dst_port]
+      properties:
+        src_port:
+          description: |-
+            The source port
+          type: integer
+        dst_port:
+          description: |-
+            The source port
+          type: integer
+        mss:
+          description: maximum segment size
+          type: integer
+          default: 1460
+        sndbuf:
+          description: send buffer
+          type: integer
+          default: 131072
+        rcvbuf:
+          description: receive buffer
+          type: integer
+          default: 131072
+        delack:
+          description: delayed acknowledgements in milliseconds
+          type: integer
+          default: 4
+        sack:
+          description: selective acknowledgements, 0 is disabled
+          type: integer
+          default: 0
+        minrto:
+          description: minimum retransmission timeout in milliseconds
+          type: integer
+          default: 300
+        ecn:
+          description: Explicit congestion notification
+          type: boolean
+          default: false
+        congestion:
+          description: Congestion algorithm
+          type: string
+          enum: [none, bbr, reno, vegas, cubic, tfrc]
+          default: none
+    
+    Extra:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+
+
+
+
