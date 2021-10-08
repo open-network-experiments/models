@@ -1,0 +1,47 @@
+components:
+  schemas:
+    GlobalNamedObject:
+      type: object
+      properties:
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+    Error.Details:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    Warning.Details:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            type: string
+
+responses:
+  Success:
+    "200":
+      description: "Success with possible warnings"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Warning.Details"
+  Error400:
+    "400":
+      description: "error 4xx"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error.Details"
+  Error500:
+    "500":
+      description: "error 5xx"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error.Details"

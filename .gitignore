@@ -1,0 +1,13 @@
+/dataflow
+/fabric
+.env
+.vscode
+.local
+.coverage
+cov_report
+.pytest_cache
+*.pyc 
+__pycache__
+mock_server
+/docs/fabric_openapi.yaml
+/docs/dataflow_openapi.yaml
