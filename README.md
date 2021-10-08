@@ -1,5 +1,5 @@
-# ONEX (open network experiments)
-This repository contains vendor agnostic data models for creating open network experiments.
+# ONEx 
+The ONEx models repository contains vendor agnostic APIs and Data Models for creating open network experiments.
 
 Get started with these links.
 - [Go sample](#a-go-fabric-and-dataflow-script)
@@ -9,14 +9,14 @@ Get started with these links.
 ### Getting Started with Python
 Install the python API clients
 ```cmd
-# ONEX fabric client
+# ONEx fabric client
 pip install onexfabric
 
-# ONEX dataflow client
+# ONEx dataflow client
 pip install onexdataflow
 ```
 
-### A python fabric and dataflow script
+### A ONEx python fabric and dataflow script
 ```python
 import onexfabric
 import onexdataflow
@@ -28,13 +28,13 @@ dataflow_api = onexdataflow.Api()
 ### Getting Started with Go
 Install the go API clients
 ```cmd
-# ONEX fabric client
+# ONEx fabric client
 go get https://open-network-experiments/onexfabric
 
-# ONEX dataflow client
+# ONEx dataflow client
 go get https://open-network-experiments/onexdataflow
 ```
-### A go fabric and dataflow script
+### A ONEx go fabric and dataflow script
 ```go
 package main
 

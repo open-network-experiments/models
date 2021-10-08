@@ -1,0 +1,90 @@
+# Build process
+name: CICD
+
+on:
+  # push:
+  workflow_dispatch:
+    paths:
+    - '!docs/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.9]
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Go and protoc
+        run: |
+          python do.py setup_ext
+
+      - name: Install dependencies
+        run: |
+          python do.py setup
+          python do.py init
+
+      - name: Run artifact generation
+        run: |
+          python do.py generate
+
+      - name: Generate html docs
+        run: | 
+          docker run -v "$(pwd)/fabric:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/dataflow:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+ 
+      - name: Run tests
+        run: |
+          sudo python do.py test
+
+      - name: Archive generated artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-artifacts
+          path: |
+            dataflow
+            fabric
+
+      - name: Commit auto generated content
+        id: commit_generated
+        run: |
+          git config user.name "Github Actions Bot"
+          git config user.email "actions@github.com"
+          cp $(pwd)/fabric/openapi.yaml docs/fabric_openapi.yaml
+          cp $(pwd)/dataflow/openapi.yaml docs/dataflow_openapi.yaml
+          cp $(pwd)/fabric/openapi.html docs/fabric_openapi.html
+          cp $(pwd)/dataflow/openapi.html docs/dataflow_openapi.html
+          git add --force docs/fabric_openapi.yaml
+          git add --force docs/dataflow_openapi.yaml
+          git add --force docs/fabric_openapi.html
+          git add --force docs/dataflow_openapi.html
+          if git status --porcelain | grep '_openapi.yaml\|_openapi.html'; then
+              git commit -m "Update auto generated content" 
+              git push
+          else
+              echo "No changed auto generated content"
+          fi
+
+      - name: Get package version
+        id: get_version
+        run: |
+          echo "::set-output name=version::v$(python do.py version)"
+
+      - name: Check tag for current version
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: check_tag
+        with:
+          tag: ${{ steps.get_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
