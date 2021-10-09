@@ -1,5 +1,5 @@
 # ONEx models
-This ONEx repository contains vendor agnostic APIs and Data Models for creating open network experiments.
+This ONEx repository produces OpenAPI artifacts that describe fabric and dataflow APIs and Data Models neccessary for creating open network experiments.
 
 Get started with these links.
 - [Experiments using Go](GO.md)
