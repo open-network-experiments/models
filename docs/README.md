@@ -1,0 +1,1 @@
+This folder should contain artifacts that are auto-generated and any other supporting documents.
