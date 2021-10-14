@@ -7,5 +7,4 @@ cov_report
 *.pyc 
 __pycache__
 mock_server
-/artifacts/fabric_openapi.yaml
-/artifacts/dataflow_openapi.yaml
+/artifacts

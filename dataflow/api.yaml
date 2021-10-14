@@ -36,9 +36,9 @@ paths:
               $ref: './config.yaml#/components/schemas/Config'
       responses:
         x-include:
-        - '../common.yaml#/components/responses/Success'
-        - '../common.yaml#/components/responses/Error400'
-        - '../common.yaml#/components/responses/Error500'
+        - '../common/common.yaml#/components/responses/Success'
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
     get:
       tags: ['Configuration']
       operationId: get_config

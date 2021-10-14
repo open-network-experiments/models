@@ -37,7 +37,7 @@ components:
 
     ActivityBase:
       x-include:
-      - "../common.yaml#/components/schemas/GlobalNamedObject"
+      - "../common/common.yaml#/components/schemas/GlobalNamedObject"
       properties:
         child_execution:
           description: |-
@@ -70,15 +70,11 @@ components:
           description: |-
             The type of dataflow activity.
           type: string
-          enum: [root, many, compute, wait]
-        root:
-          $ref: "#/components/schemas/RootActivity"
+          enum: [many, compute]
         many:
           $ref: "#/components/schemas/ManyActivity"
         compute:
           $ref: "#/components/schemas/ComputeActivity"
-        wait:
-          $ref: "#/components/schemas/WaitActivity"
 
     FlowBase:
       type: object
@@ -103,23 +99,8 @@ components:
             - '#/components/schemas/Host/properties/name'
           minItems: 1
 
-    RootActivity:
-      x-include:
-      - "#/components/schemas/ActivityBase"
-      description: |-
-        There can be only one RootActivity
-      required: [child_execution]
-      properties:
-        child_execution:
-          description: |-
-            All activities whose parent_name points to this activity will be 
-            executed according to this property.
-          type: string
-          enum: [parallel, sequential]
-
     ManyActivity:
       x-include:
-      - "#/components/schemas/ActivityBase"
       - "#/components/schemas/ChildActivity"
       - '#/components/schemas/FlowBase'
       description: |-
@@ -133,7 +114,6 @@ components:
 
     ComputeActivity:
       x-include:
-      - "#/components/schemas/ActivityBase"
       - "#/components/schemas/ChildActivity"
       description: |-
         System MUST create compute activity between sources and destinations
@@ -142,19 +122,6 @@ components:
           type: integer
           default: 1
 
-    WaitActivity:
-      x-include:
-      - "#/components/schemas/ActivityBase"
-      - "#/components/schemas/ChildActivity"
-      description: |-
-        System MUST wait for activity between sources and destinations to complete
-      properties:
-        wait_for_names:
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - "#/components/schemas/ManyActivity/properties/name"
 
     FlowProfile:
       type: object

@@ -41,13 +41,9 @@ jobs:
 
       - name: Generate html docs
         run: | 
-          docker run -v "$(pwd)/fabric:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
-          docker run -v "$(pwd)/dataflow:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/artifacts/fabric:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/artifacts/dataflow:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
  
-      - name: Run tests
-        run: |
-          sudo python do.py test
-
       - name: Archive generated artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -61,10 +57,10 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          cp $(pwd)/fabric/openapi.yaml docs/fabric_openapi.yaml
-          cp $(pwd)/dataflow/openapi.yaml docs/dataflow_openapi.yaml
-          cp $(pwd)/fabric/openapi.html docs/fabric_openapi.html
-          cp $(pwd)/dataflow/openapi.html docs/dataflow_openapi.html
+          cp $(pwd)/artifacts/fabric/openapi.yaml docs/fabric_openapi.yaml
+          cp $(pwd)/artifacts/dataflow/openapi.yaml docs/dataflow_openapi.yaml
+          cp $(pwd)/artifacts/fabric/openapi.html docs/fabric_openapi.html
+          cp $(pwd)/artifacts/dataflow/openapi.html docs/dataflow_openapi.html
           git add --force docs/fabric_openapi.yaml
           git add --force docs/dataflow_openapi.yaml
           git add --force docs/fabric_openapi.html
@@ -73,7 +69,7 @@ jobs:
               git commit -m "Update auto generated content" 
               git push
           else
-              echo "No changed auto generated content"
+              echo "No change in auto generated content"
           fi
 
       - name: Get package version

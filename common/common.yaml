@@ -25,7 +25,7 @@ components:
 
 responses:
   Success:
-    "200":
+    200:
       description: "Success with possible warnings"
       content:
         application/json:
