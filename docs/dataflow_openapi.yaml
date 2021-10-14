@@ -1,0 +1,363 @@
+components:
+  responses: {}
+  schemas:
+    Error.Details:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    Warning.Details:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            type: string
+    Config:
+      description: "The resources that define a dataflow configuration. "
+      type: object
+      properties:
+        hosts:
+          description: |-
+            A list of hosts
+          type: array
+          items:
+            $ref: '#/components/schemas/Host'
+        flow_profiles:
+          description: |-
+            A list of host flow profiles
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowProfile'
+        workload:
+          description: |-
+            A list of activities that make up a workload.
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+    Host:
+      type: object
+      required:
+      - name
+      - ipv4_address
+      properties:
+        name:
+          type: string
+        ipv4_address:
+          type: string
+          format: ipv4
+        ipv6_address:
+          type: string
+          format: ipv6
+    Activity:
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            The type of dataflow activity.
+          type: string
+          enum:
+          - many
+          - compute
+        many:
+          $ref: '#/components/schemas/ManyActivity'
+        compute:
+          $ref: '#/components/schemas/ComputeActivity'
+    ManyActivity:
+      description: |-
+        System MUST create flows between sources and destinations
+      required:
+      - flow_profile_name
+      - sources
+      - destinations
+      properties:
+        flow_profile_name:
+          type: string
+          x-constraint:
+          - '#/components/schemas/FlowProfile/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #/components/schemas/FlowProfile/properties/name
+        parent_name:
+          description: "Used to create a graph of dataflow activities.\nThe name of\
+            \ a parent activity which determines its position in the \ngraph of activities.\n\
+            There can be only one activity with a missing or empty parent_name\nand\
+            \ all other activities must point to at least one named Activity.\n\n\
+            x-constraint:\n- #/components/schemas/Activity/properties/name\n"
+          type: string
+          x-constraint:
+          - '#/components/schemas/Activity/properties/name'
+        child_execution:
+          description: "All activities whose parent_name points to this activity will\
+            \ be \nexecuted according to this property."
+          type: string
+          enum:
+          - parallel
+          - sequential
+          default: sequential
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+        sources:
+          description: |-
+            A list of host names that will send
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/Host/properties/name'
+            description: |
+              TBD
+
+              x-constraint:
+              - #/components/schemas/Host/properties/name
+          minItems: 1
+        destinations:
+          description: |-
+            A list of host names that will receive
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/Host/properties/name'
+            description: |
+              TBD
+
+              x-constraint:
+              - #/components/schemas/Host/properties/name
+          minItems: 1
+      type: object
+    ComputeActivity:
+      description: |-
+        System MUST create compute activity between sources and destinations
+      properties:
+        duration_ms:
+          type: integer
+          default: 1
+        parent_name:
+          description: "Used to create a graph of dataflow activities.\nThe name of\
+            \ a parent activity which determines its position in the \ngraph of activities.\n\
+            There can be only one activity with a missing or empty parent_name\nand\
+            \ all other activities must point to at least one named Activity.\n\n\
+            x-constraint:\n- #/components/schemas/Activity/properties/name\n"
+          type: string
+          x-constraint:
+          - '#/components/schemas/Activity/properties/name'
+        child_execution:
+          description: "All activities whose parent_name points to this activity will\
+            \ be \nexecuted according to this property."
+          type: string
+          enum:
+          - parallel
+          - sequential
+          default: sequential
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+      type: object
+    FlowProfile:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        ipv6:
+          description: |-
+            Use ipv6 addresses
+          type: boolean
+          default: false
+        ip:
+          $ref: '#/components/schemas/IpParameters'
+        choice:
+          type: string
+          enum:
+          - tcp
+          - udp
+          default: tcp
+        tcp:
+          $ref: '#/components/schemas/TcpParameters'
+        udp:
+          $ref: '#/components/schemas/UdpParameters'
+    IpParameters:
+      type: object
+      properties:
+        mss:
+          description: |-
+            The maximum segment size
+          type: integer
+          default: 0
+        initcwnd:
+          description: |-
+            The maximum initial congestion window size in MSS of a TCP connection.
+          type: integer
+          default: 0
+        mtu:
+          description: |-
+            The maximum transmission unit
+          type: integer
+          default: 0
+        tos:
+          description: |-
+            The type of service
+          type: integer
+          default: 0
+    UdpParameters:
+      type: object
+      required:
+      - src_port
+      - dst_port
+      properties:
+        src_port:
+          description: |-
+            The source port
+          type: integer
+        dst_port:
+          description: |-
+            The source port
+          type: integer
+    TcpParameters:
+      type: object
+      required:
+      - src_port
+      - dst_port
+      properties:
+        src_port:
+          description: |-
+            The source port
+          type: integer
+        dst_port:
+          description: |-
+            The source port
+          type: integer
+        mss:
+          description: |-
+            maximum segment size
+          type: integer
+          default: 1460
+        sndbuf:
+          description: |-
+            send buffer
+          type: integer
+          default: 131072
+        rcvbuf:
+          description: |-
+            receive buffer
+          type: integer
+          default: 131072
+        delack:
+          description: |-
+            delayed acknowledgements in milliseconds
+          type: integer
+          default: 4
+        sack:
+          description: |-
+            selective acknowledgements, 0 is disabled
+          type: integer
+          default: 0
+        minrto:
+          description: |-
+            minimum retransmission timeout in milliseconds
+          type: integer
+          default: 300
+        ecn:
+          description: |-
+            Explicit congestion notification
+          type: boolean
+          default: false
+        congestion:
+          description: |-
+            Congestion algorithm
+          type: string
+          enum:
+          - none
+          - bbr
+          - reno
+          - vegas
+          - cubic
+          - tfrc
+          default: none
+    Extra:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+openapi: 3.0.3
+info:
+  title: Distributed System Emulator Dataflow API and Data Models
+  description: |-
+    The Dataflow API and Data Models
+  version: 0.0.1
+  contact:
+    x-info: "Any feedback such as bugs/enhancements/questions regarding the \nDataflow\
+      \ API and Data models is welcomed by using the contact url."
+    url: https://github.com/distributed-system-emulator/issues
+  license:
+    x-info: "The license url will be used by OpenApiArt to add that content into \n\
+      generated artifacts."
+    name: MIT
+    url: https://raw.githubusercontent.com/distributed-system-emulator/main/LICENSE
+servers:
+- url: /
+paths:
+  /config:
+    post:
+      tags:
+      - Configuration
+      operationId: set_config
+      description: |-
+        Sets dataflow configuration resources.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '200':
+          description: |-
+            Success with possible warnings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warning.Details'
+    get:
+      tags:
+      - Configuration
+      operationId: get_config
+      description: |-
+        Gets the current dataflow configuration.
+      responses:
+        '200':
+          description: |-
+            The current configured dataflow configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
