@@ -49,8 +49,7 @@ jobs:
         with:
           name: generated-artifacts
           path: |
-            dataflow
-            fabric
+            artifacts
 
       - name: Commit auto generated content
         id: commit_generated
