@@ -56,10 +56,12 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          cp $(pwd)/artifacts/fabric/openapi.yaml docs/fabric_openapi.yaml
-          cp $(pwd)/artifacts/dataflow/openapi.yaml docs/dataflow_openapi.yaml
-          cp $(pwd)/artifacts/fabric/openapi.html docs/fabric_openapi.html
-          cp $(pwd)/artifacts/dataflow/openapi.html docs/dataflow_openapi.html
+          cp $(pwd)/artifacts/fabric/openapi.yaml docs/onexfabric_openapi.yaml
+          cp $(pwd)/artifacts/dataflow/openapi.yaml docs/onexdataflow_openapi.yaml
+          cp $(pwd)/artifacts/fabric/openapi.html docs/onexfabric_openapi.html
+          cp $(pwd)/artifacts/dataflow/openapi.html docs/onexdataflow_openapi.html
+          cp $(pwd)/artifacts/fabric/onexfabric.proto docs
+          cp $(pwd)/artifacts/dataflow/onexdataflow.proto docs
           git add --force docs/fabric_openapi.yaml
           git add --force docs/dataflow_openapi.yaml
           git add --force docs/fabric_openapi.html

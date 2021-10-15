@@ -11,7 +11,7 @@ def generate():
     for package_name, file_names in files.items():
         art = openapiart.OpenApiArt(
             api_files=file_names,
-            protobuf_name=package_name + "pb",
+            protobuf_name="onex" + package_name,
             artifact_dir=os.path.join(os.path.dirname(__file__), "artifacts", package_name),
         )
         art.GeneratePythonSdk(package_name=package_name)
