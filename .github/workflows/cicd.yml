@@ -62,10 +62,10 @@ jobs:
           cp $(pwd)/artifacts/dataflow/openapi.html docs/onexdataflow_openapi.html
           cp $(pwd)/artifacts/fabric/onexfabric.proto docs
           cp $(pwd)/artifacts/dataflow/onexdataflow.proto docs
-          git add --force docs/fabric_openapi.yaml
-          git add --force docs/dataflow_openapi.yaml
-          git add --force docs/fabric_openapi.html
-          git add --force docs/dataflow_openapi.html
+          git add --force docs/onexfabric_openapi.yaml
+          git add --force docs/onexdataflow_openapi.yaml
+          git add --force docs/onexfabric_openapi.html
+          git add --force docs/onexdataflow_openapi.html
           git add --force docs/onexfabric.proto
           git add --force docs/onexdataflow.proto
           if git status --porcelain | grep '_openapi.yaml\|_openapi.html\|.proto'; then
