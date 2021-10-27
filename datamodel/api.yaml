@@ -1,0 +1,35 @@
+openapi: 3.0.3
+
+info:
+  title: ONEx Data Models
+  description: |-
+    The data models for the entire ONEx ecosystem
+  version: 0.0.1
+  contact:
+    x-info: |-
+      Any feedback such as bugs/enhancements/questions regarding the 
+      ONEx data models is welcomed by using the contact url.
+    url: https://github.com/onex/models/issues
+  license:
+    name: MIT
+
+servers:
+  - url: /
+
+paths:
+  /config:
+    post:
+      tags: ["Configuration"]
+      operationId: set_config
+      description: >-
+        A placeholder API that returns nothing.
+        It is used by the OpenAPIArt package to generate UX SDK objects.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./config.yaml#/components/schemas/Config"
+      responses:
+        x-include:
+          - "../common/common.yaml#/components/responses/Success"

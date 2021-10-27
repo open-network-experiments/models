@@ -1,21 +1,17 @@
 openapi: 3.0.3
 
 info:
-  title: Distributed System Emulator Fabric API and Data Models
+  title: ONEx Fabric API
   description: |-
-    The Fabric API and Data Models
+    The Open Network Experiments Fabric API and Data Models
   version: 0.0.1
   contact:
     x-info: |-
       Any feedback such as bugs/enhancements/questions regarding the 
       Fabric API and Data models is welcomed by using the contact url.
-    url: https://github.com/distributed-system-emulator/issues
+    url: https://github.com/open-network-experiments/issues
   license:
-    x-info: |-
-      The license url will be used by OpenApiArt to add that content into 
-      generated artifacts.
     name: MIT
-    url: https://raw.githubusercontent.com/distributed-system-emulator/main/LICENSE
 
 servers:
   - url: /

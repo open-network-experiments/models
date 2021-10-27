@@ -1,0 +1,20 @@
+components:
+  schemas:
+    Host:
+      x-include: 
+      - '../../common/common.yaml#/components/schemas/GlobalNamedObject'
+      required: [address]
+      properties:
+        front_panel_port:
+          description: |-
+            The number of the port on the front panel
+          type: integer
+        address:
+          description: |-
+            The test address of the host
+          type: string
+        prefix:
+          description: |-
+            The prefix of the host
+          type: integer
+          default: 24

@@ -1,0 +1,133 @@
+components:
+  schemas:
+    Fabric:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum: [spine_pod_rack]
+        spine_pod_rack:
+          $ref: "#/components/schemas/Fabric.SpinePodRack"
+
+    Fabric.SpinePodRack:
+      description: An emulation of a spine/pod/rack topology
+      type: object
+      properties:
+        spines:
+          description: |-
+            The spines in the topology.
+          type: array
+          items:
+            $ref: "#/components/schemas/Fabric.Spine"
+        pods:
+          description: |-
+            The pods in the topology.
+          type: array
+          items:
+            $ref: "#/components/schemas/Fabric.Pod"
+        links:
+          type: array
+          items:
+            $ref: './link.yaml#/components/schemas/Fabric.Link'
+        parallel_fabric_count:
+          type: integer
+          default: 1
+
+    Fabric.Spine:
+      type: object
+      properties:
+        count:
+          description: |-
+            The number of spines to be created with each spine sharing the same
+            downlink_ecmp_mode and qos_profile_name properties.
+          type: integer
+          default: 1
+        downlink_ecmp_mode:
+          x-include:
+            - "#/components/schemas/EcmpMode"
+        qos_profile_name:
+          description: |-
+            The name of a qos profile shared by the spines.
+          type: string
+          x-constraint:
+            - "#/components/schemas/QosProfile/properties/name"
+
+    Fabric.Pod:
+      type: object
+      properties:
+        count:
+          description: The number of pods that will share the same profile
+          type: integer
+          default: 1
+        pod_profile_name:
+          description: |-
+            The pod profile associated with this pod.
+          type: array
+          items:
+            type: string
+            x-constraint:
+              - "#/components/schemas/PodProfile/properties/name"
+
+    PodProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        switch:
+          $ref: "#/components/schemas/Fabric.Switch"
+        rack:
+          $ref: "#/components/schemas/Fabric.Rack"
+        annotations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Annotations"
+
+    Fabric.Switch:
+      type: object
+      properties:
+        count:
+          type: integer
+          default: 1
+        uplink_ecmp_mode:
+          x-include:
+            - "#/components/schemas/EcmpMode"
+        downlink_ecmp_mode:
+          x-include:
+            - "#/components/schemas/EcmpMode"
+        qos_profile_name:
+          description: |-
+            The name of a qos profile associated with this pod switch.
+          type: string
+          x-constraint:
+            - "#/components/schemas/QosProfile/properties/name"
+
+    Fabric.Rack:
+      type: object
+      properties:
+        rack_profile_names:
+          description: |-
+            The names of rack profiles associated with this rack.
+          type: array
+          items:
+            type: string
+            x-constraint:
+              - "#/components/schemas/RackProfile/properties/name"
+
+    EcmpMode:
+      description: |-
+        The algorithm for packet distribution over ECMP links.
+        - static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port
+        - random_spray randomly puts each packet on an ECMP member links 
+        - hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol
+        - hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode
+      type: string
+      enum: [static_hash_ipv4_l4, random_spray, hash_3_tuple, hash_5_tuple]
+
+    Annotations:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+

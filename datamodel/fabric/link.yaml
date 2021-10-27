@@ -1,0 +1,42 @@
+components:
+  schemas:
+    Fabric.Link:
+      type: object
+      description: |-
+        The ingress point of a host which is the index of a spine switch, 
+        a pod/rack switch.
+      properties:
+        host_name:
+          type: string
+          x-constraint:
+          - '#components/schemas/Host/properties/name'
+        choice:
+          type: string
+          enum: [spine, pod, rack]
+        spine:
+          description: |-
+            One based index of the spine switch based on the number of spines 
+            configured in the spine_pod_rack topology.
+          type: integer
+          minimum: 1
+        pod:
+          $ref: '#/components/schemas/Link.PodRackLink'
+        rack:
+          $ref: '#/components/schemas/Link.PodRackLink'
+
+    Link.PodRackLink:
+      description: |-
+        Location of the switch based on the number of pods and rack switches.
+      type: object
+      properties:
+        pod_index:
+          description: |-
+            Index of the pod switch based on the number of pods and pod switches.
+          type: integer
+          minimum: 1
+        switch_index:
+          description: |-
+            Index of the rack switch based on the number of pods and rack switches.
+          type: integer
+          minimum: 1
+        
