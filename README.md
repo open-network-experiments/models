@@ -4,12 +4,6 @@
 # ONEx API and Data Models
 This ONEx repository produces OpenAPI artifacts that describe APIs and Data Models neccessary for creating open network experiments.
 
-The repository contains API and Data Models for the following areas:
-- servers
-- fabric
-- dataflow
-- chaos
-
 # Fabric example
 
 Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 1 ToR + host in each pod:
@@ -66,8 +60,3 @@ Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 
     ],
 }
 ```
-
-Current versions of the API and Data Models can be viewed using the these links:
-- [Fabric API and Data Model Documentation](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/open-network-experiments/models/main/docs/onexfabric_openapi.yaml)
-- [Dataflow API and Data Model Documentation](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/open-network-experiments/models/main/docs/onexdataflow_openapi.yaml)
-
