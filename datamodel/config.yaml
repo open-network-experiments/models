@@ -1,0 +1,20 @@
+components:
+  schemas:
+    Config:
+      description: |-
+        The resources that define a fabric configuration.
+      type: object
+      properties:
+        hosts:
+          type: array
+          items:
+            $ref: "./host/host.yaml#/components/schemas/Host"
+        servers:
+          type: array
+          items:
+            $ref: "./server/server.yaml#/components/schemas/Server"
+        fabric:
+            $ref: "./fabric/fabric.yaml#/components/schemas/Fabric"
+        dataflow:
+            $ref: "./dataflow/dataflow.yaml#/components/schemas/Dataflow"
+

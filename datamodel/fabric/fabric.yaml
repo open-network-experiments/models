@@ -1,29 +1,15 @@
 components:
   schemas:
-    Config:
+    Fabric:
       type: object
       properties:
-        hosts:
-          type: array
-          items:
-            $ref: "../datamodel/host/host.yaml#/components/schemas/Host"
-        fabric:
-            $ref: "../datamodel/fabric/fabric.yaml#/components/schemas/Fabric"
-          
-
-    QosProfile:
-      type: object
-      properties:
-        name:
+        choice:
           type: string
-        dscp_to_traffic_class:
-          description: |-
-            A list of name/value key pairs
-          type: array
-          items:
-            $ref: "#/components/schemas/Annotations"
+          enum: [spine_pod_rack]
+        spine_pod_rack:
+          $ref: "#/components/schemas/Fabric.SpinePodRack"
 
-    SpinePodRack:
+    Fabric.SpinePodRack:
       description: An emulation of a spine/pod/rack topology
       type: object
       properties:
@@ -32,18 +18,22 @@ components:
             The spines in the topology.
           type: array
           items:
-            $ref: "#/components/schemas/Spine"
+            $ref: "#/components/schemas/Fabric.Spine"
         pods:
           description: |-
             The pods in the topology.
           type: array
           items:
-            $ref: "#/components/schemas/Pod"
+            $ref: "#/components/schemas/Fabric.Pod"
+        links:
+          type: array
+          items:
+            $ref: './link.yaml#/components/schemas/Fabric.Link'
         parallel_fabric_count:
           type: integer
           default: 1
 
-    Spine:
+    Fabric.Spine:
       type: object
       properties:
         count:
@@ -62,7 +52,7 @@ components:
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
 
-    Pod:
+    Fabric.Pod:
       type: object
       properties:
         count:
@@ -83,16 +73,16 @@ components:
       properties:
         name:
           type: string
-        pod_switch:
-          $ref: "#/components/schemas/PodSwitch"
+        switch:
+          $ref: "#/components/schemas/Fabric.Switch"
         rack:
-          $ref: "#/components/schemas/PodRack"
+          $ref: "#/components/schemas/Fabric.Rack"
         annotations:
           type: array
           items:
             $ref: "#/components/schemas/Annotations"
 
-    PodSwitch:
+    Fabric.Switch:
       type: object
       properties:
         count:
@@ -111,14 +101,9 @@ components:
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
 
-    PodRack:
+    Fabric.Rack:
       type: object
       properties:
-        count:
-          type: integer
-          default: 1
-          description: |-
-            The number of racks (and thus ToR switches) in a pod
         rack_profile_names:
           description: |-
             The names of rack profiles associated with this rack.
@@ -145,3 +130,4 @@ components:
           type: string
         value:
           type: string
+

@@ -1,0 +1,12 @@
+components:
+  schemas:
+    Dataflow:
+      type: object
+      properties:
+        host_names:
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - '#/components/schemas/Host/properties/name'
+          
