@@ -1,0 +1,326 @@
+components:
+  responses: {}
+  schemas:
+    Error.Details:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    Warning.Details:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            type: string
+    Config:
+      description: |-
+        The resources that define a fabric configuration.
+      type: object
+      properties:
+        hosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Host'
+        servers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Server'
+        fabric:
+          $ref: '#/components/schemas/Fabric'
+        dataflow:
+          $ref: '#/components/schemas/Dataflow'
+    Host:
+      required:
+      - address
+      properties:
+        front_panel_port:
+          description: |-
+            The number of the port on the front panel
+          type: integer
+        address:
+          description: |-
+            The test address of the host
+          type: string
+        prefix:
+          description: |-
+            The prefix of the host
+          type: integer
+          default: 24
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+      type: object
+    Server:
+      properties:
+        mac_address:
+          description: |-
+            The mac address
+          type: string
+          format: mac
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+      type: object
+    Fabric:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - spine_pod_rack
+        spine_pod_rack:
+          $ref: '#/components/schemas/Fabric.SpinePodRack'
+    Fabric.SpinePodRack:
+      description: |-
+        An emulation of a spine/pod/rack topology
+      type: object
+      properties:
+        spines:
+          description: |-
+            The spines in the topology.
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.Spine'
+        pods:
+          description: |-
+            The pods in the topology.
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.Pod'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.Link'
+        parallel_fabric_count:
+          type: integer
+          default: 1
+    Fabric.Spine:
+      type: object
+      properties:
+        count:
+          description: |-
+            The number of spines to be created with each spine sharing the same
+            downlink_ecmp_mode and qos_profile_name properties.
+          type: integer
+          default: 1
+        downlink_ecmp_mode:
+          description: "The algorithm for packet distribution over ECMP links.\n-\
+            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
+            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
+            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
+            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
+            \ resulting RTAG7 hash mode"
+          type: string
+          enum:
+          - static_hash_ipv4_l4
+          - random_spray
+          - hash_3_tuple
+          - hash_5_tuple
+        qos_profile_name:
+          description: |
+            The name of a qos profile shared by the spines.
+
+            x-constraint:
+            - #/components/schemas/QosProfile/properties/name
+          type: string
+          x-constraint:
+          - '#/components/schemas/QosProfile/properties/name'
+    Fabric.Pod:
+      type: object
+      properties:
+        count:
+          description: |-
+            The number of pods that will share the same profile
+          type: integer
+          default: 1
+        pod_profile_name:
+          description: |-
+            The pod profile associated with this pod.
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/PodProfile/properties/name'
+            description: |
+              TBD
+
+              x-constraint:
+              - #/components/schemas/PodProfile/properties/name
+    PodProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        switch:
+          $ref: '#/components/schemas/Fabric.Switch'
+        rack:
+          $ref: '#/components/schemas/Fabric.Rack'
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotations'
+    Fabric.Switch:
+      type: object
+      properties:
+        count:
+          type: integer
+          default: 1
+        uplink_ecmp_mode:
+          description: "The algorithm for packet distribution over ECMP links.\n-\
+            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
+            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
+            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
+            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
+            \ resulting RTAG7 hash mode"
+          type: string
+          enum:
+          - static_hash_ipv4_l4
+          - random_spray
+          - hash_3_tuple
+          - hash_5_tuple
+        downlink_ecmp_mode:
+          description: "The algorithm for packet distribution over ECMP links.\n-\
+            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
+            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
+            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
+            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
+            \ resulting RTAG7 hash mode"
+          type: string
+          enum:
+          - static_hash_ipv4_l4
+          - random_spray
+          - hash_3_tuple
+          - hash_5_tuple
+        qos_profile_name:
+          description: |
+            The name of a qos profile associated with this pod switch.
+
+            x-constraint:
+            - #/components/schemas/QosProfile/properties/name
+          type: string
+          x-constraint:
+          - '#/components/schemas/QosProfile/properties/name'
+    Fabric.Rack:
+      type: object
+      properties:
+        rack_profile_names:
+          description: |-
+            The names of rack profiles associated with this rack.
+          type: array
+          items:
+            type: string
+            x-constraint:
+            - '#/components/schemas/RackProfile/properties/name'
+            description: |
+              TBD
+
+              x-constraint:
+              - #/components/schemas/RackProfile/properties/name
+    Annotations:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    Fabric.Link:
+      type: object
+      description: "The ingress point of a host which is the index of a spine switch,\
+        \ \na pod/rack switch."
+      properties:
+        host_name:
+          type: string
+          x-constraint:
+          - '#components/schemas/Host/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #components/schemas/Host/properties/name
+        choice:
+          type: string
+          enum:
+          - spine
+          - pod
+          - rack
+        spine:
+          description: "One based index of the spine switch based on the number of\
+            \ spines \nconfigured in the spine_pod_rack topology."
+          type: integer
+          minimum: 1
+        pod:
+          $ref: '#/components/schemas/Link.PodRackLink'
+        rack:
+          $ref: '#/components/schemas/Link.PodRackLink'
+    Link.PodRackLink:
+      description: |-
+        Location of the switch based on the number of pods and rack switches.
+      type: object
+      properties:
+        pod_index:
+          description: |-
+            Index of the pod switch based on the number of pods and pod switches.
+          type: integer
+          minimum: 1
+        switch_index:
+          description: |-
+            Index of the rack switch based on the number of pods and rack switches.
+          type: integer
+          minimum: 1
+    Dataflow:
+      type: object
+      properties:
+        host_names:
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - '#/components/schemas/Host/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #/components/schemas/Host/properties/name
+openapi: 3.0.3
+info:
+  title: ONEx Data Models
+  description: |-
+    The data models for the entire ONEx ecosystem
+  version: 0.0.1
+  contact:
+    x-info: "Any feedback such as bugs/enhancements/questions regarding the \nONEx\
+      \ data models is welcomed by using the contact url."
+    url: https://github.com/onex/models/issues
+  license:
+    name: MIT
+servers:
+- url: /
+paths:
+  /config:
+    post:
+      tags:
+      - Configuration
+      operationId: set_config
+      description: |-
+        A placeholder API that returns nothing. It is used by the OpenAPIArt package to generate UX SDK objects.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: |-
+            Success with possible warnings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warning.Details'
