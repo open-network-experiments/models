@@ -1,0 +1,435 @@
+// ONEx Fabric API 0.0.1
+// License: MIT
+
+syntax = "proto3";
+
+package onexfabric;
+
+option go_package = "github.com/ajbalogh/open-network-experiments/artifacts/gofabric/onexfabric";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/empty.proto";
+
+message OpenApiMsgOpt {
+  string description = 10;
+}
+extend google.protobuf.MessageOptions {
+  optional OpenApiMsgOpt msg_meta = 60001;
+}
+
+message OpenApiFldOpt {
+  string default = 10;
+  string description = 20;
+}
+extend google.protobuf.FieldOptions {
+  optional OpenApiFldOpt fld_meta = 60002;
+}
+
+message OpenApiSvcOpt {
+  string description = 10;
+}
+extend google.protobuf.ServiceOptions {
+  optional OpenApiSvcOpt svc_meta = 60003;
+}
+
+message OpenApiRpcOpt {
+  string description = 10;
+}
+extend google.protobuf.MethodOptions {
+  optional OpenApiRpcOpt rpc_meta = 60004;
+}
+
+message ErrorDetails {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string errors = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message WarningDetails {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string warnings = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Config {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated Host hosts = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional Fabric fabric = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message QosProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated Annotations dscp_to_traffic_class = 2 [
+    (fld_meta).description = "A list of name/value key pairs"
+  ];
+}
+
+message SpinePodRack {
+  option (msg_meta).description = "An emulation of a spine/pod/rack topology";
+
+  repeated Spine spines = 1 [
+    (fld_meta).description = "The spines in the topology."
+  ];
+
+  repeated Pod pods = 2 [
+    (fld_meta).description = "The pods in the topology."
+  ];
+
+  optional int32 parallel_fabric_count = 3 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Spine {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "The number of spines to be created with each spine sharing the same\ndownlink_ecmp_mode and qos_profile_name properties."
+  ];
+
+  message DownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string qos_profile_name = 3 [
+    (fld_meta).description = "The name of a qos profile shared by the spines.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+}
+
+message Pod {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "The number of pods that will share the same profile"
+  ];
+
+  repeated string pod_profile_name = 2 [
+    (fld_meta).description = "The pod profile associated with this pod."
+  ];
+}
+
+message PodProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricSwitch switch = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricRack rack = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated Annotations annotations = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PodSwitch {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message UplinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  message DownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string qos_profile_name = 4 [
+    (fld_meta).description = "The name of a qos profile associated with this pod switch.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+}
+
+message PodRack {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "The number of racks (and thus ToR switches) in a pod"
+  ];
+
+  repeated string rack_profile_names = 2 [
+    (fld_meta).description = "The names of rack profiles associated with this rack."
+  ];
+}
+
+message Annotations {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string key = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string value = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Host {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 front_panel_port = 1 [
+    (fld_meta).description = "The number of the port on the front panel"
+  ];
+
+  string address = 2 [
+    (fld_meta).description = "The test address of the host"
+  ];
+
+  optional int32 prefix = 3 [
+    (fld_meta).default = "24",
+    (fld_meta).description = "The prefix of the host"
+  ];
+
+  optional string name = 4 [
+    (fld_meta).description = "Unique identifier for an object"
+  ];
+}
+
+message Fabric {
+  option (msg_meta).description = "Description missing in models";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      spine_pod_rack = 1;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricSpinePodRack spine_pod_rack = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricSpinePodRack {
+  option (msg_meta).description = "An emulation of a spine/pod/rack topology";
+
+  repeated FabricSpine spines = 1 [
+    (fld_meta).description = "The spines in the topology."
+  ];
+
+  repeated FabricPod pods = 2 [
+    (fld_meta).description = "The pods in the topology."
+  ];
+
+  repeated FabricLink links = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 parallel_fabric_count = 4 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricSpine {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "The number of spines to be created with each spine sharing the same\ndownlink_ecmp_mode and qos_profile_name properties."
+  ];
+
+  message DownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string qos_profile_name = 3 [
+    (fld_meta).description = "The name of a qos profile shared by the spines.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+}
+
+message FabricPod {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "The number of pods that will share the same profile"
+  ];
+
+  repeated string pod_profile_name = 2 [
+    (fld_meta).description = "The pod profile associated with this pod."
+  ];
+}
+
+message FabricSwitch {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message UplinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  message DownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      static_hash_ipv4_l4 = 1;
+      random_spray = 2;
+      hash_3_tuple = 3;
+      hash_5_tuple = 4;
+    }
+  }
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string qos_profile_name = 4 [
+    (fld_meta).description = "The name of a qos profile associated with this pod switch.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+}
+
+message FabricRack {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string rack_profile_names = 1 [
+    (fld_meta).description = "The names of rack profiles associated with this rack."
+  ];
+}
+
+message FabricLink {
+  option (msg_meta).description = "The ingress point of a host which is the index of a spine switch, \na pod/rack switch.";
+
+  optional string host_name = 1 [
+    (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      spine = 1;
+      pod = 2;
+      rack = 3;
+    }
+  }
+  optional Choice.Enum choice = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 spine = 3 [
+    (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the spine_pod_rack topology."
+  ];
+
+  optional LinkPodRackLink pod = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional LinkPodRackLink rack = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message LinkPodRackLink {
+  option (msg_meta).description = "Location of the switch based on the number of pods and rack switches.";
+
+  optional int32 pod_index = 1 [
+    (fld_meta).description = "Index of the pod switch based on the number of pods and pod switches."
+  ];
+
+  optional int32 switch_index = 2 [
+    (fld_meta).description = "Index of the rack switch based on the number of pods and rack switches."
+  ];
+}
+
+message SetConfigRequest {
+  Config config = 1;
+}
+message SetConfigResponse {
+  optional ErrorDetails status_code_400 = 1;
+  optional ErrorDetails status_code_500 = 2;
+  optional WarningDetails status_code_200 = 3;
+}
+
+message GetConfigResponse {
+  optional Config status_code_200 = 1;
+}
+
+
+service Openapi {
+  option (svc_meta).description = "Description missing in models";
+
+  rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
+    option (rpc_meta).description = "Sets the fabric configuration.";
+  }
+  rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse) {
+    option (rpc_meta).description = "Gets the fabric configuration.";
+  }
+}
