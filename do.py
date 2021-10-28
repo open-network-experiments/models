@@ -94,6 +94,7 @@ def setup():
             py() + " -m pip install --upgrade pip",
             py() + " -m pip install --upgrade virtualenv",
             py() + " -m virtualenv .env",
+            py() + " -m pip install openapiart",
         ]
     )
 
@@ -119,7 +120,6 @@ def generate():
 
     run(
         [
-            py() + " -m pip install openapiart",
             py() + " " + file_path,
         ]
     )
