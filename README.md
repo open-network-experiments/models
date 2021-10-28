@@ -8,9 +8,9 @@ This ONEx repository produces OpenAPI artifacts that describe APIs and Data Mode
 
 Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 1 ToR + host in each pod:
 
-
-![fabric sample](/assets/sample_fabric.png)
-
+<p align="center">
+    <img src="./assets/sample_fabric.png" />
+</p>
 
 ```json
 {
