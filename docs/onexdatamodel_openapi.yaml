@@ -16,179 +16,22 @@ components:
           items:
             type: string
     Config:
+      description: |-
+        The resources that define a fabric configuration.
       type: object
       properties:
         hosts:
           type: array
           items:
             $ref: '#/components/schemas/Host'
+        servers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Server'
         fabric:
           $ref: '#/components/schemas/Fabric'
-    QosProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        dscp_to_traffic_class:
-          description: |-
-            A list of name/value key pairs
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotations'
-    SpinePodRack:
-      description: |-
-        An emulation of a spine/pod/rack topology
-      type: object
-      properties:
-        spines:
-          description: |-
-            The spines in the topology.
-          type: array
-          items:
-            $ref: '#/components/schemas/Spine'
-        pods:
-          description: |-
-            The pods in the topology.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pod'
-        parallel_fabric_count:
-          type: integer
-          default: 1
-    Spine:
-      type: object
-      properties:
-        count:
-          description: |-
-            The number of spines to be created with each spine sharing the same
-            downlink_ecmp_mode and qos_profile_name properties.
-          type: integer
-          default: 1
-        downlink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - static_hash_ipv4_l4
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        qos_profile_name:
-          description: |
-            The name of a qos profile shared by the spines.
-
-            x-constraint:
-            - #/components/schemas/QosProfile/properties/name
-          type: string
-          x-constraint:
-          - '#/components/schemas/QosProfile/properties/name'
-    Pod:
-      type: object
-      properties:
-        count:
-          description: |-
-            The number of pods that will share the same profile
-          type: integer
-          default: 1
-        pod_profile_name:
-          description: |-
-            The pod profile associated with this pod.
-          type: array
-          items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/PodProfile/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/PodProfile/properties/name
-    PodProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        switch:
-          $ref: '#/components/schemas/Fabric.Switch'
-        rack:
-          $ref: '#/components/schemas/Fabric.Rack'
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotations'
-    PodSwitch:
-      type: object
-      properties:
-        count:
-          type: integer
-          default: 1
-        uplink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - static_hash_ipv4_l4
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        downlink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - static_hash_ipv4_l4
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        qos_profile_name:
-          description: |
-            The name of a qos profile associated with this pod switch.
-
-            x-constraint:
-            - #/components/schemas/QosProfile/properties/name
-          type: string
-          x-constraint:
-          - '#/components/schemas/QosProfile/properties/name'
-    PodRack:
-      type: object
-      properties:
-        count:
-          type: integer
-          default: 1
-          description: |-
-            The number of racks (and thus ToR switches) in a pod
-        rack_profile_names:
-          description: |-
-            The names of rack profiles associated with this rack.
-          type: array
-          items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/RackProfile/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/RackProfile/properties/name
-    Annotations:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
+        dataflow:
+          $ref: '#/components/schemas/Dataflow'
     Host:
       required:
       - address
@@ -206,6 +49,19 @@ components:
             The prefix of the host
           type: integer
           default: 24
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
+      type: object
+    Server:
+      properties:
+        mac_address:
+          description: |-
+            The mac address
+          type: string
+          format: mac
         name:
           description: |-
             Unique identifier for an object
@@ -297,6 +153,19 @@ components:
 
               x-constraint:
               - #/components/schemas/PodProfile/properties/name
+    PodProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        switch:
+          $ref: '#/components/schemas/Fabric.Switch'
+        rack:
+          $ref: '#/components/schemas/Fabric.Rack'
+        annotations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annotations'
     Fabric.Switch:
       type: object
       properties:
@@ -354,6 +223,13 @@ components:
 
               x-constraint:
               - #/components/schemas/RackProfile/properties/name
+    Annotations:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
     Fabric.Link:
       type: object
       description: "The ingress point of a host which is the index of a spine switch,\
@@ -398,16 +274,30 @@ components:
             Index of the rack switch based on the number of pods and rack switches.
           type: integer
           minimum: 1
+    Dataflow:
+      type: object
+      properties:
+        host_names:
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - '#/components/schemas/Host/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #/components/schemas/Host/properties/name
 openapi: 3.0.3
 info:
-  title: ONEx Fabric API
+  title: ONEx Data Models
   description: |-
-    The Open Network Experiments Fabric API and Data Models
+    The data models for the entire ONEx ecosystem
   version: 0.0.1
   contact:
-    x-info: "Any feedback such as bugs/enhancements/questions regarding the \nFabric\
-      \ API and Data models is welcomed by using the contact url."
-    url: https://github.com/open-network-experiments/issues
+    x-info: "Any feedback such as bugs/enhancements/questions regarding the \nONEx\
+      \ data models is welcomed by using the contact url."
+    url: https://github.com/onex/models/issues
   license:
     name: MIT
 servers:
@@ -419,7 +309,7 @@ paths:
       - Configuration
       operationId: set_config
       description: |-
-        Sets the fabric configuration.
+        A placeholder API that returns nothing. It is used by the OpenAPIArt package to generate UX SDK objects.
       requestBody:
         required: true
         content:
@@ -427,20 +317,6 @@ paths:
             schema:
               $ref: '#/components/schemas/Config'
       responses:
-        '400':
-          description: |-
-            error 4xx
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error.Details'
-        '500':
-          description: |-
-            error 5xx
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error.Details'
         '200':
           description: |-
             Success with possible warnings
@@ -448,17 +324,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Warning.Details'
-    get:
-      tags:
-      - Configuration
-      operationId: get_config
-      description: |-
-        Gets the fabric configuration.
-      responses:
-        '200':
-          description: |-
-            The current configured fabric configuration.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Config'
