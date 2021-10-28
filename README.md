@@ -63,8 +63,6 @@ Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 
             "ipv4_address": "2.2.2.2"
         }
     ],
-
-    "$schema": "../fabric/schema/Config.jsonschema"
 }
 ```
 
