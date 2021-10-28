@@ -41,6 +41,7 @@ jobs:
 
       - name: Generate html docs
         run: | 
+          docker run -v "$(pwd)/artifacts/datamodel:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
           docker run -v "$(pwd)/artifacts/fabric:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
           docker run -v "$(pwd)/artifacts/dataflow:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
  
@@ -56,18 +57,12 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
+          cp $(pwd)/artifacts/datamodel/openapi.yaml docs/onexdatamodel_openapi.yaml
           cp $(pwd)/artifacts/fabric/openapi.yaml docs/onexfabric_openapi.yaml
           cp $(pwd)/artifacts/dataflow/openapi.yaml docs/onexdataflow_openapi.yaml
-          cp $(pwd)/artifacts/fabric/openapi.html docs/onexfabric_openapi.html
-          cp $(pwd)/artifacts/dataflow/openapi.html docs/onexdataflow_openapi.html
-          cp $(pwd)/artifacts/fabric/onexfabric.proto docs
-          cp $(pwd)/artifacts/dataflow/onexdataflow.proto docs
+          git add --force docs/onexdatamodel_openapi.yaml
           git add --force docs/onexfabric_openapi.yaml
           git add --force docs/onexdataflow_openapi.yaml
-          git add --force docs/onexfabric_openapi.html
-          git add --force docs/onexdataflow_openapi.html
-          git add --force docs/onexfabric.proto
-          git add --force docs/onexdataflow.proto
           if git status --porcelain | grep '_openapi.yaml\|_openapi.html\|.proto'; then
               git commit -m "Update auto generated content" 
               git push
