@@ -9,4 +9,120 @@ components:
             type: string
           x-constraint:
           - '#/components/schemas/Host/properties/name'
-          
+        workload:
+          description: |-
+            The workload items making up the dataflow
+          type: array
+          items:
+            $ref: "#/components/schemas/Dataflow.WorkloadItem"
+        flow_profiles: 
+          description: |-
+            foo
+          type: array
+          items:
+            $ref: "#/components/schemas/Dataflow.FlowProfile"
+
+    Dataflow.FlowProfile:
+      type: object
+      required: [name, data_size]
+      properties:
+        name:
+          type: string
+        data_size:
+          type: integer
+
+    Dataflow.WorkloadItem:
+      type: object
+      required: [name, choice]
+      properties:
+        name:
+          description: |-
+            uniquely identifies the workload item
+          type: string
+        choice:
+          description: |-
+            The type of workflow item
+          type: string
+          enum: [scatter, loop, compute, all_reduce]
+        scatter:
+          $ref: "#/components/schemas/Dataflow.ScatterWorkload"
+        loop:
+          $ref: "#/components/schemas/Dataflow.LoopWorkload"
+        compute:
+          $ref: "#/components/schemas/Dataflow.ComputeWorkload"
+        all_reduce:
+          $ref: "#/components/schemas/Dataflow.AllReduceWorkload"
+
+    Dataflow.ScatterWorkload:
+      type: object
+      properties:
+        sources:
+          description: |-
+            list of host names, indicating the originator of the data
+          type: array
+          items:
+            type: string
+        destinations:
+          description: |-
+            list of host names, indicating the destination of the data
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+
+    Dataflow.AllReduceWorkload:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+        type:
+          description: |-
+            type of all reduce
+          type: string
+          enum: [ring]
+
+    Dataflow.ComputeWorkload:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
+        choice:
+          description: |-
+            type of compute
+          type: string
+          enum: [simulated]
+        simulated:
+          $ref: "#/components/schemas/Dataflow.SimulatedComputeWorkload"
+    
+    Dataflow.SimulatedComputeWorkload:
+      type: object
+      properties:
+        duration:
+          description: |-
+            duration of the simulated compute workload in seconds
+          type: number
+
+    Dataflow.LoopWorkload:
+      type: object
+      properties:
+        iterations:
+          description: |-
+            number of iterations in the loop
+          type: integer
+        children:
+          description: |-
+            list of workload items that are executed in this loop
+          type: array
+          items:
+            $ref: "#/components/schemas/Dataflow.WorkloadItem"
