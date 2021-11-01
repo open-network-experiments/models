@@ -102,6 +102,7 @@ def init():
     run(
         [
             py() + " -m pip install openapiart",
+            py() + " -m pip install pytest-cov",
         ]
     )
 
@@ -131,9 +132,8 @@ def generate():
 def test():
     run(
         [
-            py() + " -m pip install pytest-cov",
-            py() + " -m pytest -sv --cov=fabric --cov-report term --cov-report html:cov_report pytests/fabric",
-            py() + " -m pytest -sv --cov=dataflow --cov-report term --cov-report html:cov_report pytests/dataflow",
+            # py() + " -m pytest -sv --cov=fabric --cov-report term --cov-report html:cov_report pytests/fabric",
+            py() + " -m pytest -sv --cov=artifacts/datamodel --cov-report term --cov-report html:cov_report pytests/dataflow",
         ]
     )
     import re

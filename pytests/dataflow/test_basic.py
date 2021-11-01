@@ -1,7 +1,7 @@
 from typing import NamedTuple
 from artifacts.datamodel import datamodel as onex
 
-def dataflow_sample():
+def test_ml_training():
     api = onex.api()
     config = api.config()
 
@@ -40,7 +40,3 @@ def dataflow_sample():
     back_compute_optimizer.simulated.duration = 10
 
     return config
-
-if __name__ == '__main__':
-    config = dataflow_sample()
-    print(config.serialize())

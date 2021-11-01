@@ -39,6 +39,10 @@ jobs:
         run: |
           python do.py generate
 
+      - name: Run tests
+        run: |
+          python do.py test
+
       - name: Generate html docs
         run: | 
           docker run -v "$(pwd)/artifacts/datamodel:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
