@@ -100,6 +100,18 @@ components:
         parallel_fabric_count:
           type: integer
           default: 1
+        pod_profiles:
+          description: |-
+            A list of pod profiles
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.PodProfile'
+        rack_profiles:
+          description: |-
+            A list of rack profiles
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.RackProfile'
     Fabric.Spine:
       type: object
       properties:
@@ -111,14 +123,11 @@ components:
           default: 1
         downlink_ecmp_mode:
           description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
+            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
+            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
+            \ but a different resulting RTAG7 hash mode"
           type: string
           enum:
-          - static_hash_ipv4_l4
           - random_spray
           - hash_3_tuple
           - hash_5_tuple
@@ -152,48 +161,46 @@ components:
 
               x-constraint:
               - #/components/schemas/PodProfile/properties/name
-    PodProfile:
+    Fabric.PodProfile:
       type: object
       properties:
         name:
           type: string
-        switch:
-          $ref: '#/components/schemas/Fabric.Switch'
+        pod_switch:
+          $ref: '#/components/schemas/Fabric.PodSwitch'
         rack:
           $ref: '#/components/schemas/Fabric.Rack'
         annotations:
           type: array
           items:
             $ref: '#/components/schemas/Annotations'
-    Fabric.Switch:
+    Fabric.PodSwitch:
       type: object
       properties:
         count:
           type: integer
           default: 1
+        pod_to_spine_oversubscription:
+          description: |-
+            oversubscription ratio of the pod switches
+          type: string
         uplink_ecmp_mode:
           description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
+            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
+            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
+            \ but a different resulting RTAG7 hash mode"
           type: string
           enum:
-          - static_hash_ipv4_l4
           - random_spray
           - hash_3_tuple
           - hash_5_tuple
         downlink_ecmp_mode:
           description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and\
-            \ tcp or udp src, dst port\n- random_spray randomly puts each packet on\
-            \ an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src,\
-            \ dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different\
-            \ resulting RTAG7 hash mode"
+            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
+            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
+            \ but a different resulting RTAG7 hash mode"
           type: string
           enum:
-          - static_hash_ipv4_l4
           - random_spray
           - hash_3_tuple
           - hash_5_tuple
@@ -222,6 +229,44 @@ components:
 
               x-constraint:
               - #/components/schemas/RackProfile/properties/name
+    Fabric.RackProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        tor_uplink_ecmp_mode:
+          description: "The algorithm for packet distribution over ECMP links.\n-\
+            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
+            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
+            \ but a different resulting RTAG7 hash mode"
+          type: string
+          enum:
+          - random_spray
+          - hash_3_tuple
+          - hash_5_tuple
+        tor_downlink_ecmp_mode:
+          description: "The algorithm for packet distribution over ECMP links.\n-\
+            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
+            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
+            \ but a different resulting RTAG7 hash mode"
+          type: string
+          enum:
+          - random_spray
+          - hash_3_tuple
+          - hash_5_tuple
+        tor_qos_profile_name:
+          description: |
+            The name of a qos profile associated with the ToR of this rack
+
+            x-constraint:
+            - #/components/schemas/QosProfile/properties/name
+          type: string
+          x-constraint:
+          - '#/components/schemas/QosProfile/properties/name'
+        tor_to_pod_oversubscription:
+          description: |-
+            The oversubscription ratio of the ToR switch
+          type: string
     Annotations:
       type: object
       properties:

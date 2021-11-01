@@ -115,14 +115,13 @@ message Spine {
   message DownlinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
   optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
   optional string qos_profile_name = 3 [
@@ -150,11 +149,11 @@ message PodProfile {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional FabricSwitch switch = 2 [
+  optional PodSwitch pod_switch = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional FabricRack rack = 3 [
+  optional PodRack rack = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -174,27 +173,25 @@ message PodSwitch {
   message UplinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
   optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
   message DownlinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
   optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
   optional string qos_profile_name = 4 [
@@ -285,6 +282,14 @@ message FabricSpinePodRack {
     (fld_meta).default = "1",
     (fld_meta).description = "Description missing in models"
   ];
+
+  repeated FabricPodProfile pod_profiles = 5 [
+    (fld_meta).description = "A list of pod profiles"
+  ];
+
+  repeated FabricRackProfile rack_profiles = 6 [
+    (fld_meta).description = "A list of rack profiles"
+  ];
 }
 
 message FabricSpine {
@@ -298,14 +303,13 @@ message FabricSpine {
   message DownlinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
   optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
   optional string qos_profile_name = 3 [
@@ -326,7 +330,27 @@ message FabricPod {
   ];
 }
 
-message FabricSwitch {
+message FabricPodProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricPodSwitch pod_switch = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricRack rack = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated Annotations annotations = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricPodSwitch {
   option (msg_meta).description = "Description missing in models";
 
   optional int32 count = 1 [
@@ -334,33 +358,35 @@ message FabricSwitch {
     (fld_meta).description = "Description missing in models"
   ];
 
+  optional string pod_to_spine_oversubscription = 2 [
+    (fld_meta).description = "oversubscription ratio of the pod switches"
+  ];
+
   message UplinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
-  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 3 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
   message DownlinkEcmpMode {
     enum Enum {
       unspecified = 0;
-      static_hash_ipv4_l4 = 1;
-      random_spray = 2;
-      hash_3_tuple = 3;
-      hash_5_tuple = 4;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
     }
   }
-  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- static_hash_ipv4_l4 is a 5 tuple hash of ipv4 src, dst, protocol and tcp or udp src, dst port\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 4 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
-  optional string qos_profile_name = 4 [
+  optional string qos_profile_name = 5 [
     (fld_meta).description = "The name of a qos profile associated with this pod switch.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
 }
@@ -370,6 +396,46 @@ message FabricRack {
 
   repeated string rack_profile_names = 1 [
     (fld_meta).description = "The names of rack profiles associated with this rack."
+  ];
+}
+
+message FabricRackProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message TorUplinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
+    }
+  }
+  optional TorUplinkEcmpMode.Enum tor_uplink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  message TorDownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
+    }
+  }
+  optional TorDownlinkEcmpMode.Enum tor_downlink_ecmp_mode = 3 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string tor_qos_profile_name = 4 [
+    (fld_meta).description = "The name of a qos profile associated with the ToR of this rack\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+
+  optional string tor_to_pod_oversubscription = 5 [
+    (fld_meta).description = "The oversubscription ratio of the ToR switch"
   ];
 }
 
