@@ -39,6 +39,14 @@ extend google.protobuf.MethodOptions {
   optional OpenApiRpcOpt rpc_meta = 60004;
 }
 
+message GlobalNamedObject {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Unique identifier for an object"
+  ];
+}
+
 message ErrorDetails {
   option (msg_meta).description = "Description missing in models";
 
@@ -226,17 +234,17 @@ message Host {
     (fld_meta).description = "The number of the port on the front panel"
   ];
 
-  string address = 2 [
+  string name = 2 [
+    (fld_meta).description = "The name, uniquely identifying the host"
+  ];
+
+  string address = 3 [
     (fld_meta).description = "The test address of the host"
   ];
 
-  optional int32 prefix = 3 [
+  optional int32 prefix = 4 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
-  ];
-
-  optional string name = 4 [
-    (fld_meta).description = "Unique identifier for an object"
   ];
 }
 

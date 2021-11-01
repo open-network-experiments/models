@@ -82,17 +82,17 @@ message Host {
     (fld_meta).description = "The number of the port on the front panel"
   ];
 
-  string address = 2 [
+  string name = 2 [
+    (fld_meta).description = "The name, uniquely identifying the host"
+  ];
+
+  string address = 3 [
     (fld_meta).description = "The test address of the host"
   ];
 
-  optional int32 prefix = 3 [
+  optional int32 prefix = 4 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
-  ];
-
-  optional string name = 4 [
-    (fld_meta).description = "Unique identifier for an object"
   ];
 }
 
@@ -314,6 +314,143 @@ message Dataflow {
 
   repeated string host_names = 1 [
     (fld_meta).description = "TBD\n\nx-constraint:\n- #/components/schemas/Host/properties/name\n"
+  ];
+
+  repeated DataflowWorkloadItem workload = 2 [
+    (fld_meta).description = "The workload items making up the dataflow"
+  ];
+
+  repeated DataflowFlowProfile flow_profiles = 3 [
+    (fld_meta).description = "foo"
+  ];
+}
+
+message DataflowFlowProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 data_size = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowWorkloadItem {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "uniquely identifies the workload item"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      scatter = 1;
+      loop = 2;
+      compute = 3;
+      all_reduce = 4;
+    }
+  }
+  Choice.Enum choice = 2 [
+    (fld_meta).description = "The type of workflow item"
+  ];
+
+  optional DataflowScatterWorkload scatter = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowLoopWorkload loop = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowComputeWorkload compute = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowAllReduceWorkload all_reduce = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowScatterWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowAllReduceWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string nodes = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string flow_profile_name = 2 [
+    (fld_meta).description = "flow profile reference"
+  ];
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      ring = 1;
+    }
+  }
+  optional Type.Enum type = 3 [
+    (fld_meta).description = "type of all reduce"
+  ];
+}
+
+message DataflowComputeWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string nodes = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      simulated = 1;
+    }
+  }
+  optional Choice.Enum choice = 2 [
+    (fld_meta).description = "type of compute"
+  ];
+
+  optional DataflowSimulatedComputeWorkload simulated = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowSimulatedComputeWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  optional float duration = 1 [
+    (fld_meta).description = "duration of the simulated compute workload in seconds"
+  ];
+}
+
+message DataflowLoopWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 iterations = 1 [
+    (fld_meta).description = "number of iterations in the loop"
+  ];
+
+  repeated DataflowWorkloadItem children = 2 [
+    (fld_meta).description = "list of workload items that are executed in this loop"
   ];
 }
 
