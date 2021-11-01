@@ -124,6 +124,10 @@ message Fabric {
   optional FabricSpinePodRack spine_pod_rack = 2 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  repeated FabricQosProfile qos_profiles = 3 [
+    (fld_meta).description = "A list of Quality of Service (QoS) profiles"
+  ];
 }
 
 message FabricSpinePodRack {
@@ -300,6 +304,75 @@ message FabricRackProfile {
   optional string tor_to_pod_oversubscription = 5 [
     (fld_meta).description = "The oversubscription ratio of the ToR switch"
   ];
+}
+
+message FabricQosProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricQosProfileIngressAdmission ingress_admission = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricQosProfileScheduler scheduler = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricQosProfilePacketClassification packet_classification = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricQosProfileIngressAdmission {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 reserved_buffer_bytes = 1 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Buffer space (in bytes) reserved for each port that this Qos profile applies to"
+  ];
+
+  optional int32 shared_buffer_bytes = 2 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Amount of shared buffer space (in bytes) available"
+  ];
+}
+
+message FabricQosProfileScheduler {
+  option (msg_meta).description = "Description missing in models";
+
+  message SchedulerMode {
+    enum Enum {
+      unspecified = 0;
+      strict_priority = 1;
+      weighted_round_robin = 2;
+    }
+  }
+  optional SchedulerMode.Enum scheduler_mode = 1 [
+    (fld_meta).description = "The queue scheduling discipline "
+  ];
+
+  repeated int32 weight_list = 2 [
+    (fld_meta).description = "A list of queue weights"
+  ];
+}
+
+message FabricQosProfilePacketClassification {
+  option (msg_meta).description = "Description missing in models";
+
+  optional FabricQosProfilePacketClassificationMap map_dscp_to_traffic_class = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricQosProfilePacketClassificationMap map_traffic_class_to_queue = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricQosProfilePacketClassificationMap {
+  option (msg_meta).description = "Description missing in models";
 }
 
 message Annotations {
