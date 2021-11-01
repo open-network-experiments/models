@@ -1,8 +1,10 @@
 # to build this docker image (any time do.py changes): 
 #   docker build --tag onex-build-env:latest .
 #
-# to run this docker image: 
+# to build all artifacts this docker image: 
 #   docker run -it --rm -v $PWD:/tmp onex-build-env:latest bash -c "source /onex/.env/bin/activate && cd /tmp && python3 generate.py"
+# to run tests with this docker image:
+#   docker run -it --rm -v $PWD:/tmp onex-build-env:latest bash -c "source /onex/.env/bin/activate && cd /tmp && python3 do.py test"
 
 FROM ubuntu:latest
 
