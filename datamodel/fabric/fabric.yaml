@@ -8,6 +8,13 @@ components:
           enum: [spine_pod_rack]
         spine_pod_rack:
           $ref: "#/components/schemas/Fabric.SpinePodRack"
+        qos_profiles:
+          description: |-
+            A list of Quality of Service (QoS) profiles
+          type: array
+          items:
+            $ref: "#/components/schemas/Fabric.QosProfile"
+
 
     Fabric.SpinePodRack:
       description: An emulation of a spine/pod/rack topology
@@ -165,8 +172,62 @@ components:
             The oversubscription ratio of the ToR switch
           type: string
 
+    Fabric.QosProfile:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        ingress_admission:
+          $ref: "#/components/schemas/Fabric.QosProfile.IngressAdmission"
+        scheduler:
+          $ref: "#/components/schemas/Fabric.QosProfile.Scheduler"
+        packet_classification:
+          $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification"
+        
 
+    Fabric.QosProfile.IngressAdmission:
+      type: object
+      properties:
+        reserved_buffer_bytes:
+          description: Buffer space (in bytes) reserved for each port that this Qos profile applies to
+          type: integer
+          default: 0
+        shared_buffer_bytes:
+          description: Amount of shared buffer space (in bytes) available 
+          type: integer
+          default: 0
 
+    Fabric.QosProfile.Scheduler:
+      type: object
+      properties:
+        scheduler_mode:
+          x-include:
+            - "#/components/schemas/QosSchedulerMode"
+        weight_list:
+          description: A list of queue weights
+          type: array
+          items:
+            type: integer
+
+    QosSchedulerMode:
+      description: |-
+        The queue scheduling discipline 
+      type: string
+      enum: [strict_priority, weighted_round_robin]
+
+    Fabric.QosProfile.PacketClassification:
+      type: object
+      properties:
+        map_dscp_to_traffic_class:
+          $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification.Map"
+        map_traffic_class_to_queue:
+          $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification.Map"
+
+    Fabric.QosProfile.PacketClassification.Map:
+      type: object
+      additionalProperties:
+        type: string
 
     Annotations:
       type: object
