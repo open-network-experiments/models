@@ -12,6 +12,7 @@ def test_simple_fabric_with_oversubscription():
         tor_to_pod_oversubscription="2:1"
     )
     pod_profile.rack.rack_profile_names = [ rack_profile.name ]
+    pod_profile.rack.count = 2
 
     config.hosts.add(name="Data Storage 1", address="1.1.1.1")
     config.hosts.add(name="Compute 1", address="3.3.3.3")

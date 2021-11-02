@@ -132,6 +132,10 @@ components:
     Fabric.Rack:
       type: object
       properties:
+        count:
+          type: integer
+          description: number of racks (and thus ToRs) in the pod
+          default: 1
         rack_profile_names:
           description: |-
             The names of rack profiles associated with this rack.

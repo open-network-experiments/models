@@ -39,6 +39,7 @@ Click on language/format node to expand the sample!
                     "count": 1
                 },
                 "rack": {
+                    "count": 2,
                     "rack_profile_names": [ "Rack Profile 1" ]
                 }
             }
@@ -73,6 +74,7 @@ spine_pod_rack:
     pod_switch:
       count: 1
     rack:
+      count: 2
       rack_profile_names:
       - Rack Profile 1
   rack_profiles:
@@ -102,6 +104,7 @@ def fabric_sample():
         tor_to_pod_oversubscription="2:1"
     )
     pod_profile.rack.rack_profile_names = [ rack_profile.name ]
+    pod_profile.rack.count = 2
 ```
 </p>
 </details>
