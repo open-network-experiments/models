@@ -19,50 +19,37 @@ Click on language/format node to expand the sample!
 
 ```json
 {
-    "topology": {
-        "choice": "spine_pod_rack",
-        "spine_pod_rack": {
-            "spines": [
-                { 
-                    "count": 1
-                }
-            ],
-            "pods": [
-                {
-                    "count": 2,
-                    "pod_profile_name": ["Pod Profile 1"]
-                }
-            ]
-        }
-    },
-    "pod_profiles": [
-        {
-            "name": "Pod Profile 1",
-            "pod_switch": {
+    "choice": "spine_pod_rack",
+    "spine_pod_rack": {
+        "spines": [
+            {
                 "count": 1
-            },
-            "rack": {
-                "count": 1,
-                "rack_profile_names": ["Rack Profile 1"]
             }
-        }
-    ],
-    "rack_profiles": [
-        {
-            "name": "Rack Profile 1",
-            "oversubscription": "2:1"
-        }
-    ],
-    "hosts": [
-        {
-            "name": "Compute East",
-            "ipv4_address": "1.1.1.1"
-        },
-        {
-            "name": "Storage West",
-            "ipv4_address": "2.2.2.2"
-        }
-    ],
+        ],
+        "pods": [
+            {
+                "count": 2,
+                "pod_profile_name": [ "Pod Profile 1" ]
+            }
+        ],
+        "pod_profiles": [
+            {
+                "name": "Pod Profile 1",
+                "pod_switch": {
+                    "count": 1
+                },
+                "rack": {
+                    "rack_profile_names": [ "Rack Profile 1" ]
+                }
+            }
+        ],
+        "rack_profiles": [
+            {
+                "name": "Rack Profile 1",
+                "tor_to_pod_oversubscription": "2:1"
+            }
+        ]
+    }
 }
 ```
 </p>
@@ -73,33 +60,24 @@ Click on language/format node to expand the sample!
 
 
 ```yaml
-    topology:
-        choice: spine_pod_rack
-        spine_pod_rack:
-            spines:
-            - count: 1
-            pods:
-            - count: 2
-            pod_profile_name:
-            - Pod Profile 1
-    pod_profiles:
-        - name: Pod Profile 1
+choice: spine_pod_rack
+spine_pod_rack:
+  spines:
+  - count: 1
+  pods:
+  - count: 2
+    pod_profile_name:
+    - Pod Profile 1
+  pod_profiles:
+  - name: Pod Profile 1
     pod_switch:
-        count: 1
+      count: 1
     rack:
-        count: 1
-        rack_profile_names:
-            - Rack Profile 1
-    rack_profiles:
-        - name: Rack Profile 1
-    oversubscription: '2:1'
-    hosts:
-    -
-        name: Compute East
-        ipv4_address: 1.1.1.1
-    - 
-        name: Storage West
-        ipv4_address: 2.2.2.2
+      rack_profile_names:
+      - Rack Profile 1
+  rack_profiles:
+  - name: Rack Profile 1
+    tor_to_pod_oversubscription: '2:1'
 ```
 </p>
 </details>
@@ -124,10 +102,6 @@ def fabric_sample():
         tor_to_pod_oversubscription="2:1"
     )
     pod_profile.rack.rack_profile_names = [ rack_profile.name ]
-
-    config.hosts.add(name="Data Storage 1", address="1.1.1.1")
-    config.hosts.add(name="Compute 1", address="3.3.3.3")
-    config.hosts.add(name="Compute 2", address="4.4.4.4")
 ```
 </p>
 </details>
