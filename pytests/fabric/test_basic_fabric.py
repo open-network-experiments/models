@@ -37,6 +37,8 @@ def test_qos_ingress_admission():
     pod_profile.pod_switch.count = 1
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
 
+    assert config.serialize()
+
 def test_qos_scheduling_discipline():
     config = onex.api().config()
 
@@ -54,3 +56,5 @@ def test_qos_scheduling_discipline():
     pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1")
     pod_profile.pod_switch.count = 1
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
+
+    assert config.serialize()
