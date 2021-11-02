@@ -457,6 +457,141 @@ message DataflowFlowProfile {
   int32 data_size = 2 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  message L2ProtocolChoice {
+    enum Enum {
+      unspecified = 0;
+      ethernet = 1;
+    }
+  }
+  optional L2ProtocolChoice.Enum l2_protocol_choice = 3 [
+    (fld_meta).description = "layer2 protocol selection"
+  ];
+
+  optional DataflowFlowProfileEthernet ethernet = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message L4ProtocolChoice {
+    enum Enum {
+      unspecified = 0;
+      tcp = 1;
+      udp = 2;
+    }
+  }
+  optional L4ProtocolChoice.Enum l4_protocol_choice = 5 [
+    (fld_meta).description = "layer4 protocol selection"
+  ];
+
+  optional DataflowFlowProfileTcp tcp = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowFlowProfileUdp udp = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileEthernet {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 mtu = 1 [
+    (fld_meta).default = "1500",
+    (fld_meta).description = "Maximum Transmission Unit"
+  ];
+}
+
+message DataflowFlowProfileTcp {
+  option (msg_meta).description = "Description missing in models";
+
+  message CongestionAlgorithm {
+    enum Enum {
+      unspecified = 0;
+      bbr = 1;
+      dctcp = 2;
+      cubic = 3;
+      reno = 4;
+    }
+  }
+  optional CongestionAlgorithm.Enum congestionalgorithm = 1 [
+    (fld_meta).default = "CongestionAlgorithm.Enum.cubic",
+    (fld_meta).description = "The TCP congestion algorithm:\nbbr - Bottleneck Bandwidth and Round-trip propagation time\ndctcp - Data center TCP\ncubic - cubic window increase function\nreno - TCP New Reno"
+  ];
+
+  optional int32 initcwnd = 2 [
+    (fld_meta).description = "initial congestion window"
+  ];
+
+  optional int32 sendbuf = 3 [
+    (fld_meta).description = "send buffer size"
+  ];
+
+  optional int32 receivebuf = 4 [
+    (fld_meta).description = "receive buffer size"
+  ];
+
+  optional L4PortRange destinationport = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L4PortRange sourceport = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRange {
+  option (msg_meta).description = "Layer4 protocol source or destination port values";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      single_value = 1;
+      range = 2;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "None"
+  ];
+
+  optional L4PortRangeSingleValue single_value = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L4PortRangeRange range = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRangeSingleValue {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 value = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRangeRange {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 start_value = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 increment = 2 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 count = 3 [
+    (fld_meta).default = "65535",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileUdp {
+  option (msg_meta).description = "Description missing in models";
 }
 
 message DataflowWorkloadItem {

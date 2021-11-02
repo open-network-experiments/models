@@ -412,6 +412,105 @@ components:
           type: string
         data_size:
           type: integer
+        l2_protocol_choice:
+          description: |-
+            layer2 protocol selection
+          type: string
+          enum:
+          - ethernet
+        ethernet:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Ethernet'
+        l4_protocol_choice:
+          description: |-
+            layer4 protocol selection
+          type: string
+          enum:
+          - tcp
+          - udp
+        tcp:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Tcp'
+        udp:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Udp'
+    Dataflow.FlowProfile.Ethernet:
+      type: object
+      properties:
+        mtu:
+          type: integer
+          description: |-
+            Maximum Transmission Unit
+          default: 1500
+    Dataflow.FlowProfile.Tcp:
+      type: object
+      properties:
+        congestionAlgorithm:
+          default: cubic
+          description: |-
+            The TCP congestion algorithm:
+            bbr - Bottleneck Bandwidth and Round-trip propagation time
+            dctcp - Data center TCP
+            cubic - cubic window increase function
+            reno - TCP New Reno
+          type: string
+          enum:
+          - bbr
+          - dctcp
+          - cubic
+          - reno
+        initcwnd:
+          description: |-
+            initial congestion window
+          type: integer
+        sendBuf:
+          description: |-
+            send buffer size
+          type: integer
+        receiveBuf:
+          description: |-
+            receive buffer size
+          type: integer
+        destinationPort:
+          $ref: '#/components/schemas/L4PortRange'
+        sourcePort:
+          $ref: '#/components/schemas/L4PortRange'
+    L4PortRange:
+      description: |-
+        Layer4 protocol source or destination port values
+      type: object
+      properties:
+        choice:
+          description: |-
+            None
+          type: string
+          enum:
+          - single_value
+          - range
+        single_value:
+          $ref: '#/components/schemas/L4PortRange.SingleValue'
+        range:
+          $ref: '#/components/schemas/L4PortRange.Range'
+    L4PortRange.SingleValue:
+      type: object
+      properties:
+        value:
+          type: integer
+          default: 1
+    L4PortRange.Range:
+      type: object
+      properties:
+        start_value:
+          type: integer
+          default: 1
+        increment:
+          type: integer
+          default: 1
+          minimum: 1
+        count:
+          type: integer
+          default: 65535
+          minimum: 1
+          maximum: 65535
+    Dataflow.FlowProfile.Udp:
+      type: object
     Dataflow.WorkloadItem:
       type: object
       required:
