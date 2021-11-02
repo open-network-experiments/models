@@ -398,7 +398,12 @@ message FabricPodSwitch {
 message FabricRack {
   option (msg_meta).description = "Description missing in models";
 
-  repeated string rack_profile_names = 1 [
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "number of racks (and thus ToRs) in the pod"
+  ];
+
+  repeated string rack_profile_names = 2 [
     (fld_meta).description = "The names of rack profiles associated with this rack."
   ];
 }
