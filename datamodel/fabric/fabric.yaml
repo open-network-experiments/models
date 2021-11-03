@@ -36,9 +36,6 @@ components:
           type: array
           items:
             $ref: './link.yaml#/components/schemas/Fabric.Link'
-        parallel_fabric_count:
-          type: integer
-          default: 1
 
         pod_profiles:
           description: |-
