@@ -232,7 +232,7 @@ def dataflow_sample():
     aggregator = config.hosts.add(name="Aggregator", address="1.1.1.1")    
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
-    data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
+    data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1*1024*1024*1024)
     
     scatter = config.dataflow.workload.add(name="Scatter").scatter
     scatter.sources = [ aggregator.name ]
