@@ -111,3 +111,139 @@ def fabric_sample():
 </p>
 </details>
 
+
+
+# Dataflow example
+
+Below is a simple scatter-gather dataflow example:
+
+<p align="center">
+    <img src="./assets/sample_dataflow.png" />
+</p>
+
+<details><summary>JSON</summary>
+<p>
+
+```json
+{
+    "dataflow": {
+        "flow_profiles": [
+            {
+                "name": "data transfer",
+                "data_size": 1073741824
+            }
+        ],
+        "workload": [
+            {
+                "name": "Scatter",
+                "choice": "scatter",
+                "scatter": {
+                    "destinations": [
+                        "Compute 1",
+                        "Compute 2"
+                    ],
+                    "flow_profile_name": "data transfer",
+                    "sources": [
+                        "Aggregator"
+                    ]
+                }
+            },
+            {
+                "name": "Gather",
+                "choice": "gather",
+                "gather": {
+                    "destinations": [
+                        "Aggregator"
+                    ],
+                    "flow_profile_name": "data transfer",
+                    "sources": [
+                        "Compute 1",
+                        "Compute 2"
+                    ]
+                }
+            }
+        ]
+    },
+    "hosts": [
+        {
+            "name": "Aggregator",
+            "address": "1.1.1.1"
+        },
+        {
+            "name": "Compute 1",
+            "address": "3.3.3.3"
+        },
+        {
+            "name": "Compute 2",
+            "address": "4.4.4.4"
+        }
+    ]
+}
+```
+</p>
+</details>
+
+<details><summary>yaml</summary>
+<p>
+
+
+```yaml
+dataflow:
+  flow_profiles:
+  - name: data transfer
+    data_size: 1073741824
+  workload:
+  - name: Scatter
+    choice: scatter
+    scatter:
+      destinations:
+      - Compute 1
+      - Compute 2
+      flow_profile_name: data transfer
+      sources:
+      - Aggregator
+  - name: Gather
+    choice: gather
+    gather:
+      destinations:
+      - Aggregator
+      flow_profile_name: data transfer
+      sources:
+      - Compute 1
+      - Compute 2
+hosts:
+- name: Aggregator
+  address: 1.1.1.1
+- name: Compute 1
+  address: 3.3.3.3
+- name: Compute 2
+  address: 4.4.4.4
+```
+</p>
+</details>
+
+
+<details><summary>Python</summary>
+<p>
+
+```python
+def dataflow_sample():
+    config = onex.api().config()
+    aggregator = config.hosts.add(name="Aggregator", address="1.1.1.1")    
+    compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
+    compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
+    data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
+    
+    scatter = config.dataflow.workload.add(name="Scatter").scatter
+    scatter.sources = [ aggregator.name ]
+    scatter.destinations = [ compute1.name, compute2.name ]
+    scatter.flow_profile_name = data_transfer.name
+
+    gather = config.dataflow.workload.add(name="Gather").gather
+    gather.sources = [ compute1.name, compute2.name ]
+    gather.destinations = [ aggregator.name ]
+    gather.flow_profile_name = data_transfer.name    
+```
+</p>
+</details>
+
