@@ -610,9 +610,10 @@ message DataflowWorkloadItem {
     enum Enum {
       unspecified = 0;
       scatter = 1;
-      loop = 2;
-      compute = 3;
-      all_reduce = 4;
+      gather = 2;
+      all_reduce = 3;
+      loop = 4;
+      compute = 5;
     }
   }
   Choice.Enum choice = 2 [
@@ -623,20 +624,40 @@ message DataflowWorkloadItem {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowLoopWorkload loop = 4 [
+  optional DataflowGatherWorkload gather = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowComputeWorkload compute = 5 [
+  optional DataflowLoopWorkload loop = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowAllReduceWorkload all_reduce = 6 [
+  optional DataflowComputeWorkload compute = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowAllReduceWorkload all_reduce = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
 message DataflowScatterWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowGatherWorkload {
   option (msg_meta).description = "Description missing in models";
 
   repeated string sources = 1 [
