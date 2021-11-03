@@ -9,10 +9,6 @@ components:
           type: array
           items:
             $ref: "./host/host.yaml#/components/schemas/Host"
-        servers:
-          type: array
-          items:
-            $ref: "./server/server.yaml#/components/schemas/Server"
         fabric:
             $ref: "./fabric/fabric.yaml#/components/schemas/Fabric"
         dataflow:

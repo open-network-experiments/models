@@ -24,10 +24,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Host'
-        servers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Server'
         fabric:
           $ref: '#/components/schemas/Fabric'
         dataflow:
@@ -54,19 +50,6 @@ components:
             The prefix of the host
           type: integer
           default: 24
-    Server:
-      properties:
-        mac_address:
-          description: |-
-            The mac address
-          type: string
-          format: mac
-        name:
-          description: |-
-            Unique identifier for an object
-          type: string
-          format: global-unique
-      type: object
     Fabric:
       type: object
       properties:
