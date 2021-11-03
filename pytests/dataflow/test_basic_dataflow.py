@@ -1,9 +1,28 @@
 from typing import NamedTuple
 from artifacts.datamodel import datamodel as onex
 
+def test_simple_dataflow():
+    config = onex.api().config()
+
+    aggregator = config.hosts.add(name="Aggregator", address="1.1.1.1")    
+    compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
+    compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
+    data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
+    
+    scatter = config.dataflow.workload.add(name="Scatter").scatter
+    scatter.sources = [ aggregator.name ]
+    scatter.destinations = [ compute1.name, compute2.name ]
+    scatter.flow_profile_name = data_transfer.name
+
+    gather = config.dataflow.workload.add(name="Gather").gather
+    gather.sources = [ compute1.name, compute2.name ]
+    gather.destinations = [ aggregator.name ]
+    gather.flow_profile_name = data_transfer.name    
+
+    print (config.serialize())
+
 def test_ml_training():
-    api = onex.api()
-    config = api.config()
+    config = onex.api().config()
 
     storage_host = config.hosts.add(name="Data Storage 1", address="1.1.1.1")
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
@@ -40,11 +59,9 @@ def test_ml_training():
     back_compute_optimizer.simulated.duration = 10
     
     assert config.serialize()
-    return config
 
 def test_dataflow_flowprofile():
-    api = onex.api()
-    config = api.config()
+    config = onex.api().config()
 
     flow_profile = config.dataflow.flow_profiles.add(name='hyperparameters', data_size=10000)
 
