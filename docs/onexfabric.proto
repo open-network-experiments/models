@@ -133,16 +133,11 @@ message FabricSpinePodRack {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 parallel_fabric_count = 4 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated FabricPodProfile pod_profiles = 5 [
+  repeated FabricPodProfile pod_profiles = 4 [
     (fld_meta).description = "A list of pod profiles"
   ];
 
-  repeated FabricRackProfile rack_profiles = 6 [
+  repeated FabricRackProfile rack_profiles = 5 [
     (fld_meta).description = "A list of rack profiles"
   ];
 }
@@ -197,10 +192,6 @@ message FabricPodProfile {
   ];
 
   optional FabricRack rack = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated Annotations annotations = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -366,18 +357,6 @@ message FabricQosProfilePacketClassification {
 
 message FabricQosProfilePacketClassificationMap {
   option (msg_meta).description = "Description missing in models";
-}
-
-message Annotations {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string key = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional string value = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
 }
 
 message FabricLink {
