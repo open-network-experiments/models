@@ -3,10 +3,6 @@ components:
     Host:
       required: [address, name]
       properties:
-        front_panel_port:
-          description: |-
-            The number of the port on the front panel
-          type: integer
         name:
           description: |-
             The name, uniquely identifying the host
