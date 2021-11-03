@@ -97,10 +97,6 @@ components:
           $ref: "#/components/schemas/Fabric.PodSwitch"
         rack:
           $ref: "#/components/schemas/Fabric.Rack"
-        annotations:
-          type: array
-          items:
-            $ref: "#/components/schemas/Annotations"
 
     Fabric.PodSwitch:
       type: object
@@ -229,12 +225,4 @@ components:
       type: object
       additionalProperties:
         type: string
-
-    Annotations:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
 
