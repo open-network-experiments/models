@@ -32,162 +32,6 @@ components:
             $ref: '#/components/schemas/Host'
         fabric:
           $ref: '#/components/schemas/Fabric'
-    QosProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        dscp_to_traffic_class:
-          description: |-
-            A list of name/value key pairs
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotations'
-    SpinePodRack:
-      description: |-
-        An emulation of a spine/pod/rack topology
-      type: object
-      properties:
-        spines:
-          description: |-
-            The spines in the topology.
-          type: array
-          items:
-            $ref: '#/components/schemas/Spine'
-        pods:
-          description: |-
-            The pods in the topology.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pod'
-        parallel_fabric_count:
-          type: integer
-          default: 1
-    Spine:
-      type: object
-      properties:
-        count:
-          description: |-
-            The number of spines to be created with each spine sharing the same
-            downlink_ecmp_mode and qos_profile_name properties.
-          type: integer
-          default: 1
-        downlink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
-            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
-            \ but a different resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        qos_profile_name:
-          description: |
-            The name of a qos profile shared by the spines.
-
-            x-constraint:
-            - #/components/schemas/QosProfile/properties/name
-          type: string
-          x-constraint:
-          - '#/components/schemas/QosProfile/properties/name'
-    Pod:
-      type: object
-      properties:
-        count:
-          description: |-
-            The number of pods that will share the same profile
-          type: integer
-          default: 1
-        pod_profile_name:
-          description: |-
-            The pod profile associated with this pod.
-          type: array
-          items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/PodProfile/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/PodProfile/properties/name
-    PodProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        pod_switch:
-          $ref: '#/components/schemas/PodSwitch'
-        rack:
-          $ref: '#/components/schemas/PodRack'
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotations'
-    PodSwitch:
-      type: object
-      properties:
-        count:
-          type: integer
-          default: 1
-        uplink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
-            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
-            \ but a different resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        downlink_ecmp_mode:
-          description: "The algorithm for packet distribution over ECMP links.\n-\
-            \ random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple\
-            \ is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4\
-            \ but a different resulting RTAG7 hash mode"
-          type: string
-          enum:
-          - random_spray
-          - hash_3_tuple
-          - hash_5_tuple
-        qos_profile_name:
-          description: |
-            The name of a qos profile associated with this pod switch.
-
-            x-constraint:
-            - #/components/schemas/QosProfile/properties/name
-          type: string
-          x-constraint:
-          - '#/components/schemas/QosProfile/properties/name'
-    PodRack:
-      type: object
-      properties:
-        count:
-          type: integer
-          default: 1
-          description: |-
-            The number of racks (and thus ToR switches) in a pod
-        rack_profile_names:
-          description: |-
-            The names of rack profiles associated with this rack.
-          type: array
-          items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/RackProfile/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/RackProfile/properties/name
-    Annotations:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
     Host:
       required:
       - address
@@ -473,6 +317,13 @@ components:
       type: object
       additionalProperties:
         type: string
+    Annotations:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
     Fabric.Link:
       type: object
       description: "The ingress point of a host which is the index of a spine switch,\

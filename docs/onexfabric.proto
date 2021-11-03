@@ -75,155 +75,6 @@ message Config {
   ];
 }
 
-message QosProfile {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string name = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated Annotations dscp_to_traffic_class = 2 [
-    (fld_meta).description = "A list of name/value key pairs"
-  ];
-}
-
-message SpinePodRack {
-  option (msg_meta).description = "An emulation of a spine/pod/rack topology";
-
-  repeated Spine spines = 1 [
-    (fld_meta).description = "The spines in the topology."
-  ];
-
-  repeated Pod pods = 2 [
-    (fld_meta).description = "The pods in the topology."
-  ];
-
-  optional int32 parallel_fabric_count = 3 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message Spine {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 count = 1 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "The number of spines to be created with each spine sharing the same\ndownlink_ecmp_mode and qos_profile_name properties."
-  ];
-
-  message DownlinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  optional string qos_profile_name = 3 [
-    (fld_meta).description = "The name of a qos profile shared by the spines.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
-  ];
-}
-
-message Pod {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 count = 1 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "The number of pods that will share the same profile"
-  ];
-
-  repeated string pod_profile_name = 2 [
-    (fld_meta).description = "The pod profile associated with this pod."
-  ];
-}
-
-message PodProfile {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string name = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional PodSwitch pod_switch = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional PodRack rack = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated Annotations annotations = 4 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message PodSwitch {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 count = 1 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  message UplinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  message DownlinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  optional string qos_profile_name = 4 [
-    (fld_meta).description = "The name of a qos profile associated with this pod switch.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
-  ];
-}
-
-message PodRack {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 count = 1 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "The number of racks (and thus ToR switches) in a pod"
-  ];
-
-  repeated string rack_profile_names = 2 [
-    (fld_meta).description = "The names of rack profiles associated with this rack."
-  ];
-}
-
-message Annotations {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string key = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional string value = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
 message Host {
   option (msg_meta).description = "Description missing in models";
 
@@ -515,6 +366,18 @@ message FabricQosProfilePacketClassification {
 
 message FabricQosProfilePacketClassificationMap {
   option (msg_meta).description = "Description missing in models";
+}
+
+message Annotations {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string key = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string value = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricLink {

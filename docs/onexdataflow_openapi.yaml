@@ -1,6 +1,14 @@
 components:
   responses: {}
   schemas:
+    GlobalNamedObject:
+      type: object
+      properties:
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
     Error.Details:
       type: object
       properties:
@@ -20,280 +28,266 @@ components:
       type: object
       properties:
         hosts:
-          description: |-
-            A list of hosts
           type: array
           items:
             $ref: '#/components/schemas/Host'
-        flow_profiles:
-          description: |-
-            A list of host flow profiles
-          type: array
-          items:
-            $ref: '#/components/schemas/FlowProfile'
-        workload:
-          description: |-
-            A list of activities that make up a workload.
-          type: array
-          items:
-            $ref: '#/components/schemas/Activity'
+        dataflow:
+          $ref: '#/components/schemas/Dataflow'
     Host:
-      type: object
       required:
+      - address
       - name
-      - ipv4_address
       properties:
-        name:
-          type: string
-        ipv4_address:
-          type: string
-          format: ipv4
-        ipv6_address:
-          type: string
-          format: ipv6
-    Activity:
-      type: object
-      required:
-      - choice
-      properties:
-        choice:
+        front_panel_port:
           description: |-
-            The type of dataflow activity.
+            The number of the port on the front panel
+          type: integer
+        name:
+          description: |-
+            The name, uniquely identifying the host
           type: string
-          enum:
-          - many
-          - compute
-        many:
-          $ref: '#/components/schemas/ManyActivity'
-        compute:
-          $ref: '#/components/schemas/ComputeActivity'
-    ManyActivity:
-      description: |-
-        System MUST create flows between sources and destinations
-      required:
-      - flow_profile_name
-      - sources
-      - destinations
+        address:
+          description: |-
+            The test address of the host
+          type: string
+        prefix:
+          description: |-
+            The prefix of the host
+          type: integer
+          default: 24
+    Dataflow:
+      type: object
       properties:
-        flow_profile_name:
-          type: string
+        host_names:
+          type: array
+          items:
+            type: string
           x-constraint:
-          - '#/components/schemas/FlowProfile/properties/name'
+          - '#/components/schemas/Host/properties/name'
           description: |
             TBD
 
             x-constraint:
-            - #/components/schemas/FlowProfile/properties/name
-        parent_name:
-          description: "Used to create a graph of dataflow activities.\nThe name of\
-            \ a parent activity which determines its position in the \ngraph of activities.\n\
-            There can be only one activity with a missing or empty parent_name\nand\
-            \ all other activities must point to at least one named Activity.\n\n\
-            x-constraint:\n- #/components/schemas/Activity/properties/name\n"
-          type: string
-          x-constraint:
-          - '#/components/schemas/Activity/properties/name'
-        child_execution:
-          description: "All activities whose parent_name points to this activity will\
-            \ be \nexecuted according to this property."
-          type: string
-          enum:
-          - parallel
-          - sequential
-          default: sequential
-        name:
+            - #/components/schemas/Host/properties/name
+        workload:
           description: |-
-            Unique identifier for an object
-          type: string
-          format: global-unique
-        sources:
-          description: |-
-            A list of host names that will send
+            The workload items making up the dataflow
           type: array
           items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/Host/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/Host/properties/name
-          minItems: 1
-        destinations:
+            $ref: '#/components/schemas/Dataflow.WorkloadItem'
+        flow_profiles:
           description: |-
-            A list of host names that will receive
+            foo
           type: array
           items:
-            type: string
-            x-constraint:
-            - '#/components/schemas/Host/properties/name'
-            description: |
-              TBD
-
-              x-constraint:
-              - #/components/schemas/Host/properties/name
-          minItems: 1
-      type: object
-    ComputeActivity:
-      description: |-
-        System MUST create compute activity between sources and destinations
-      properties:
-        duration_ms:
-          type: integer
-          default: 1
-        parent_name:
-          description: "Used to create a graph of dataflow activities.\nThe name of\
-            \ a parent activity which determines its position in the \ngraph of activities.\n\
-            There can be only one activity with a missing or empty parent_name\nand\
-            \ all other activities must point to at least one named Activity.\n\n\
-            x-constraint:\n- #/components/schemas/Activity/properties/name\n"
-          type: string
-          x-constraint:
-          - '#/components/schemas/Activity/properties/name'
-        child_execution:
-          description: "All activities whose parent_name points to this activity will\
-            \ be \nexecuted according to this property."
-          type: string
-          enum:
-          - parallel
-          - sequential
-          default: sequential
-        name:
-          description: |-
-            Unique identifier for an object
-          type: string
-          format: global-unique
-      type: object
-    FlowProfile:
+            $ref: '#/components/schemas/Dataflow.FlowProfile'
+    Dataflow.FlowProfile:
       type: object
       required:
       - name
+      - data_size
       properties:
         name:
           type: string
-        ipv6:
+        data_size:
+          type: integer
+        l2_protocol_choice:
           description: |-
-            Use ipv6 addresses
-          type: boolean
-          default: false
-        ip:
-          $ref: '#/components/schemas/IpParameters'
-        choice:
+            layer2 protocol selection
+          type: string
+          enum:
+          - ethernet
+        ethernet:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Ethernet'
+        l4_protocol_choice:
+          description: |-
+            layer4 protocol selection
           type: string
           enum:
           - tcp
           - udp
-          default: tcp
         tcp:
-          $ref: '#/components/schemas/TcpParameters'
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Tcp'
         udp:
-          $ref: '#/components/schemas/UdpParameters'
-    IpParameters:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.Udp'
+    Dataflow.FlowProfile.Ethernet:
       type: object
       properties:
-        mss:
-          description: |-
-            The maximum segment size
-          type: integer
-          default: 0
-        initcwnd:
-          description: |-
-            The maximum initial congestion window size in MSS of a TCP connection.
-          type: integer
-          default: 0
         mtu:
-          description: |-
-            The maximum transmission unit
           type: integer
-          default: 0
-        tos:
           description: |-
-            The type of service
-          type: integer
-          default: 0
-    UdpParameters:
+            Maximum Transmission Unit
+          default: 1500
+    Dataflow.FlowProfile.Tcp:
       type: object
-      required:
-      - src_port
-      - dst_port
       properties:
-        src_port:
+        congestionAlgorithm:
+          default: cubic
           description: |-
-            The source port
-          type: integer
-        dst_port:
-          description: |-
-            The source port
-          type: integer
-    TcpParameters:
-      type: object
-      required:
-      - src_port
-      - dst_port
-      properties:
-        src_port:
-          description: |-
-            The source port
-          type: integer
-        dst_port:
-          description: |-
-            The source port
-          type: integer
-        mss:
-          description: |-
-            maximum segment size
-          type: integer
-          default: 1460
-        sndbuf:
-          description: |-
-            send buffer
-          type: integer
-          default: 131072
-        rcvbuf:
-          description: |-
-            receive buffer
-          type: integer
-          default: 131072
-        delack:
-          description: |-
-            delayed acknowledgements in milliseconds
-          type: integer
-          default: 4
-        sack:
-          description: |-
-            selective acknowledgements, 0 is disabled
-          type: integer
-          default: 0
-        minrto:
-          description: |-
-            minimum retransmission timeout in milliseconds
-          type: integer
-          default: 300
-        ecn:
-          description: |-
-            Explicit congestion notification
-          type: boolean
-          default: false
-        congestion:
-          description: |-
-            Congestion algorithm
+            The TCP congestion algorithm:
+            bbr - Bottleneck Bandwidth and Round-trip propagation time
+            dctcp - Data center TCP
+            cubic - cubic window increase function
+            reno - TCP New Reno
           type: string
           enum:
-          - none
           - bbr
-          - reno
-          - vegas
+          - dctcp
           - cubic
-          - tfrc
-          default: none
-    Extra:
+          - reno
+        initcwnd:
+          description: |-
+            initial congestion window
+          type: integer
+        sendBuf:
+          description: |-
+            send buffer size
+          type: integer
+        receiveBuf:
+          description: |-
+            receive buffer size
+          type: integer
+        destinationPort:
+          $ref: '#/components/schemas/L4PortRange'
+        sourcePort:
+          $ref: '#/components/schemas/L4PortRange'
+    L4PortRange:
+      description: |-
+        Layer4 protocol source or destination port values
       type: object
       properties:
-        name:
+        choice:
+          description: |-
+            None
           type: string
+          enum:
+          - single_value
+          - range
+        single_value:
+          $ref: '#/components/schemas/L4PortRange.SingleValue'
+        range:
+          $ref: '#/components/schemas/L4PortRange.Range'
+    L4PortRange.SingleValue:
+      type: object
+      properties:
         value:
+          type: integer
+          default: 1
+    L4PortRange.Range:
+      type: object
+      properties:
+        start_value:
+          type: integer
+          default: 1
+        increment:
+          type: integer
+          default: 1
+          minimum: 1
+        count:
+          type: integer
+          default: 65535
+          minimum: 1
+          maximum: 65535
+    Dataflow.FlowProfile.Udp:
+      type: object
+    Dataflow.WorkloadItem:
+      type: object
+      required:
+      - name
+      - choice
+      properties:
+        name:
+          description: |-
+            uniquely identifies the workload item
           type: string
+        choice:
+          description: |-
+            The type of workflow item
+          type: string
+          enum:
+          - scatter
+          - loop
+          - compute
+          - all_reduce
+        scatter:
+          $ref: '#/components/schemas/Dataflow.ScatterWorkload'
+        loop:
+          $ref: '#/components/schemas/Dataflow.LoopWorkload'
+        compute:
+          $ref: '#/components/schemas/Dataflow.ComputeWorkload'
+        all_reduce:
+          $ref: '#/components/schemas/Dataflow.AllReduceWorkload'
+    Dataflow.ScatterWorkload:
+      type: object
+      properties:
+        sources:
+          description: |-
+            list of host names, indicating the originator of the data
+          type: array
+          items:
+            type: string
+        destinations:
+          description: |-
+            list of host names, indicating the destination of the data
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+    Dataflow.AllReduceWorkload:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+        type:
+          description: |-
+            type of all reduce
+          type: string
+          enum:
+          - ring
+    Dataflow.ComputeWorkload:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
+        choice:
+          description: |-
+            type of compute
+          type: string
+          enum:
+          - simulated
+        simulated:
+          $ref: '#/components/schemas/Dataflow.SimulatedComputeWorkload'
+    Dataflow.SimulatedComputeWorkload:
+      type: object
+      properties:
+        duration:
+          description: |-
+            duration of the simulated compute workload in seconds
+          type: number
+    Dataflow.LoopWorkload:
+      type: object
+      properties:
+        iterations:
+          description: |-
+            number of iterations in the loop
+          type: integer
+        children:
+          description: |-
+            list of workload items that are executed in this loop
+          type: array
+          items:
+            $ref: '#/components/schemas/Dataflow.WorkloadItem'
 openapi: 3.0.3
 info:
   title: Distributed System Emulator Dataflow API and Data Models
