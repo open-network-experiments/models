@@ -72,7 +72,6 @@ def test_dataflow_flowprofile():
     flow_profile.tcp.sendBuf = 4 * 1024 * 1024
     flow_profile.tcp.sourcePort.range.start_value = 1024
     flow_profile.tcp.sourcePort.range.increment = 1
-    flow_profile.tcp.sourcePort.range.count = 2000
     flow_profile.tcp.destinationPort.single_value.value = 50051
 
     flow_profile.data_size = 1 * 1024 * 1024 * 1024
