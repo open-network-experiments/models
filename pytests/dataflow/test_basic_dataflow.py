@@ -19,7 +19,7 @@ def test_simple_dataflow():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    print (config.serialize())
+    assert config.serialize()
 
 def test_ml_training():
     config = onex.api().config()

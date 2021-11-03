@@ -30,10 +30,14 @@ def test_qos_ingress_admission():
 
     # 2. create a topology with a single pod (and 1 switch in the pod),
     #    assign the qos profile to it
-    config.fabric.spine_pod_rack.pods.add(count=1, pod_profile_name=["Pod Profile 1"])
     pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1")
+    config.fabric.spine_pod_rack.pods.add(count=1, pod_profile_name=[pod_profile.name])
     pod_profile.pod_switch.count = 1
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
+    pod_profile.rack.count = 2
+    rack_profile = config.fabric.spine_pod_rack.rack_profiles.add("Rack Profile 1")
+    pod_profile.rack.rack_profile_names = [ rack_profile.name ]
+    rack_profile.tor_qos_profile_name = qos_profile.name
 
     assert config.serialize()
 
