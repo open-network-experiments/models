@@ -38,10 +38,6 @@ components:
       - address
       - name
       properties:
-        front_panel_port:
-          description: |-
-            The number of the port on the front panel
-          type: integer
         name:
           description: |-
             The name, uniquely identifying the host
@@ -183,11 +179,6 @@ components:
           type: integer
           default: 1
           minimum: 1
-        count:
-          type: integer
-          default: 65535
-          minimum: 1
-          maximum: 65535
     Dataflow.FlowProfile.Udp:
       type: object
     Dataflow.WorkloadItem:

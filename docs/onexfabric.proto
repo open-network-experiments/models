@@ -78,19 +78,15 @@ message Config {
 message Host {
   option (msg_meta).description = "Description missing in models";
 
-  optional int32 front_panel_port = 1 [
-    (fld_meta).description = "The number of the port on the front panel"
-  ];
-
-  string name = 2 [
+  string name = 1 [
     (fld_meta).description = "The name, uniquely identifying the host"
   ];
 
-  string address = 3 [
+  string address = 2 [
     (fld_meta).description = "The test address of the host"
   ];
 
-  optional int32 prefix = 4 [
+  optional int32 prefix = 3 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
   ];
