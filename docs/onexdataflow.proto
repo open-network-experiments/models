@@ -347,10 +347,14 @@ message DataflowAllReduceWorkload {
   message Type {
     enum Enum {
       unspecified = 0;
-      ring = 1;
+      all_to_all = 1;
+      ring = 2;
+      butterfly = 3;
+      pipeline = 4;
     }
   }
   optional Type.Enum type = 3 [
+    (fld_meta).default = "Type.Enum.all_to_all",
     (fld_meta).description = "type of all reduce"
   ];
 }

@@ -39,6 +39,14 @@ extend google.protobuf.MethodOptions {
   optional OpenApiRpcOpt rpc_meta = 60004;
 }
 
+message GlobalNamedObject {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Unique identifier for an object"
+  ];
+}
+
 message ErrorDetails {
   option (msg_meta).description = "Description missing in models";
 
@@ -62,15 +70,11 @@ message Config {
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated Server servers = 2 [
+  optional Fabric fabric = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Fabric fabric = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional Dataflow dataflow = 4 [
+  optional Dataflow dataflow = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -93,18 +97,6 @@ message Host {
   optional int32 prefix = 4 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
-  ];
-}
-
-message Server {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string mac_address = 1 [
-    (fld_meta).description = "The mac address"
-  ];
-
-  optional string name = 2 [
-    (fld_meta).description = "Unique identifier for an object"
   ];
 }
 
@@ -145,16 +137,11 @@ message FabricSpinePodRack {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 parallel_fabric_count = 4 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated FabricPodProfile pod_profiles = 5 [
+  repeated FabricPodProfile pod_profiles = 4 [
     (fld_meta).description = "A list of pod profiles"
   ];
 
-  repeated FabricRackProfile rack_profiles = 6 [
+  repeated FabricRackProfile rack_profiles = 5 [
     (fld_meta).description = "A list of rack profiles"
   ];
 }
@@ -209,10 +196,6 @@ message FabricPodProfile {
   ];
 
   optional FabricRack rack = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated Annotations annotations = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -378,18 +361,6 @@ message FabricQosProfilePacketClassification {
 
 message FabricQosProfilePacketClassificationMap {
   option (msg_meta).description = "Description missing in models";
-}
-
-message Annotations {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string key = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional string value = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
 }
 
 message FabricLink {
@@ -687,10 +658,14 @@ message DataflowAllReduceWorkload {
   message Type {
     enum Enum {
       unspecified = 0;
-      ring = 1;
+      all_to_all = 1;
+      ring = 2;
+      butterfly = 3;
+      pipeline = 4;
     }
   }
   optional Type.Enum type = 3 [
+    (fld_meta).default = "Type.Enum.all_to_all",
     (fld_meta).description = "type of all reduce"
   ];
 }

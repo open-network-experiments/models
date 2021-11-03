@@ -1,6 +1,14 @@
 components:
   responses: {}
   schemas:
+    GlobalNamedObject:
+      type: object
+      properties:
+        name:
+          description: |-
+            Unique identifier for an object
+          type: string
+          format: global-unique
     Error.Details:
       type: object
       properties:
@@ -86,9 +94,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fabric.Link'
-        parallel_fabric_count:
-          type: integer
-          default: 1
         pod_profiles:
           description: |-
             A list of pod profiles
@@ -159,10 +164,6 @@ components:
           $ref: '#/components/schemas/Fabric.PodSwitch'
         rack:
           $ref: '#/components/schemas/Fabric.Rack'
-        annotations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Annotations'
     Fabric.PodSwitch:
       type: object
       properties:
@@ -313,13 +314,6 @@ components:
       type: object
       additionalProperties:
         type: string
-    Annotations:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
     Fabric.Link:
       type: object
       description: "The ingress point of a host which is the index of a spine switch,\
@@ -583,7 +577,11 @@ components:
             type of all reduce
           type: string
           enum:
+          - all_to_all
           - ring
+          - butterfly
+          - pipeline
+          default: all_to_all
     Dataflow.ComputeWorkload:
       type: object
       properties:
