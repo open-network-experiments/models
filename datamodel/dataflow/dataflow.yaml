@@ -135,9 +135,11 @@ components:
           description: |-
             The type of workflow item
           type: string
-          enum: [scatter, loop, compute, all_reduce]
+          enum: [scatter, gather, all_reduce, loop, compute]
         scatter:
           $ref: "#/components/schemas/Dataflow.ScatterWorkload"
+        gather:
+          $ref: "#/components/schemas/Dataflow.GatherWorkload"
         loop:
           $ref: "#/components/schemas/Dataflow.LoopWorkload"
         compute:
@@ -146,6 +148,26 @@ components:
           $ref: "#/components/schemas/Dataflow.AllReduceWorkload"
 
     Dataflow.ScatterWorkload:
+      type: object
+      properties:
+        sources:
+          description: |-
+            list of host names, indicating the originator of the data
+          type: array
+          items:
+            type: string
+        destinations:
+          description: |-
+            list of host names, indicating the destination of the data
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+
+    Dataflow.GatherWorkload:
       type: object
       properties:
         sources:
