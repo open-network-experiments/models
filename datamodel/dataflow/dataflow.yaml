@@ -202,7 +202,8 @@ components:
           description: |-
             type of all reduce
           type: string
-          enum: [ring]
+          enum: [all_to_all, ring, butterfly, pipeline]
+          default: all_to_all
 
     Dataflow.ComputeWorkload:
       type: object
