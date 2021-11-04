@@ -16,7 +16,7 @@ Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 
 
 Click on language/format node to expand the sample!
 
-<details><summary>JSON</summary>
+<details><summary>Json</summary>
 <p>
 
 ```json
@@ -58,7 +58,7 @@ Click on language/format node to expand the sample!
 </p>
 </details>
 
-<details><summary>yaml</summary>
+<details><summary>Yaml</summary>
 <p>
 
 
@@ -121,7 +121,7 @@ Below is a simple scatter-gather dataflow example:
     <img src="./assets/sample_dataflow.png" />
 </p>
 
-<details><summary>JSON</summary>
+<details><summary>Json</summary>
 <p>
 
 ```json
@@ -183,7 +183,7 @@ Below is a simple scatter-gather dataflow example:
 </p>
 </details>
 
-<details><summary>yaml</summary>
+<details><summary>Yaml</summary>
 <p>
 
 
