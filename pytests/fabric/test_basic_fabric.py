@@ -2,6 +2,11 @@ from artifacts.fabric import fabric as onex
 
 def test_simple_fabric_with_oversubscription():
     config = onex.api().config()
+
+    datastorage1 = config.hosts.add(name="Data Storage 1", address="1.1.1.1")
+    compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
+    compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
+
     config.fabric.spine_pod_rack.spines.add(count=1)
     config.fabric.spine_pod_rack.pods.add(count=2, pod_profile_name=["Pod Profile 1"])
 
@@ -14,9 +19,18 @@ def test_simple_fabric_with_oversubscription():
     pod_profile.rack.rack_profile_names = [ rack_profile.name ]
     pod_profile.rack.count = 2
 
-    config.hosts.add(name="Data Storage 1", address="1.1.1.1")
-    config.hosts.add(name="Compute 1", address="3.3.3.3")
-    config.hosts.add(name="Compute 2", address="4.4.4.4")
+    datastorage1_link = config.fabric.spine_pod_rack.host_links.add(host_name=datastorage1.name)
+    datastorage1_link.rack.pod_index = 1
+    datastorage1_link.rack.switch_index = 1
+    
+    compute1_link = config.fabric.spine_pod_rack.host_links.add(host_name=compute1.name)
+    compute1_link.rack.pod_index = 2
+    compute1_link.rack.switch_index = 1
+
+    compute2_link = config.fabric.spine_pod_rack.host_links.add(host_name=compute2.name)
+    compute2_link.rack.pod_index = 2
+    compute2_link.rack.switch_index = 1
+
 
 def test_qos_ingress_admission():
     config = onex.api().config()

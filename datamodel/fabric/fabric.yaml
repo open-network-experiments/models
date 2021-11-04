@@ -32,10 +32,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Fabric.Pod"
-        links:
+        host_links:
           type: array
           items:
-            $ref: './link.yaml#/components/schemas/Fabric.Link'
+            $ref: './link.yaml#/components/schemas/SwitchHostLink'
 
         pod_profiles:
           description: |-
