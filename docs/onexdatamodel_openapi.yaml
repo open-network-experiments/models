@@ -672,6 +672,8 @@ components:
         auxillary host information needed to run dataflow experiments
       required:
       - host_name
+      - management_address
+      - nic_name
       properties:
         host_name:
           type: string
@@ -686,6 +688,10 @@ components:
           type: string
           description: |-
             Hostname or address of management interface of a server running dataflow traffic
+        nic_name:
+          type: string
+          description: |-
+            unique idenfier for the network interface card (nic), e.g. "eth1"
 openapi: 3.0.3
 info:
   title: ONEx Data Models

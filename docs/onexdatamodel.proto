@@ -781,8 +781,12 @@ message DataflowHostManagement {
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
   ];
 
-  optional string management_address = 2 [
+  string management_address = 2 [
     (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
+  ];
+
+  string nic_name = 3 [
+    (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
   ];
 }
 
