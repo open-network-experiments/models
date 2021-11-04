@@ -1,0 +1,15 @@
+components:
+  schemas:
+    Dataflow.HostManagement:
+      type: object
+      description: |-
+        auxillary host information needed to run dataflow experiments
+      required: [host_name]
+      properties:
+        host_name:
+          type: string
+          x-constraint:
+          - '#components/schemas/Host/properties/name'
+        management_address:
+          type: string
+          description: Hostname or address of management interface of a server running dataflow traffic

@@ -3,12 +3,10 @@ components:
     Dataflow:
       type: object
       properties:
-        host_names:
+        host_management:
           type: array
           items:
-            type: string
-          x-constraint:
-          - '#/components/schemas/Host/properties/name'
+            $ref: './host_management.yaml#/components/schemas/Dataflow.HostManagement'
         workload:
           description: |-
             The workload items making up the dataflow
