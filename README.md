@@ -8,7 +8,7 @@ This ONEx repository produces OpenAPI artifacts that describe APIs and Data Mode
 
 # Fabric example
 
-Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 1 ToR + host in each pod:
+Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 1 ToR in each pod:
 
 <p align="center">
     <img src="./assets/sample_fabric.png" />
