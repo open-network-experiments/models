@@ -19,9 +19,9 @@ def test_simple_dataflow():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    config.dataflow.host_management.add(host_name=aggregator.name, management_address="10.36.12.32")
-    config.dataflow.host_management.add(host_name=compute1.name, management_address="10.36.12.33")
-    config.dataflow.host_management.add(host_name=compute2.name, management_address="10.36.12.34")
+    config.dataflow.host_management.add(host_name=aggregator.name, management_address="10.36.12.32", nic_name='eth1')
+    config.dataflow.host_management.add(host_name=compute1.name, management_address="10.36.12.33", nic_name='eth1')
+    config.dataflow.host_management.add(host_name=compute2.name, management_address="10.36.12.33", nic_name='eth2')
 
     assert config.serialize()
 
