@@ -142,10 +142,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fabric.Pod'
-        links:
+        host_links:
           type: array
           items:
-            $ref: '#/components/schemas/Fabric.Link'
+            $ref: '#/components/schemas/SwitchHostLink'
         pod_profiles:
           description: |-
             A list of pod profiles
@@ -366,10 +366,12 @@ components:
       type: object
       additionalProperties:
         type: string
-    Fabric.Link:
+    SwitchHostLink:
       type: object
       description: "The ingress point of a host which is the index of a spine switch,\
         \ \na pod/rack switch."
+      required:
+      - host_name
       properties:
         host_name:
           type: string
@@ -380,50 +382,50 @@ components:
 
             x-constraint:
             - #components/schemas/Host/properties/name
+        front_panel_port:
+          type: integer
+          description: |-
+            Optional front panel port number, if fabric is rendered on physical box
         choice:
           type: string
           enum:
           - spine
           - pod
           - rack
+          default: rack
         spine:
           description: "One based index of the spine switch based on the number of\
             \ spines \nconfigured in the spine_pod_rack topology."
           type: integer
           minimum: 1
         pod:
-          $ref: '#/components/schemas/Link.PodRackLink'
+          $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
         rack:
-          $ref: '#/components/schemas/Link.PodRackLink'
-    Link.PodRackLink:
+          $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
+    SwitchHostLink.SwitchRef:
       description: |-
-        Location of the switch based on the number of pods and rack switches.
+        Location of the switch based on pod and switch index
       type: object
       properties:
         pod_index:
           description: |-
-            Index of the pod switch based on the number of pods and pod switches.
+            One-based index of the pod based on the number of pods in the fabric
           type: integer
+          default: 1
           minimum: 1
         switch_index:
           description: |-
-            Index of the rack switch based on the number of pods and rack switches.
+            One-based index of the pod or rack switch in the indicated pod
           type: integer
+          default: 1
           minimum: 1
     Dataflow:
       type: object
       properties:
-        host_names:
+        host_management:
           type: array
           items:
-            type: string
-          x-constraint:
-          - '#/components/schemas/Host/properties/name'
-          description: |
-            TBD
-
-            x-constraint:
-            - #/components/schemas/Host/properties/name
+            $ref: '#/components/schemas/Dataflow.HostManagement'
         workload:
           description: |-
             The workload items making up the dataflow
@@ -664,6 +666,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dataflow.WorkloadItem'
+    Dataflow.HostManagement:
+      type: object
+      description: |-
+        auxillary host information needed to run dataflow experiments
+      required:
+      - host_name
+      properties:
+        host_name:
+          type: string
+          x-constraint:
+          - '#components/schemas/Host/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #components/schemas/Host/properties/name
+        management_address:
+          type: string
+          description: |-
+            Hostname or address of management interface of a server running dataflow traffic
 openapi: 3.0.3
 info:
   title: ONEx Data Models

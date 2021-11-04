@@ -193,7 +193,7 @@ message FabricSpinePodRack {
     (fld_meta).description = "The pods in the topology."
   ];
 
-  repeated FabricLink links = 3 [
+  repeated SwitchHostLink host_links = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -423,11 +423,15 @@ message FabricQosProfilePacketClassificationMap {
   option (msg_meta).description = "Description missing in models";
 }
 
-message FabricLink {
+message SwitchHostLink {
   option (msg_meta).description = "The ingress point of a host which is the index of a spine switch, \na pod/rack switch.";
 
-  optional string host_name = 1 [
+  string host_name = 1 [
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
+  ];
+
+  optional int32 front_panel_port = 2 [
+    (fld_meta).description = "Optional front panel port number, if fabric is rendered on physical box"
   ];
 
   message Choice {
@@ -438,40 +442,43 @@ message FabricLink {
       rack = 3;
     }
   }
-  optional Choice.Enum choice = 2 [
+  optional Choice.Enum choice = 3 [
+    (fld_meta).default = "Choice.Enum.rack",
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 spine = 3 [
+  optional int32 spine = 4 [
     (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the spine_pod_rack topology."
   ];
 
-  optional LinkPodRackLink pod = 4 [
+  optional SwitchHostLinkSwitchRef pod = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional LinkPodRackLink rack = 5 [
+  optional SwitchHostLinkSwitchRef rack = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message LinkPodRackLink {
-  option (msg_meta).description = "Location of the switch based on the number of pods and rack switches.";
+message SwitchHostLinkSwitchRef {
+  option (msg_meta).description = "Location of the switch based on pod and switch index";
 
   optional int32 pod_index = 1 [
-    (fld_meta).description = "Index of the pod switch based on the number of pods and pod switches."
+    (fld_meta).default = "1",
+    (fld_meta).description = "One-based index of the pod based on the number of pods in the fabric"
   ];
 
   optional int32 switch_index = 2 [
-    (fld_meta).description = "Index of the rack switch based on the number of pods and rack switches."
+    (fld_meta).default = "1",
+    (fld_meta).description = "One-based index of the pod or rack switch in the indicated pod"
   ];
 }
 
 message Dataflow {
   option (msg_meta).description = "Description missing in models";
 
-  repeated string host_names = 1 [
-    (fld_meta).description = "TBD\n\nx-constraint:\n- #/components/schemas/Host/properties/name\n"
+  repeated DataflowHostManagement host_management = 1 [
+    (fld_meta).description = "Description missing in models"
   ];
 
   repeated DataflowWorkloadItem workload = 2 [
@@ -764,6 +771,18 @@ message DataflowLoopWorkload {
 
   repeated DataflowWorkloadItem children = 2 [
     (fld_meta).description = "list of workload items that are executed in this loop"
+  ];
+}
+
+message DataflowHostManagement {
+  option (msg_meta).description = "auxillary host information needed to run dataflow experiments";
+
+  string host_name = 1 [
+    (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
+  ];
+
+  optional string management_address = 2 [
+    (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
   ];
 }
 

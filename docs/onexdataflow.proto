@@ -95,8 +95,8 @@ message Host {
 message Dataflow {
   option (msg_meta).description = "Description missing in models";
 
-  repeated string host_names = 1 [
-    (fld_meta).description = "TBD\n\nx-constraint:\n- #/components/schemas/Host/properties/name\n"
+  repeated DataflowHostManagement host_management = 1 [
+    (fld_meta).description = "Description missing in models"
   ];
 
   repeated DataflowWorkloadItem workload = 2 [
@@ -389,6 +389,18 @@ message DataflowLoopWorkload {
 
   repeated DataflowWorkloadItem children = 2 [
     (fld_meta).description = "list of workload items that are executed in this loop"
+  ];
+}
+
+message DataflowHostManagement {
+  option (msg_meta).description = "auxillary host information needed to run dataflow experiments";
+
+  string host_name = 1 [
+    (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
+  ];
+
+  optional string management_address = 2 [
+    (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
   ];
 }
 

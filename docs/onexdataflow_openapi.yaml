@@ -54,17 +54,10 @@ components:
     Dataflow:
       type: object
       properties:
-        host_names:
+        host_management:
           type: array
           items:
-            type: string
-          x-constraint:
-          - '#/components/schemas/Host/properties/name'
-          description: |
-            TBD
-
-            x-constraint:
-            - #/components/schemas/Host/properties/name
+            $ref: '#/components/schemas/Dataflow.HostManagement'
         workload:
           description: |-
             The workload items making up the dataflow
@@ -305,6 +298,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dataflow.WorkloadItem'
+    Dataflow.HostManagement:
+      type: object
+      description: |-
+        auxillary host information needed to run dataflow experiments
+      required:
+      - host_name
+      properties:
+        host_name:
+          type: string
+          x-constraint:
+          - '#components/schemas/Host/properties/name'
+          description: |
+            TBD
+
+            x-constraint:
+            - #components/schemas/Host/properties/name
+        management_address:
+          type: string
+          description: |-
+            Hostname or address of management interface of a server running dataflow traffic
 openapi: 3.0.3
 info:
   title: Distributed System Emulator Dataflow API and Data Models
