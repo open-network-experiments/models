@@ -63,6 +63,70 @@ message WarningDetails {
   ];
 }
 
+message ExperimentRequest {
+  option (msg_meta).description = "Experiment request details";
+}
+
+message MetricsRequest {
+  option (msg_meta).description = "Metrics request details";
+}
+
+message MetricsResponse {
+  option (msg_meta).description = "Metrics response details";
+
+  optional float jct = 1 [
+    (fld_meta).description = "job completion time"
+  ];
+
+  repeated MetricsResponseFlowResult flow_results = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message MetricsResponseFlowResult {
+  option (msg_meta).description = "result for a single data flow";
+
+  optional string workload_name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 flow_number = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string from_host_name = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string to_host_name = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional float fct = 5 [
+    (fld_meta).description = "flow completion time"
+  ];
+
+  optional MetricsResponseFlowResultTcpInfo tcp_info = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message MetricsResponseFlowResultTcpInfo {
+  option (msg_meta).description = "TCP information for this flow";
+
+  optional float rtt = 1 [
+    (fld_meta).description = "round trip time in microseconds"
+  ];
+
+  optional float rtt_variance = 2 [
+    (fld_meta).description = "round trip time variance in microseconds, larger values indicate less stable performance"
+  ];
+
+  optional float retransmissions = 3 [
+    (fld_meta).description = "total number of TCP retransmissions"
+  ];
+}
+
 message Config {
   option (msg_meta).description = "The resources that define a fabric configuration.";
 
@@ -711,10 +775,36 @@ message SetConfigResponse {
 }
 
 
+message RunExperimentRequest {
+  ExperimentRequest experiment_request = 1;
+}
+message RunExperimentResponse {
+  optional ErrorDetails status_code_400 = 1;
+  optional ErrorDetails status_code_500 = 2;
+  optional WarningDetails status_code_200 = 3;
+}
+
+
+message GetMetricsRequest {
+  MetricsRequest metrics_request = 1;
+}
+message GetMetricsResponse {
+  optional MetricsResponse status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
+
 service Openapi {
   option (svc_meta).description = "Description missing in models";
 
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
     option (rpc_meta).description = "A placeholder API that returns nothing. It is used by the OpenAPIArt package to generate UX SDK objects.";
+  }
+  rpc RunExperiment(RunExperimentRequest) returns (RunExperimentResponse) {
+    option (rpc_meta).description = "Runs the currently configured experiment";
+  }
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
+    option (rpc_meta).description = "Description missing in models";
   }
 }
