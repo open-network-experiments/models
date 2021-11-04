@@ -228,7 +228,8 @@ hosts:
 
 ```python
 def dataflow_sample():
-    config = onex.api().config()
+    api = onex.api()
+    config = api.config()
     aggregator = config.hosts.add(name="Aggregator", address="1.1.1.1")    
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
@@ -242,8 +243,13 @@ def dataflow_sample():
     gather = config.dataflow.workload.add(name="Gather").gather
     gather.sources = [ compute1.name, compute2.name ]
     gather.destinations = [ aggregator.name ]
-    gather.flow_profile_name = data_transfer.name    
-```
+    gather.flow_profile_name = data_transfer.name 
+
+    api.set_config(config)
+    api.run_experiment(api.experiment_request())
+    jct = api.get_metrics(api.metrics_request()).jct
+    print (f"Experiment complete, JCT: {jct}")
+ ```
 </p>
 </details>
 
