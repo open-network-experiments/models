@@ -86,4 +86,35 @@ components:
         rate_unit: 
           type: string
           enum: [bps, Kbps, Mbps, Gbps]
+        packet:
+          $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet"
 
+
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet:
+      type: object
+      properties:
+        src_address:
+          description: source IP address
+          type: string
+        dst_address:
+          description: destination IP address
+          type: string
+        src_port:
+          type: integer
+          description: Layer 4 source port
+          maximum: 65535
+          default: 1024
+        dst_port:
+          type: integer
+          description: Layer 4 destination port
+          maximum: 65535
+          default: 1024
+        size:
+          type: integer
+          description: total packet size
+          minimum: 64
+          default: 1000
+        l4_protocol:
+          type: string
+          description: Layer 4 transport protocol
+          enum: [tcp, udp]
