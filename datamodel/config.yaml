@@ -10,7 +10,8 @@ components:
           items:
             $ref: "./host/host.yaml#/components/schemas/Host"
         fabric:
-            $ref: "./fabric/fabric.yaml#/components/schemas/Fabric"
+          $ref: "./fabric/fabric.yaml#/components/schemas/Fabric"
         dataflow:
-            $ref: "./dataflow/dataflow.yaml#/components/schemas/Dataflow"
-
+          $ref: "./dataflow/dataflow.yaml#/components/schemas/Dataflow"
+        chaos:
+          $ref: "./chaos/chaos.yaml#/components/schemas/Chaos"
