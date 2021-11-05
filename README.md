@@ -370,7 +370,8 @@ def run_workfload(mtu):
     print (f"Experiment complete, JCT: {jct}")
 
 
-def run_experiment()
+def run_experiments():
+
     for fabric_switch_port_buffer in [0, 10000, 1000000]:
 
         configure_fabric(fabric_switch_port_buffer)
