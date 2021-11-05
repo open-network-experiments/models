@@ -384,6 +384,8 @@ def run_experiment()
                 run_workfload(mtu)
 
  ```
+</p>
+</details>
 
 # Contributing
 
