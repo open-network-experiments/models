@@ -141,6 +141,10 @@ message Config {
   optional Dataflow dataflow = 3 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional Chaos chaos = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message Host {
@@ -787,6 +791,194 @@ message DataflowHostManagement {
 
   string nic_name = 3 [
     (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
+  ];
+}
+
+message Chaos {
+  option (msg_meta).description = "Description missing in models";
+
+  optional ChaosBackgroundTraffic background_traffic = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTraffic {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated ChaosBackgroundTrafficFlow flows = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlow {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPoint fabric_entry_point = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      stateless = 1;
+    }
+  }
+  optional Choice.Enum choice = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated ChaosBackgroundTrafficFlowStateless stateless = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowEntryPoint {
+  option (msg_meta).description = "Description missing in models";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      switch_reference = 1;
+      front_panel_port = 2;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPointSwitchReference switch_reference = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPointFrontPanelPort front_panel_port = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowEntryPointSwitchReference {
+  option (msg_meta).description = "Description missing in models";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      spine = 1;
+      pod = 2;
+      tor = 3;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferenceSpine spine = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference pod = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference tor = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowEntryPointSwitchReferenceSpine {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 switch_index = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 pod_index = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 switch_index = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowEntryPointFrontPanelPort {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 front_panel_port = 1 [
+    (fld_meta).description = "Front panel port number (if fabric is emulated on a device with front panel ports)"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStateless {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 rate = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message RateUnit {
+    enum Enum {
+      unspecified = 0;
+      bps = 1;
+      kbps = 2;
+      mbps = 3;
+      gbps = 4;
+    }
+  }
+  optional RateUnit.Enum rate_unit = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStatelessPacket packet = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStatelessPacket {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string src_address = 1 [
+    (fld_meta).description = "source IP address"
+  ];
+
+  optional string dst_address = 2 [
+    (fld_meta).description = "destination IP address"
+  ];
+
+  optional int32 src_port = 3 [
+    (fld_meta).default = "1024",
+    (fld_meta).description = "Layer 4 source port"
+  ];
+
+  optional int32 dst_port = 4 [
+    (fld_meta).default = "1024",
+    (fld_meta).description = "Layer 4 destination port"
+  ];
+
+  optional int32 size = 5 [
+    (fld_meta).default = "1000",
+    (fld_meta).description = "total packet size"
+  ];
+
+  message L4Protocol {
+    enum Enum {
+      unspecified = 0;
+      tcp = 1;
+      udp = 2;
+    }
+  }
+  optional L4Protocol.Enum l4_protocol = 6 [
+    (fld_meta).description = "Layer 4 transport protocol"
   ];
 }
 
