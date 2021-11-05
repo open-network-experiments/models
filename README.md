@@ -127,39 +127,33 @@ Below is a simple scatter-gather dataflow example:
 ```json
 {
     "dataflow": {
-        "flow_profiles": [
-            {
-                "name": "data transfer",
-                "data_size": 1073741824
-            }
-        ],
         "workload": [
             {
                 "name": "Scatter",
                 "choice": "scatter",
                 "scatter": {
+                    "sources": [
+                        "Aggregator"
+                    ],
                     "destinations": [
                         "Compute 1",
                         "Compute 2"
                     ],
-                    "flow_profile_name": "data transfer",
-                    "sources": [
-                        "Aggregator"
-                    ]
+                    "flow_profile_name": "data transfer"
                 }
             },
             {
                 "name": "Gather",
                 "choice": "gather",
                 "gather": {
-                    "destinations": [
-                        "Aggregator"
-                    ],
-                    "flow_profile_name": "data transfer",
                     "sources": [
                         "Compute 1",
                         "Compute 2"
-                    ]
+                    ],
+                    "destinations": [
+                        "Aggregator"
+                    ],
+                    "flow_profile_name": "data transfer"
                 }
             }
         ]
@@ -176,6 +170,12 @@ Below is a simple scatter-gather dataflow example:
         {
             "name": "Compute 2",
             "address": "4.4.4.4"
+        }
+    ],
+    "flow_profiles": [
+        {
+            "name": "data transfer",
+            "data_size": 1073741824
         }
     ]
 }
