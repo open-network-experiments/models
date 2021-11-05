@@ -92,6 +92,8 @@ components:
           $ref: '#/components/schemas/Fabric'
         dataflow:
           $ref: '#/components/schemas/Dataflow'
+        chaos:
+          $ref: '#/components/schemas/Chaos'
     Host:
       required:
       - address
@@ -672,6 +674,8 @@ components:
         auxillary host information needed to run dataflow experiments
       required:
       - host_name
+      - management_address
+      - nic_name
       properties:
         host_name:
           type: string
@@ -686,6 +690,97 @@ components:
           type: string
           description: |-
             Hostname or address of management interface of a server running dataflow traffic
+        nic_name:
+          type: string
+          description: |-
+            unique idenfier for the network interface card (nic), e.g. "eth1"
+    Chaos:
+      type: object
+      properties:
+        background_traffic:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic'
+    Chaos.BackgroundTraffic:
+      type: object
+      properties:
+        flows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow'
+    Chaos.BackgroundTraffic.Flow:
+      type: object
+      properties:
+        name:
+          type: string
+        fabric_entry_point:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint'
+        choice:
+          type: string
+          enum:
+          - stateless
+        stateless:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless'
+    Chaos.BackgroundTraffic.Flow.EntryPoint:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - switch_reference
+          - front_panel_port
+        switch_reference:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference'
+        front_panel_port:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.FrontPanelPort'
+    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - spine
+          - pod
+          - tor
+        spine:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.Spine'
+        pod:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference'
+        tor:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference'
+    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.Spine:
+      type: object
+      properties:
+        switch_index:
+          type: integer
+    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference:
+      type: object
+      properties:
+        pod_index:
+          type: integer
+        switch_index:
+          type: integer
+    Chaos.BackgroundTraffic.Flow.EntryPoint.FrontPanelPort:
+      type: object
+      properties:
+        front_panel_port:
+          type: integer
+          description: |-
+            Front panel port number (if fabric is emulated on a device with front panel ports)
+    Chaos.BackgroundTraffic.Flow.Stateless:
+      type: object
+      properties:
+        name:
+          type: string
+        rate:
+          type: integer
+        rate_unit:
+          type: string
+          enum:
+          - bps
+          - Kbps
+          - Mbps
+          - Gbps
 openapi: 3.0.3
 info:
   title: ONEx Data Models
