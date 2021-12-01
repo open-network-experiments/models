@@ -22,8 +22,7 @@ paths:
       tags: ["Configuration"]
       operationId: set_config
       description: >-
-        A placeholder API that returns nothing.
-        It is used by the OpenAPIArt package to generate UX SDK objects.
+        Sets the unified ONEx data model
       requestBody:
         required: true
         content:
@@ -33,6 +32,33 @@ paths:
       responses:
         x-include:
           - "../common/common.yaml#/components/responses/Success"
+          - '../common/common.yaml#/components/responses/Error400'
+          - '../common/common.yaml#/components/responses/Error500'
+
+    get:
+      tags: ["Configuration"]
+      operationId: get_config
+      description: >-
+        Gets the unified ONEx data model from the server, as currently configured
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config.Request'
+      responses:
+        '200':
+          description: >-
+            Current ONEx configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config.Response'
+        x-include:
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
+
+
 
 
   /control/experiment:
@@ -84,6 +110,21 @@ paths:
 
 components:
   schemas:
+
+    Config.Request:
+      description: |-
+        GetConfig request details
+      type: object
+
+    Config.Response:
+      description: |-
+        GetConfig response details
+      type: object
+      properties:
+        config:
+          $ref: "./config.yaml#/components/schemas/Config"
+
+
     Experiment.Request:
       description: |-
         Experiment request details
