@@ -194,6 +194,7 @@ components:
           - all_reduce
           - loop
           - compute
+          - broadcast
         scatter:
           $ref: '#/components/schemas/Dataflow.ScatterWorkload'
         gather:
@@ -204,7 +205,28 @@ components:
           $ref: '#/components/schemas/Dataflow.ComputeWorkload'
         all_reduce:
           $ref: '#/components/schemas/Dataflow.AllReduceWorkload'
+        broadcast:
+          $ref: '#/components/schemas/Dataflow.BroadcastWorkload'
     Dataflow.ScatterWorkload:
+      type: object
+      properties:
+        sources:
+          description: |-
+            list of host names, indicating the originator of the data
+          type: array
+          items:
+            type: string
+        destinations:
+          description: |-
+            list of host names, indicating the destination of the data
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+    Dataflow.BroadcastWorkload:
       type: object
       properties:
         sources:

@@ -265,6 +265,7 @@ message DataflowWorkloadItem {
       all_reduce = 3;
       loop = 4;
       compute = 5;
+      broadcast = 6;
     }
   }
   Choice.Enum choice = 2 [
@@ -290,9 +291,29 @@ message DataflowWorkloadItem {
   optional DataflowAllReduceWorkload all_reduce = 7 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional DataflowBroadcastWorkload broadcast = 8 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message DataflowScatterWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowBroadcastWorkload {
   option (msg_meta).description = "Description missing in models";
 
   repeated string sources = 1 [

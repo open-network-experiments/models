@@ -63,6 +63,18 @@ message WarningDetails {
   ];
 }
 
+message ConfigRequest {
+  option (msg_meta).description = "GetConfig request details";
+}
+
+message ConfigResponse {
+  option (msg_meta).description = "GetConfig response details";
+
+  optional Config config = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
 message ExperimentRequest {
   option (msg_meta).description = "Experiment request details";
 }
@@ -651,6 +663,7 @@ message DataflowWorkloadItem {
       all_reduce = 3;
       loop = 4;
       compute = 5;
+      broadcast = 6;
     }
   }
   Choice.Enum choice = 2 [
@@ -676,9 +689,29 @@ message DataflowWorkloadItem {
   optional DataflowAllReduceWorkload all_reduce = 7 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional DataflowBroadcastWorkload broadcast = 8 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message DataflowScatterWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowBroadcastWorkload {
   option (msg_meta).description = "Description missing in models";
 
   repeated string sources = 1 [
@@ -985,8 +1018,20 @@ message ChaosBackgroundTrafficFlowStatelessPacket {
 message SetConfigRequest {
   Config config = 1;
 }
+
+message GetConfigRequest {
+  ConfigRequest config_request = 1;
+}
 message SetConfigResponse {
-  optional WarningDetails status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 1;
+  optional ErrorDetails status_code_500 = 2;
+  optional WarningDetails status_code_200 = 3;
+}
+
+message GetConfigResponse {
+  optional ConfigResponse status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
 }
 
 
@@ -1014,7 +1059,10 @@ service Openapi {
   option (svc_meta).description = "Description missing in models";
 
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
-    option (rpc_meta).description = "A placeholder API that returns nothing. It is used by the OpenAPIArt package to generate UX SDK objects.";
+    option (rpc_meta).description = "Sets the unified ONEx data model";
+  }
+  rpc GetConfig(GetConfigRequest) returns (GetConfigResponse) {
+    option (rpc_meta).description = "Gets the unified ONEx data model from the server, as currently configured";
   }
   rpc RunExperiment(RunExperimentRequest) returns (RunExperimentResponse) {
     option (rpc_meta).description = "Runs the currently configured experiment";

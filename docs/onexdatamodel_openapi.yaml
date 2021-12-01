@@ -23,6 +23,17 @@ components:
           type: array
           items:
             type: string
+    Config.Request:
+      description: |-
+        GetConfig request details
+      type: object
+    Config.Response:
+      description: |-
+        GetConfig response details
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/Config'
     Experiment.Request:
       description: |-
         Experiment request details
@@ -564,6 +575,7 @@ components:
           - all_reduce
           - loop
           - compute
+          - broadcast
         scatter:
           $ref: '#/components/schemas/Dataflow.ScatterWorkload'
         gather:
@@ -574,7 +586,28 @@ components:
           $ref: '#/components/schemas/Dataflow.ComputeWorkload'
         all_reduce:
           $ref: '#/components/schemas/Dataflow.AllReduceWorkload'
+        broadcast:
+          $ref: '#/components/schemas/Dataflow.BroadcastWorkload'
     Dataflow.ScatterWorkload:
+      type: object
+      properties:
+        sources:
+          description: |-
+            list of host names, indicating the originator of the data
+          type: array
+          items:
+            type: string
+        destinations:
+          description: |-
+            list of host names, indicating the destination of the data
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
+    Dataflow.BroadcastWorkload:
       type: object
       properties:
         sources:
@@ -840,7 +873,7 @@ paths:
       - Configuration
       operationId: set_config
       description: |-
-        A placeholder API that returns nothing. It is used by the OpenAPIArt package to generate UX SDK objects.
+        Sets the unified ONEx data model
       requestBody:
         required: true
         content:
@@ -848,6 +881,20 @@ paths:
             schema:
               $ref: '#/components/schemas/Config'
       responses:
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
         '200':
           description: |-
             Success with possible warnings
@@ -855,6 +902,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Warning.Details'
+    get:
+      tags:
+      - Configuration
+      operationId: get_config
+      description: |-
+        Gets the unified ONEx data model from the server, as currently configured
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config.Request'
+      responses:
+        '200':
+          description: |-
+            Current ONEx configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config.Response'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
   /control/experiment:
     post:
       tags:
