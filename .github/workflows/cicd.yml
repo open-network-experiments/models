@@ -56,6 +56,12 @@ jobs:
           path: |
             artifacts
 
+      - name: Prep onexgo for auto-commit
+        uses: actions/checkout@main
+          with: 
+            repository: open-network-experiments/onexgo
+            path: ./onexgo
+
       - name: Commit auto generated content
         id: commit_generated
         run: |
@@ -75,6 +81,17 @@ jobs:
           else
               echo "No change in auto generated content"
           fi
+
+      - name: Update and commit onexgo auto generated content
+        run: |
+          cp -R $(pwd)/artifacts/godatamodel ./onexgo
+          cd ./onexgo
+          git add .
+          git config user.name "Github Actions Bot"
+          git config user.email "actions@github.com"
+          git commit -m "Update auto generated content" 
+          git push
+
 
       - name: Get package version
         id: get_version
