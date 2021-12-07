@@ -58,9 +58,9 @@ jobs:
 
       - name: Prep onexgo for auto-commit
         uses: actions/checkout@main
-          with: 
-            repository: open-network-experiments/onexgo
-            path: ./onexgo
+        with: 
+          repository: open-network-experiments/onexgo
+          path: ./onexgo
 
       - name: Commit auto generated content
         id: commit_generated
