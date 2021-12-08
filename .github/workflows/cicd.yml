@@ -57,9 +57,10 @@ jobs:
             artifacts
 
       - name: Prep onexgo for auto-commit
-        uses: actions/checkout@main
+        uses: actions/checkout@master
         with: 
           repository: open-network-experiments/onexgo
+          token: ${{ secrets.ACTIONS_TOKEN }}
           path: ./onexgo
 
       - name: Commit auto generated content
