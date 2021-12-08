@@ -85,7 +85,7 @@ jobs:
 
       - name: Update and commit onexgo auto generated content
         run: |
-          cp -R $(pwd)/artifacts/godatamodel ./onexgo
+          cp -R $(pwd)/artifacts/godatamodel/* ./onexgo
           cd ./onexgo
           git add .
           git config user.name "Github Actions Bot"
