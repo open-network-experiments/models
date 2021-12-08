@@ -5,8 +5,6 @@ syntax = "proto3";
 
 package onexfabric;
 
-option go_package = "github.com/ajbalogh/open-network-experiments/artifacts/gofabric/onexfabric";
-
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
 

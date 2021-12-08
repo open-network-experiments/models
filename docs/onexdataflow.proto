@@ -5,8 +5,6 @@ syntax = "proto3";
 
 package onexdataflow;
 
-option go_package = "github.com/ajbalogh/open-network-experiments/artifacts/godataflow/onexdataflow";
-
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
 

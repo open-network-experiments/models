@@ -5,7 +5,7 @@ syntax = "proto3";
 
 package onexdatamodel;
 
-option go_package = "github.com/ajbalogh/open-network-experiments/artifacts/godatamodel/onexdatamodel";
+option go_package = "github.com/open-network-experiments/onexgo/onexdatamodel";
 
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/empty.proto";
