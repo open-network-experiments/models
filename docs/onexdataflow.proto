@@ -357,10 +357,9 @@ message DataflowAllReduceWorkload {
   message Type {
     enum Enum {
       unspecified = 0;
-      all_to_all = 1;
-      ring = 2;
+      ring = 1;
+      tree = 2;
       butterfly = 3;
-      pipeline = 4;
     }
   }
   optional Type.Enum type = 3 [

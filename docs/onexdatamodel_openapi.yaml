@@ -661,10 +661,9 @@ components:
             type of all reduce
           type: string
           enum:
-          - all_to_all
           - ring
+          - tree
           - butterfly
-          - pipeline
           default: all_to_all
     Dataflow.ComputeWorkload:
       type: object
