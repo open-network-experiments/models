@@ -90,9 +90,12 @@ jobs:
           git add .
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          git commit -m "Update auto generated content" 
-          git push
-
+          if git status --porcelain | grep '.go\|go.mod'; then
+            git commit -m "Update auto generated content" 
+            git push
+          else
+              echo "No change in auto generated content"
+          fi
 
       - name: Get package version
         id: get_version
