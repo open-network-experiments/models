@@ -8,6 +8,6 @@ components:
         hosts:
           type: array
           items:
-            $ref: "../datamodel/host/host.yaml#/components/schemas/Host"
+            $ref: "../model/host/host.yaml#/components/schemas/Host"
         dataflow:
-            $ref: "../datamodel/dataflow/dataflow.yaml#/components/schemas/Dataflow"
+            $ref: "../model/dataflow/dataflow.yaml#/components/schemas/Dataflow"

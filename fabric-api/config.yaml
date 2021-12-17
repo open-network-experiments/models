@@ -1,0 +1,11 @@
+components:
+  schemas:
+    Config:
+      type: object
+      properties:
+        hosts:
+          type: array
+          items:
+            $ref: "../model/host/host.yaml#/components/schemas/Host"
+        fabric:
+            $ref: "../model/fabric/fabric.yaml#/components/schemas/Fabric"
