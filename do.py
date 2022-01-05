@@ -93,6 +93,7 @@ def setup():
         [
             py() + " -m pip install --upgrade pip",
             py() + " -m pip install --upgrade virtualenv",
+            py() + " -m pip install --upgrade wheel",
             py() + " -m virtualenv .env",
         ]
     )
