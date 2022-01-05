@@ -191,16 +191,16 @@ def release():
         os.chdir(f"{cwd}/staging/{pkg}")
         print (f"2 pwd={os.getcwd()}")
         print (f"2 listdir={os.listdir()}")
-        # run(
-        #     [
-        #         py() + " -m pip install --upgrade twine",
-        #         "{} -m twine upload -u {} -p {} dist/*".format(
-        #             py(),
-        #             os.environ["PYPI_USERNAME"],
-        #             os.environ["PYPI_PASSWORD"],
-        #         ),
-        #     ]
-        # )
+        run(
+            [
+                py() + " -m pip install --upgrade twine",
+                "{} -m twine upload -u {} -p {} dist/*".format(
+                    py(),
+                    os.environ["PYPI_USERNAME"],
+                    os.environ["PYPI_PASSWORD"],
+                ),
+            ]
+        )
 
     os.chdir(cwd)
 
