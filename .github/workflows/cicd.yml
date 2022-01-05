@@ -109,3 +109,8 @@ jobs:
           tag: ${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish package
+        if: steps.check_tag.outputs.exists == 'false' && matrix.python-version == '3.6'
+        run: |
+          PYPI_USERNAME=${{ secrets.PYPI_USERNAME }} PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }} python do.py release

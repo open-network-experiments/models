@@ -183,16 +183,21 @@ def install():
 
 
 def release():
-    run(
-        [
-            py() + " -m pip install --upgrade twine",
-            "{} -m twine upload -u {} -p {} dist/*".format(
-                py(),
-                os.environ["PYPI_USERNAME"],
-                os.environ["PYPI_PASSWORD"],
-            ),
-        ]
-    )
+    cwd = os.getcwd()
+    for pkg in ['onex_model', 'onex_dataflowapi', 'onex_fabricapi']:
+        os.chdir(f"staging/{pkg}")
+        run(
+            [
+                py() + " -m pip install --upgrade twine",
+                "{} -m twine upload -u {} -p {} dist/*".format(
+                    py(),
+                    os.environ["PYPI_USERNAME"],
+                    os.environ["PYPI_PASSWORD"],
+                ),
+            ]
+        )
+
+    os.chdir(cwd)
 
 
 def clean():
