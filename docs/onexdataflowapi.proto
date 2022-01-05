@@ -1,0 +1,464 @@
+// Distributed System Emulator Dataflow API and Data Models 0.0.1
+// License: MIT
+
+syntax = "proto3";
+
+package onexdataflowapi;
+
+option go_package = "github.com/open-network-experiments/onexgodataflowapi/onexdataflowapi";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/empty.proto";
+
+message OpenApiMsgOpt {
+  string description = 10;
+}
+extend google.protobuf.MessageOptions {
+  optional OpenApiMsgOpt msg_meta = 60001;
+}
+
+message OpenApiFldOpt {
+  string default = 10;
+  string description = 20;
+}
+extend google.protobuf.FieldOptions {
+  optional OpenApiFldOpt fld_meta = 60002;
+}
+
+message OpenApiSvcOpt {
+  string description = 10;
+}
+extend google.protobuf.ServiceOptions {
+  optional OpenApiSvcOpt svc_meta = 60003;
+}
+
+message OpenApiRpcOpt {
+  string description = 10;
+}
+extend google.protobuf.MethodOptions {
+  optional OpenApiRpcOpt rpc_meta = 60004;
+}
+
+message GlobalNamedObject {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Unique identifier for an object"
+  ];
+}
+
+message ErrorDetails {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string errors = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message WarningDetails {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string warnings = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Config {
+  option (msg_meta).description = "ONEx dataflow configuration";
+
+  repeated Host hosts = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional Dataflow dataflow = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message GetConfigDetails {
+  option (msg_meta).description = "Get config request details";
+}
+
+message Host {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "The name, uniquely identifying the host"
+  ];
+
+  string address = 2 [
+    (fld_meta).description = "The test address of the host"
+  ];
+
+  optional int32 prefix = 3 [
+    (fld_meta).default = "24",
+    (fld_meta).description = "The prefix of the host"
+  ];
+}
+
+message Dataflow {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated DataflowHostManagement host_management = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated DataflowWorkloadItem workload = 2 [
+    (fld_meta).description = "The workload items making up the dataflow"
+  ];
+
+  repeated DataflowFlowProfile flow_profiles = 3 [
+    (fld_meta).description = "foo"
+  ];
+}
+
+message DataflowFlowProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 data_size = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message L2ProtocolChoice {
+    enum Enum {
+      unspecified = 0;
+      ethernet = 1;
+    }
+  }
+  optional L2ProtocolChoice.Enum l2_protocol_choice = 3 [
+    (fld_meta).description = "layer2 protocol selection"
+  ];
+
+  optional DataflowFlowProfileEthernet ethernet = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message L4ProtocolChoice {
+    enum Enum {
+      unspecified = 0;
+      tcp = 1;
+      udp = 2;
+    }
+  }
+  optional L4ProtocolChoice.Enum l4_protocol_choice = 5 [
+    (fld_meta).description = "layer4 protocol selection"
+  ];
+
+  optional DataflowFlowProfileTcp tcp = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowFlowProfileUdp udp = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileEthernet {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 mtu = 1 [
+    (fld_meta).default = "1500",
+    (fld_meta).description = "Maximum Transmission Unit"
+  ];
+}
+
+message DataflowFlowProfileTcp {
+  option (msg_meta).description = "Description missing in models";
+
+  message CongestionAlgorithm {
+    enum Enum {
+      unspecified = 0;
+      bbr = 1;
+      dctcp = 2;
+      cubic = 3;
+      reno = 4;
+    }
+  }
+  optional CongestionAlgorithm.Enum congestionalgorithm = 1 [
+    (fld_meta).default = "CongestionAlgorithm.Enum.cubic",
+    (fld_meta).description = "The TCP congestion algorithm:\nbbr - Bottleneck Bandwidth and Round-trip propagation time\ndctcp - Data center TCP\ncubic - cubic window increase function\nreno - TCP New Reno"
+  ];
+
+  optional int32 initcwnd = 2 [
+    (fld_meta).description = "initial congestion window"
+  ];
+
+  optional int32 sendbuf = 3 [
+    (fld_meta).description = "send buffer size"
+  ];
+
+  optional int32 receivebuf = 4 [
+    (fld_meta).description = "receive buffer size"
+  ];
+
+  optional L4PortRange destinationport = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L4PortRange sourceport = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRange {
+  option (msg_meta).description = "Layer4 protocol source or destination port values";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      single_value = 1;
+      range = 2;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "None"
+  ];
+
+  optional L4PortRangeSingleValue single_value = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L4PortRangeRange range = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRangeSingleValue {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 value = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L4PortRangeRange {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 start_value = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 increment = 2 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileUdp {
+  option (msg_meta).description = "Description missing in models";
+}
+
+message DataflowWorkloadItem {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "uniquely identifies the workload item"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      scatter = 1;
+      gather = 2;
+      all_reduce = 3;
+      loop = 4;
+      compute = 5;
+      broadcast = 6;
+    }
+  }
+  Choice.Enum choice = 2 [
+    (fld_meta).description = "The type of workflow item"
+  ];
+
+  optional DataflowScatterWorkload scatter = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowGatherWorkload gather = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowLoopWorkload loop = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowComputeWorkload compute = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowAllReduceWorkload all_reduce = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowBroadcastWorkload broadcast = 8 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowScatterWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowBroadcastWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowGatherWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string sources = 1 [
+    (fld_meta).description = "list of host names, indicating the originator of the data"
+  ];
+
+  repeated string destinations = 2 [
+    (fld_meta).description = "list of host names, indicating the destination of the data"
+  ];
+
+  optional string flow_profile_name = 3 [
+    (fld_meta).description = "flow profile reference"
+  ];
+}
+
+message DataflowAllReduceWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string nodes = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string flow_profile_name = 2 [
+    (fld_meta).description = "flow profile reference"
+  ];
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      ring = 1;
+      tree = 2;
+      butterfly = 3;
+    }
+  }
+  optional Type.Enum type = 3 [
+    (fld_meta).default = "Type.Enum.ring",
+    (fld_meta).description = "type of all reduce"
+  ];
+}
+
+message DataflowComputeWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string nodes = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      simulated = 1;
+    }
+  }
+  optional Choice.Enum choice = 2 [
+    (fld_meta).description = "type of compute"
+  ];
+
+  optional DataflowSimulatedComputeWorkload simulated = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowSimulatedComputeWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  optional float duration = 1 [
+    (fld_meta).description = "duration of the simulated compute workload in seconds"
+  ];
+}
+
+message DataflowLoopWorkload {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 iterations = 1 [
+    (fld_meta).description = "number of iterations in the loop"
+  ];
+
+  repeated DataflowWorkloadItem children = 2 [
+    (fld_meta).description = "list of workload items that are executed in this loop"
+  ];
+}
+
+message DataflowHostManagement {
+  option (msg_meta).description = "auxillary host information needed to run dataflow experiments";
+
+  string host_name = 1 [
+    (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
+  ];
+
+  string management_address = 2 [
+    (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
+  ];
+
+  string nic_name = 3 [
+    (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
+  ];
+}
+
+message SetConfigRequest {
+  Config config = 1;
+}
+
+message GetConfigRequest {
+  GetConfigDetails get_config_details = 1;
+}
+message SetConfigResponse {
+  optional Config status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
+message GetConfigResponse {
+  optional Config status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
+
+service Openapi {
+  option (svc_meta).description = "Description missing in models";
+
+  rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
+    option (rpc_meta).description = "Sets the ONEx dataflow config";
+  }
+  rpc GetConfig(GetConfigRequest) returns (GetConfigResponse) {
+    option (rpc_meta).description = "Gets the ONEx dataflow config from the server, as currently configured";
+  }
+}

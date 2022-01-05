@@ -24,7 +24,8 @@ components:
           items:
             type: string
     Config:
-      description: "The resources that define a dataflow configuration. "
+      description: |-
+        ONEx dataflow configuration
       type: object
       properties:
         hosts:
@@ -33,6 +34,10 @@ components:
             $ref: '#/components/schemas/Host'
         dataflow:
           $ref: '#/components/schemas/Dataflow'
+    GetConfigDetails:
+      description: |-
+        Get config request details
+      type: object
     Host:
       required:
       - address
@@ -369,7 +374,7 @@ paths:
       - Configuration
       operationId: set_config
       description: |-
-        Sets dataflow configuration resources.
+        Sets the ONEx dataflow config
       requestBody:
         required: true
         content:
@@ -377,6 +382,13 @@ paths:
             schema:
               $ref: '#/components/schemas/Config'
       responses:
+        '200':
+          description: |-
+            Current ONEx dataflow configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
         '400':
           description: |-
             error 4xx
@@ -391,24 +403,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error.Details'
-        '200':
-          description: |-
-            Success with possible warnings
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Warning.Details'
     get:
       tags:
       - Configuration
       operationId: get_config
       description: |-
-        Gets the current dataflow configuration.
+        Gets the ONEx dataflow config from the server, as currently configured
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetConfigDetails'
       responses:
         '200':
           description: |-
-            The current configured dataflow configuration.
+            Current ONEx dataflow configuration
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Config'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
