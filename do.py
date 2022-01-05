@@ -132,8 +132,8 @@ def generate():
 def test():
     run(
         [
-            py() + " -m pytest -sv --cov=artifacts/fabric --cov-report term --cov-report html:cov_report pytests/fabric",
-            py() + " -m pytest -sv --cov=artifacts/datamodel --cov-report term --cov-report html:cov_report pytests/dataflow",
+            py() + " -m pytest -sv --cov=artifacts/onex_model --cov-report term --cov-report html:cov_report pytests/fabric",
+            py() + " -m pytest -sv --cov=artifacts/onex_model --cov-report term --cov-report html:cov_report pytests/dataflow",
         ]
     )
     import re
