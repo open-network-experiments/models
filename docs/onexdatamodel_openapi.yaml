@@ -664,7 +664,7 @@ components:
           - ring
           - tree
           - butterfly
-          default: all_to_all
+          default: ring
     Dataflow.ComputeWorkload:
       type: object
       properties:
