@@ -184,10 +184,12 @@ def install():
 
 def release():
     cwd = os.getcwd()
+    print (f"1 cwd={cwd}")
+    print (f"1 listdir={os.listdir()}")
     for pkg in ['onex_model', 'onex_dataflowapi', 'onex_fabricapi']:
         os.chdir(f"staging/{pkg}")
-        print (f"pwd={os.getcwd()}")
-        print (f"pwd={os.listdir()}")
+        print (f"2 pwd={os.getcwd()}")
+        print (f"2 listdir={os.listdir()}")
         # run(
         #     [
         #         py() + " -m pip install --upgrade twine",
