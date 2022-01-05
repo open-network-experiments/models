@@ -24,30 +24,47 @@ servers:
 paths: 
   /config:
     post:
-      tags: ['Configuration']
+      tags: ["Configuration"]
       operationId: set_config
       description: >-
-        Sets dataflow configuration resources.
+        Sets the ONEx dataflow config
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './config.yaml#/components/schemas/Config'
-      responses:
-        x-include:
-        - '../common/common.yaml#/components/responses/Success'
-        - '../common/common.yaml#/components/responses/Error400'
-        - '../common/common.yaml#/components/responses/Error500'
-    get:
-      tags: ['Configuration']
-      operationId: get_config
-      description: >-
-        Gets the current dataflow configuration.
+              $ref: "./config.yaml#/components/schemas/Config"
       responses:
         '200':
-          description: The current configured dataflow configuration.
+          description: >-
+            Current ONEx dataflow configuration
           content:
             application/json:
               schema:
-                $ref: "./config.yaml#/components/schemas/Config"
+                $ref: './config.yaml#/components/schemas/Config'
+        x-include:
+          - '../common/common.yaml#/components/responses/Error400'
+          - '../common/common.yaml#/components/responses/Error500'
+
+    get:
+      tags: ["Configuration"]
+      operationId: get_config
+      description: >-
+        Gets the ONEx dataflow config from the server, as currently configured
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetConfigDetails'
+      responses:
+        '200':
+          description: >-
+            Current ONEx dataflow configuration
+          content:
+            application/json:
+              schema:
+                $ref: './config.yaml#/components/schemas/Config'
+        x-include:
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'

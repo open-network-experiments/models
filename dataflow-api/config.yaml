@@ -1,8 +1,9 @@
 components:
   schemas:
+
     Config:
       description: |-
-        The resources that define a dataflow configuration. 
+        ONEx dataflow configuration
       type: object
       properties:
         hosts:
@@ -11,3 +12,8 @@ components:
             $ref: "../model/host/host.yaml#/components/schemas/Host"
         dataflow:
             $ref: "../model/dataflow/dataflow.yaml#/components/schemas/Dataflow"
+
+    GetConfigDetails:
+      description: |-
+        Get config request details
+      type: object
