@@ -1,5 +1,5 @@
 from typing import NamedTuple
-from artifacts.datamodel import datamodel as onex
+from artifacts.onex_model import onex_model as onex
 
 def test_simple_dataflow():
     config = onex.api().config()

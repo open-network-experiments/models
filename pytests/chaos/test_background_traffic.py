@@ -1,4 +1,4 @@
-from artifacts.datamodel import datamodel as onex
+from artifacts.onex_model import datamodel as onex
 
 def test_background_traffic():
     api = onex.api()

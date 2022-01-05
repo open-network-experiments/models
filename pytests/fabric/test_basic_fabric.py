@@ -1,4 +1,4 @@
-from artifacts.fabric import fabric as onex
+from artifacts.onex_model import onex_model as onex
 
 def test_simple_fabric_with_oversubscription():
     config = onex.api().config()
