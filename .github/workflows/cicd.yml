@@ -68,12 +68,12 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          cp $(pwd)/artifacts/datamodel/openapi.yaml docs/onexdatamodel_openapi.yaml
-          cp $(pwd)/artifacts/datamodel/*.proto docs
-          cp $(pwd)/artifacts/fabric/openapi.yaml docs/onexfabric_openapi.yaml
-          cp $(pwd)/artifacts/fabric/*.proto docs
-          cp $(pwd)/artifacts/dataflow/openapi.yaml docs/onexdataflow_openapi.yaml
-          cp $(pwd)/artifacts/dataflow/*.proto docs
+          cp $(pwd)/artifacts/onex_model/openapi.yaml docs/onexdatamodel_openapi.yaml
+          cp $(pwd)/artifacts/onex_model/*.proto docs
+          cp $(pwd)/artifacts/onex_fabricapi/openapi.yaml docs/onexfabric_openapi.yaml
+          cp $(pwd)/artifacts/onex_fabricapi/*.proto docs
+          cp $(pwd)/artifacts/onex_dataflowapi/openapi.yaml docs/onexdataflow_openapi.yaml
+          cp $(pwd)/artifacts/onex_dataflowapi/*.proto docs
           git add --force docs/*.yaml
           git add --force docs/*.proto
           if git status --porcelain | grep '_openapi.yaml\|_openapi.html\|.proto'; then
@@ -85,7 +85,7 @@ jobs:
 
       - name: Update and commit onexgo auto generated content
         run: |
-          cp -R $(pwd)/artifacts/onexgo/* ./onexgo
+          cp -R $(pwd)/artifacts/onexgodataflowapi/* ./onexgo
           cd ./onexgo
           git add .
           git config user.name "Github Actions Bot"
