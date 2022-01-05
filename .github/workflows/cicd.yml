@@ -97,6 +97,10 @@ jobs:
               echo "No change in auto generated content"
           fi
 
+      - name: Build distribution
+        run: |
+          python do.py dist
+
       - name: Get package version
         id: get_version
         run: |
