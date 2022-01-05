@@ -45,9 +45,9 @@ jobs:
 
       - name: Generate html docs
         run: | 
-          docker run -v "$(pwd)/artifacts/datamodel:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
-          docker run -v "$(pwd)/artifacts/fabric:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
-          docker run -v "$(pwd)/artifacts/dataflow:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/artifacts/onex_model:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/artifacts/onex_fabricapi:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
+          docker run -v "$(pwd)/artifacts/onex_dataflowapi:/data" ajbalogh/redoc-cli bundle openapi.yaml -o openapi.html
  
       - name: Archive generated artifacts
         uses: actions/upload-artifact@v2
