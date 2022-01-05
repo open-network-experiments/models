@@ -3,11 +3,11 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 """
 import setuptools
 
-pkg_name = "onex-model"
+pkg = "onex_model"
 version = "0.0.1"
 
 setuptools.setup(
-    name=pkg_name,
+    name=pkg,
     version=version,
     description="The Open Network Experiments (ONEx) Python Package",
     long_description="A long description",
@@ -25,7 +25,7 @@ setuptools.setup(
     ],
     keywords="onex open network experiments testing automation",
     include_package_data=True,
-    packages=[pkg_name],
+    packages=[pkg],
     python_requires=">=2.7, <4",
     install_requires=[
         "pyyaml",

@@ -148,14 +148,29 @@ def test():
             print("Coverage thresold[{0}] is achieved[{1}]".format(coverage_threshold, result))
 
 
+def stage(pkg: str):
+    shutil.rmtree(f"staging/{pkg}/{pkg}", ignore_errors=True)
+    shutil.copytree(f"artifacts/{pkg}/{pkg}", f"staging/{pkg}/{pkg}")
+    os.mkdir(f"staging/{pkg}/{pkg}/docs")
+    doc_files = os.listdir(f"artifacts/{pkg}")
+    for f in doc_files:
+        if '.' in f: # skip directories
+            shutil.copy(f"artifacts/{pkg}/{f}", f"staging/{pkg}/{pkg}/docs")
+
 def dist():
+    # generate pypi packages
+    cwd = os.getcwd()
     clean()
-    run(
-        [
-            py() + " setup.py sdist bdist_wheel --universal",
-        ]
-    )
-    print(os.listdir("dist"))
+    for pkg in ['onex_model', 'onex_dataflowapi', 'onex_fabricapi']:
+        stage(pkg)
+        os.chdir(f"staging/{pkg}")
+        run(
+            [
+                py() + " setup.py sdist bdist_wheel --universal",
+            ]
+        )
+        print(os.listdir("dist"))
+        os.chdir(cwd)
 
 
 def install():

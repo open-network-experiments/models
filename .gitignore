@@ -8,3 +8,9 @@ cov_report
 __pycache__
 mock_server
 /artifacts
+/staging/**/build
+/staging/**/dist
+/staging/**/*egg-info
+/staging/onex_model/onex_model
+/staging/onex_dataflowapi/onex_dataflowapi
+/staging/onex_fabricapi/onex_fabricapi
