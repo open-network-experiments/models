@@ -93,7 +93,7 @@ def setup():
         [
             py() + " -m pip install --upgrade pip",
             py() + " -m pip install --upgrade virtualenv",
-            py() + " -m pip install --upgrade wheel",
+            py() + " -m pip install --upgrade wheel",   # avoid error: invalid command 'bdist_wheel' in dist()
             py() + " -m virtualenv .env",
         ]
     )
