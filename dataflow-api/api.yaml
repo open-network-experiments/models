@@ -68,3 +68,49 @@ paths:
         x-include:
         - '../common/common.yaml#/components/responses/Error400'
         - '../common/common.yaml#/components/responses/Error500'
+
+  /control/experiment:
+    post:
+      tags:
+      - Control
+      operationId: run_experiment
+      description: |-
+        Runs the currently configured experiment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Experiment.Request'
+      responses:
+        x-include:
+        - '../common/common.yaml#/components/responses/Success'
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
+
+  /results/metrics:
+    description: >-
+      Metrics API
+    post:
+      tags: ['Metrics']
+      operationId: get_metrics
+      requestBody:
+        description: >-
+          Request to obtain experiment metrics
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metrics.Request'
+      responses:
+        '200':
+          description: >-
+            Experiment metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics.Response'
+        x-include:
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
+

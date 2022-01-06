@@ -17,3 +17,62 @@ components:
       description: |-
         Get config request details
       type: object
+
+    Experiment.Request:
+      description: |-
+        Experiment request details
+      type: object
+
+    Metrics.Request:
+      description: |-
+        Metrics request details
+      type: object
+
+    Metrics.Response:
+      description: |-
+        Metrics response details
+      type: object
+      properties:
+        jct:
+          description: job completion time
+          type: number
+        flow_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metrics.Response.FlowResult'
+
+    Metrics.Response.FlowResult:
+      description: result for a single data flow
+      properties:
+        workload_name:
+          type: string
+        flow_number:
+          type: integer
+        from_host_name:
+          type: string
+        to_host_name:
+          type: string
+        fct:
+          type: number
+          description: flow completion time
+        tcp_info:
+          $ref: "#/components/schemas/Metrics.Response.FlowResult.TcpInfo"
+
+    Metrics.Response.FlowResult.TcpInfo:
+      type: object
+      description: TCP information for this flow
+      properties:
+        rtt:
+          type: number
+          description: round trip time in microseconds
+        rtt_variance:
+          type: number
+          description: round trip time variance in microseconds, larger values indicate less stable performance
+        retransmissions:
+          type: number
+          description: total number of TCP retransmissions
+
+
+
+
+
