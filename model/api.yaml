@@ -17,11 +17,17 @@ servers:
   - url: /
 
 paths:
-  /:
-    get:
+  /config:
+    post:
       tags: ["Configuration"]
-      operationId: get_root
-      description: Unused
+      operationId: set_config
+      description: unused
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./config.yaml#/components/schemas/Config"
       responses:
         x-include:
           - "../common/common.yaml#/components/responses/Success"
