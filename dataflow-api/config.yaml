@@ -34,7 +34,7 @@ components:
       type: object
       properties:
         jct:
-          description: job completion time
+          description: job completion time in micro seconds
           type: number
         flow_results:
           type: array
@@ -54,7 +54,7 @@ components:
           type: string
         fct:
           type: number
-          description: flow completion time
+          description: flow completion time in micro seconds
         tcp_info:
           $ref: "#/components/schemas/Metrics.Response.FlowResult.TcpInfo"
 
