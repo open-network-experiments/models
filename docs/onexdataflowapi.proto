@@ -91,7 +91,7 @@ message MetricsResponse {
   option (msg_meta).description = "Metrics response details";
 
   optional float jct = 1 [
-    (fld_meta).description = "job completion time"
+    (fld_meta).description = "job completion time in micro seconds"
   ];
 
   repeated MetricsResponseFlowResult flow_results = 2 [
@@ -119,7 +119,7 @@ message MetricsResponseFlowResult {
   ];
 
   optional float fct = 5 [
-    (fld_meta).description = "flow completion time"
+    (fld_meta).description = "flow completion time in micro seconds"
   ];
 
   optional MetricsResponseFlowResultTcpInfo tcp_info = 6 [

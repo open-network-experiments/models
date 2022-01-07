@@ -53,7 +53,7 @@ components:
       properties:
         jct:
           description: |-
-            job completion time
+            job completion time in micro seconds
           type: number
         flow_results:
           type: array
@@ -74,7 +74,7 @@ components:
         fct:
           type: number
           description: |-
-            flow completion time
+            flow completion time in micro seconds
         tcp_info:
           $ref: '#/components/schemas/Metrics.Response.FlowResult.TcpInfo'
     Metrics.Response.FlowResult.TcpInfo:
