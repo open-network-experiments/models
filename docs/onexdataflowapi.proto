@@ -122,7 +122,23 @@ message MetricsResponseFlowResult {
     (fld_meta).description = "flow completion time in micro seconds"
   ];
 
-  optional MetricsResponseFlowResultTcpInfo tcp_info = 6 [
+  optional int32 first_timestamp = 6 [
+    (fld_meta).description = "first timestamp in micro seconds"
+  ];
+
+  optional int32 last_timestamp = 7 [
+    (fld_meta).description = "last timestamp in micro seconds"
+  ];
+
+  optional int32 bytes_tx = 8 [
+    (fld_meta).description = "bytes transmitted from src to dst"
+  ];
+
+  optional int32 bytes_rx = 9 [
+    (fld_meta).description = "bytes received by src from dst"
+  ];
+
+  optional MetricsResponseFlowResultTcpInfo tcp_info = 10 [
     (fld_meta).description = "Description missing in models"
   ];
 }
