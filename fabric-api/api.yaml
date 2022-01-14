@@ -46,3 +46,6 @@ paths:
             application/json:
               schema:
                 $ref: "./config.yaml#/components/schemas/Config"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
