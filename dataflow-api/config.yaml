@@ -55,6 +55,18 @@ components:
         fct:
           type: number
           description: flow completion time in micro seconds
+        first_timestamp:
+          type: integer
+          description: first timestamp in micro seconds
+        last_timestamp:
+          type: integer
+          description: last timestamp in micro seconds          
+        bytes_tx:
+          type: integer
+          description: bytes transmitted from src to dst
+        bytes_rx:
+          type: integer
+          description: bytes received by src from dst
         tcp_info:
           $ref: "#/components/schemas/Metrics.Response.FlowResult.TcpInfo"
 
