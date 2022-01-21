@@ -63,21 +63,3 @@ def test_ml_training():
     back_compute_optimizer.simulated.duration = 10
     
     assert config.serialize()
-
-def test_dataflow_flowprofile():
-    config = onex.api().config()
-
-    flow_profile = config.dataflow.flow_profiles.add(name='hyperparameters', data_size=10000)
-
-    flow_profile.ethernet.mtu = 1000
-
-    flow_profile.tcp.congestionAlgorithm = flow_profile.tcp.CUBIC
-    flow_profile.tcp.initcwnd = 10
-    flow_profile.tcp.sendBuf = 4 * 1024 * 1024
-    flow_profile.tcp.sourcePort.range.start_value = 1024
-    flow_profile.tcp.sourcePort.range.increment = 1
-    flow_profile.tcp.destinationPort.single_value.value = 50051
-
-    flow_profile.data_size = 1 * 1024 * 1024 * 1024
-
-    assert config.serialize()
