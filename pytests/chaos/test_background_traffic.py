@@ -1,7 +1,7 @@
-from artifacts.onex_model import datamodel as onex
+from artifacts.onex_model.onex_model import onex_model
 
 def test_background_traffic():
-    api = onex.api()
+    api = onex_model.api()
     config = api.config()
 
     flow1 = config.chaos.background_traffic.flows.add(name="Flow 1")
@@ -19,4 +19,4 @@ def test_background_traffic():
     flow2 = config.chaos.background_traffic.flows.add(name="Flow 2")
     flow2.fabric_entry_point.switch_reference.spine.switch_index = 1
 
-    api.set_config(config)
+    assert config.serialize()
