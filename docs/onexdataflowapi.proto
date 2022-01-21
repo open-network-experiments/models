@@ -90,7 +90,7 @@ message MetricsRequest {
 message MetricsResponse {
   option (msg_meta).description = "Metrics response details";
 
-  optional float jct = 1 [
+  optional int64 jct = 1 [
     (fld_meta).description = "job completion time in micro seconds"
   ];
 
@@ -106,7 +106,7 @@ message MetricsResponseFlowResult {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 flow_number = 2 [
+  optional int64 flow_number = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -118,23 +118,23 @@ message MetricsResponseFlowResult {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional float fct = 5 [
+  optional int64 fct = 5 [
     (fld_meta).description = "flow completion time in micro seconds"
   ];
 
-  optional int32 first_timestamp = 6 [
+  optional int64 first_timestamp = 6 [
     (fld_meta).description = "first timestamp in micro seconds"
   ];
 
-  optional int32 last_timestamp = 7 [
+  optional int64 last_timestamp = 7 [
     (fld_meta).description = "last timestamp in micro seconds"
   ];
 
-  optional int32 bytes_tx = 8 [
+  optional int64 bytes_tx = 8 [
     (fld_meta).description = "bytes transmitted from src to dst"
   ];
 
-  optional int32 bytes_rx = 9 [
+  optional int64 bytes_rx = 9 [
     (fld_meta).description = "bytes received by src from dst"
   ];
 
@@ -146,15 +146,15 @@ message MetricsResponseFlowResult {
 message MetricsResponseFlowResultTcpInfo {
   option (msg_meta).description = "TCP information for this flow";
 
-  optional float rtt = 1 [
+  optional int64 rtt = 1 [
     (fld_meta).description = "round trip time in microseconds"
   ];
 
-  optional float rtt_variance = 2 [
+  optional int64 rtt_variance = 2 [
     (fld_meta).description = "round trip time variance in microseconds, larger values indicate less stable performance"
   ];
 
-  optional float retransmissions = 3 [
+  optional int64 retransmissions = 3 [
     (fld_meta).description = "total number of TCP retransmissions"
   ];
 }

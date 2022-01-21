@@ -54,7 +54,8 @@ components:
         jct:
           description: |-
             job completion time in micro seconds
-          type: number
+          type: integer
+          format: int64
         flow_results:
           type: array
           items:
@@ -67,28 +68,34 @@ components:
           type: string
         flow_number:
           type: integer
+          format: int64
         from_host_name:
           type: string
         to_host_name:
           type: string
         fct:
-          type: number
+          type: integer
+          format: int64
           description: |-
             flow completion time in micro seconds
         first_timestamp:
           type: integer
+          format: int64
           description: |-
             first timestamp in micro seconds
         last_timestamp:
           type: integer
+          format: int64
           description: |-
             last timestamp in micro seconds
         bytes_tx:
           type: integer
+          format: int64
           description: |-
             bytes transmitted from src to dst
         bytes_rx:
           type: integer
+          format: int64
           description: |-
             bytes received by src from dst
         tcp_info:
@@ -99,15 +106,18 @@ components:
         TCP information for this flow
       properties:
         rtt:
-          type: number
+          type: integer
+          format: int64
           description: |-
             round trip time in microseconds
         rtt_variance:
-          type: number
+          type: integer
+          format: int64
           description: |-
             round trip time variance in microseconds, larger values indicate less stable performance
         retransmissions:
-          type: number
+          type: integer
+          format: int64
           description: |-
             total number of TCP retransmissions
     Host:
