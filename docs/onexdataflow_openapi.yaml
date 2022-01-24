@@ -197,7 +197,7 @@ components:
     Dataflow.FlowProfile.Tcp:
       type: object
       properties:
-        congestionAlgorithm:
+        congestion_algorithm:
           default: cubic
           description: |-
             The TCP congestion algorithm:
@@ -215,17 +215,17 @@ components:
           description: |-
             initial congestion window
           type: integer
-        sendBuf:
+        send_buf:
           description: |-
             send buffer size
           type: integer
-        receiveBuf:
+        receive_buf:
           description: |-
             receive buffer size
           type: integer
-        destinationPort:
+        destination_port:
           $ref: '#/components/schemas/L4PortRange'
-        sourcePort:
+        source_port:
           $ref: '#/components/schemas/L4PortRange'
     L4PortRange:
       description: |-

@@ -258,7 +258,7 @@ message DataflowFlowProfileTcp {
       reno = 4;
     }
   }
-  optional CongestionAlgorithm.Enum congestionalgorithm = 1 [
+  optional CongestionAlgorithm.Enum congestion_algorithm = 1 [
     (fld_meta).default = "CongestionAlgorithm.Enum.cubic",
     (fld_meta).description = "The TCP congestion algorithm:\nbbr - Bottleneck Bandwidth and Round-trip propagation time\ndctcp - Data center TCP\ncubic - cubic window increase function\nreno - TCP New Reno"
   ];
@@ -267,19 +267,19 @@ message DataflowFlowProfileTcp {
     (fld_meta).description = "initial congestion window"
   ];
 
-  optional int32 sendbuf = 3 [
+  optional int32 send_buf = 3 [
     (fld_meta).description = "send buffer size"
   ];
 
-  optional int32 receivebuf = 4 [
+  optional int32 receive_buf = 4 [
     (fld_meta).description = "receive buffer size"
   ];
 
-  optional L4PortRange destinationport = 5 [
+  optional L4PortRange destination_port = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional L4PortRange sourceport = 6 [
+  optional L4PortRange source_port = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 }
