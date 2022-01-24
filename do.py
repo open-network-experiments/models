@@ -102,7 +102,7 @@ def setup():
 def init():
     run(
         [
-            py() + " -m pip install openapiart",
+            py() + " -m pip install openapiart==0.1.34",
             py() + " -m pip install pytest-cov",
         ]
     )
