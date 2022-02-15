@@ -15,14 +15,23 @@ components:
         errors:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Error.Item'
     Warning.Details:
       type: object
       properties:
         warnings:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Error.Item'
+    Error.Item:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        detail:
+          type: string
     Config:
       description: |-
         ONEx dataflow configuration
