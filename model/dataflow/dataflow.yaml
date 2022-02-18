@@ -142,6 +142,8 @@ components:
           $ref: "#/components/schemas/Dataflow.AllReduceWorkload"
         broadcast:
           $ref: "#/components/schemas/Dataflow.BroadcastWorkload"
+        all_to_all:
+          $ref: "#/components/schemas/Dataflow.AlltoallWorkload"
 
     Dataflow.ScatterWorkload:
       type: object
@@ -220,6 +222,19 @@ components:
           type: string
           enum: [ring, tree, butterfly]
           default: ring
+
+    Dataflow.AlltoallWorkload:
+      type: object
+      description: creates full-mesh flows between all nodes
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
+        flow_profile_name:
+          description: |-
+            flow profile reference
+          type: string
 
     Dataflow.ComputeWorkload:
       type: object
