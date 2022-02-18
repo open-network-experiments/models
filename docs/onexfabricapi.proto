@@ -50,7 +50,7 @@ message GlobalNamedObject {
 message ErrorDetails {
   option (msg_meta).description = "Description missing in models";
 
-  repeated string errors = 1 [
+  repeated ErrorItem errors = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -58,7 +58,23 @@ message ErrorDetails {
 message WarningDetails {
   option (msg_meta).description = "Description missing in models";
 
-  repeated string warnings = 1 [
+  repeated ErrorItem warnings = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ErrorItem {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string message = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 code = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string detail = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 }
