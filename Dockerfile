@@ -1,5 +1,5 @@
 # to build this docker image (any time do.py changes): 
-#   docker build --user $(id -u):$(id -g) --tag onex-build-env:latest .
+#   docker build --tag onex-build-env:latest .
 #
 # to build all artifacts this docker image: 
 #   docker run -it --rm --user $(id -u):$(id -g) -v $PWD:/tmp onex-build-env:latest bash -c "source /onex/.env/bin/activate && cd /tmp && python3 generate.py"
