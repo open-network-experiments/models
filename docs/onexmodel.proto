@@ -633,6 +633,10 @@ message DataflowWorkloadItem {
   optional DataflowBroadcastWorkload broadcast = 8 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional DataflowAlltoallWorkload all_to_all = 9 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message DataflowScatterWorkload {
@@ -705,6 +709,18 @@ message DataflowAllReduceWorkload {
   optional Type.Enum type = 3 [
     (fld_meta).default = "Type.Enum.ring",
     (fld_meta).description = "type of all reduce"
+  ];
+}
+
+message DataflowAlltoallWorkload {
+  option (msg_meta).description = "creates full-mesh flows between all nodes";
+
+  repeated string nodes = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string flow_profile_name = 2 [
+    (fld_meta).description = "flow profile reference"
   ];
 }
 
