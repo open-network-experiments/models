@@ -129,7 +129,7 @@ components:
           description: |-
             The type of workflow item
           type: string
-          enum: [scatter, gather, all_reduce, loop, compute, broadcast]
+          enum: [scatter, gather, all_reduce, loop, compute, broadcast, all_to_all]
         scatter:
           $ref: "#/components/schemas/Dataflow.ScatterWorkload"
         gather:

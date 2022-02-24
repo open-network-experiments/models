@@ -25,6 +25,30 @@ def test_simple_dataflow():
 
     assert config.serialize()
 
+def test_alltoall_workload():
+    config = onex.api().config()
+
+    aggregator = config.hosts.add(name="Aggregator", address="1.1.1.1")    
+    compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
+    compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
+    data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
+    
+    alltoall = config.dataflow.workload.add(name="all to all").all_to_all
+    alltoall.nodes = [ aggregator.name, compute1.name, compute2.name ]
+    alltoall.flow_profile_name = data_transfer.name
+
+    gather = config.dataflow.workload.add(name="Gather").gather
+    gather.sources = [ compute1.name, compute2.name ]
+    gather.destinations = [ aggregator.name ]
+    gather.flow_profile_name = data_transfer.name    
+
+    config.dataflow.host_management.add(host_name=aggregator.name, management_address="10.36.12.32", nic_name='eth1')
+    config.dataflow.host_management.add(host_name=compute1.name, management_address="10.36.12.33", nic_name='eth1')
+    config.dataflow.host_management.add(host_name=compute2.name, management_address="10.36.12.33", nic_name='eth2')
+
+    assert config.serialize()
+
+
 def test_ml_training():
     config = onex.api().config()
 
