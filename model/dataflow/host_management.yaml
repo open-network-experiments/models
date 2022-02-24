@@ -4,7 +4,7 @@ components:
       type: object
       description: |-
         auxillary host information needed to run dataflow experiments
-      required: [host_name, management_address, nic_name]
+      required: [host_name]
       properties:
         host_name:
           type: string
