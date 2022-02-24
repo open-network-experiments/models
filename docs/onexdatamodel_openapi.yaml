@@ -518,6 +518,7 @@ components:
           - loop
           - compute
           - broadcast
+          - all_to_all
         scatter:
           $ref: '#/components/schemas/Dataflow.ScatterWorkload'
         gather:

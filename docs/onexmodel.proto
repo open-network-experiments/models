@@ -604,6 +604,7 @@ message DataflowWorkloadItem {
       loop = 4;
       compute = 5;
       broadcast = 6;
+      all_to_all = 7;
     }
   }
   Choice.Enum choice = 2 [
