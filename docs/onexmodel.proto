@@ -823,11 +823,11 @@ message DataflowHostManagement {
     (fld_meta).description = "configured link speed Mbps (e.g. 100000 for 100G)"
   ];
 
-  string management_address = 5 [
+  optional string management_address = 5 [
     (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
   ];
 
-  string nic_name = 6 [
+  optional string nic_name = 6 [
     (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
   ];
 }
