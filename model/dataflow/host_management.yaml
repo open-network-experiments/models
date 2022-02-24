@@ -10,6 +10,15 @@ components:
           type: string
           x-constraint:
           - '#components/schemas/Host/properties/name'
+        nic_rx_buffer:
+          type: integer
+          description: RX buffer size in bytes
+        nic_tx_buffer:
+          type: integer
+          description: TX buffer size in bytes
+        nic_speed:
+          type: integer
+          description: configured link speed Mbps (e.g. 100000 for 100G)
         management_address:
           type: string
           description: Hostname or address of management interface of a server running dataflow traffic

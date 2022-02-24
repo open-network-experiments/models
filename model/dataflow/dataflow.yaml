@@ -39,6 +39,8 @@ components:
           description: layer4 protocol selection
           type: string
           enum: [tcp, udp]
+        ip:
+          $ref: "#/components/schemas/Dataflow.FlowProfile.Ip"
         tcp:
           $ref: "#/components/schemas/Dataflow.FlowProfile.Tcp"
         udp:
@@ -51,6 +53,13 @@ components:
           type: integer
           description: Maximum Transmission Unit
           default: 1500
+
+    Dataflow.FlowProfile.Ip:
+      type: object
+      properties:
+        dscp:
+          type: integer
+          description: differentiated services code point
 
     Dataflow.FlowProfile.Tcp:
       type: object
@@ -69,6 +78,25 @@ components:
         receive_buf:
           description: receive buffer size
           type: integer
+        delayed_ack:
+          description: delayed acknowledgment
+          type: integer
+        selective_ack:
+          description: selective acknowledgment
+          type: boolean
+        min_rto:
+          description: minimum retransmission timeout
+          type: integer
+        mss:
+          type: integer
+          description: Maximum Segment Size
+          default: 1500
+        ecn:
+          description: early congestion notification
+          type: boolean
+        enable_timestamp:
+          description: enable tcp timestamping
+          type: boolean
         destination_port:
           $ref: "#/components/schemas/L4PortRange"
         source_port:
