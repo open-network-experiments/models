@@ -244,11 +244,15 @@ message DataflowFlowProfile {
     (fld_meta).description = "layer4 protocol selection"
   ];
 
-  optional DataflowFlowProfileTcp tcp = 6 [
+  optional DataflowFlowProfileIp ip = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowFlowProfileUdp udp = 7 [
+  optional DataflowFlowProfileTcp tcp = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowFlowProfileUdp udp = 8 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -259,6 +263,14 @@ message DataflowFlowProfileEthernet {
   optional int32 mtu = 1 [
     (fld_meta).default = "1500",
     (fld_meta).description = "Maximum Transmission Unit"
+  ];
+}
+
+message DataflowFlowProfileIp {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 dscp = 1 [
+    (fld_meta).description = "differentiated services code point"
   ];
 }
 
@@ -291,11 +303,36 @@ message DataflowFlowProfileTcp {
     (fld_meta).description = "receive buffer size"
   ];
 
-  optional L4PortRange destination_port = 5 [
+  optional int32 delayed_ack = 5 [
+    (fld_meta).description = "delayed acknowledgment"
+  ];
+
+  optional bool selective_ack = 6 [
+    (fld_meta).description = "selective acknowledgment"
+  ];
+
+  optional int32 min_rto = 7 [
+    (fld_meta).description = "minimum retransmission timeout"
+  ];
+
+  optional int32 mss = 8 [
+    (fld_meta).default = "1500",
+    (fld_meta).description = "Maximum Segment Size"
+  ];
+
+  optional bool ecn = 9 [
+    (fld_meta).description = "early congestion notification"
+  ];
+
+  optional bool enable_timestamp = 10 [
+    (fld_meta).description = "enable tcp timestamping"
+  ];
+
+  optional L4PortRange destination_port = 11 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional L4PortRange source_port = 6 [
+  optional L4PortRange source_port = 12 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -536,11 +573,23 @@ message DataflowHostManagement {
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
   ];
 
-  string management_address = 2 [
+  optional int32 nic_rx_buffer = 2 [
+    (fld_meta).description = "RX buffer size in bytes"
+  ];
+
+  optional int32 nic_tx_buffer = 3 [
+    (fld_meta).description = "TX buffer size in bytes"
+  ];
+
+  optional int32 nic_speed = 4 [
+    (fld_meta).description = "configured link speed Mbps (e.g. 100000 for 100G)"
+  ];
+
+  string management_address = 5 [
     (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
   ];
 
-  string nic_name = 3 [
+  string nic_name = 6 [
     (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
   ];
 }
