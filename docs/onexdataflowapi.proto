@@ -163,7 +163,7 @@ message MetricsResponseFlowResultTcpInfo {
   option (msg_meta).description = "TCP information for this flow";
 
   optional int64 rtt = 1 [
-    (fld_meta).description = "round trip time in microseconds"
+    (fld_meta).description = "average round trip time in microseconds"
   ];
 
   optional int64 rtt_variance = 2 [
@@ -172,6 +172,22 @@ message MetricsResponseFlowResultTcpInfo {
 
   optional int64 retransmissions = 3 [
     (fld_meta).description = "total number of TCP retransmissions"
+  ];
+
+  optional int64 retransmission_timeout = 4 [
+    (fld_meta).description = "retransmission timeout in micro seconds"
+  ];
+
+  optional int64 congestion_window = 5 [
+    (fld_meta).description = "congestion windows size in bytes"
+  ];
+
+  optional int64 slow_start_threshold = 6 [
+    (fld_meta).description = "slow start threshold in bytes (max int64 value when wide open)"
+  ];
+
+  optional int64 path_mtu = 7 [
+    (fld_meta).description = "path MTU"
   ];
 }
 
