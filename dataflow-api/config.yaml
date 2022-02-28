@@ -74,8 +74,10 @@ components:
           type: integer
           format: int64
           description: bytes received by src from dst
-        tcp_info:
+        tcp_info_initiator:
           $ref: "#/components/schemas/Metrics.Response.FlowResult.TcpInfo"
+        tcp_info_responder:
+          $ref: "#/components/schemas/Metrics.Response.FlowResult.TcpInfo"          
 
     Metrics.Response.FlowResult.TcpInfo:
       type: object
