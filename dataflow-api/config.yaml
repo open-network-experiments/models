@@ -84,7 +84,7 @@ components:
         rtt:
           type: integer
           format: int64
-          description: round trip time in microseconds
+          description: average round trip time in microseconds
         rtt_variance:
           type: integer
           format: int64
@@ -93,7 +93,22 @@ components:
           type: integer
           format: int64
           description: total number of TCP retransmissions
-
+        retransmission_timeout:
+          type: integer
+          format: int64
+          description: retransmission timeout in micro seconds
+        congestion_window:
+          type: integer
+          format: int64
+          description: congestion windows size in bytes
+        slow_start_threshold:
+          type: integer
+          format: int64
+          description: slow start threshold in bytes (max int64 value when wide open)
+        path_mtu:
+          type: integer
+          format: int64
+          description: path MTU
 
 
 
