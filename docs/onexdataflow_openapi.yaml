@@ -75,9 +75,6 @@ components:
       properties:
         workload_name:
           type: string
-        flow_number:
-          type: integer
-          format: int64
         from_host_name:
           type: string
         to_host_name:
