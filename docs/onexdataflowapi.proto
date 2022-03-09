@@ -154,7 +154,11 @@ message MetricsResponseFlowResult {
     (fld_meta).description = "bytes received by src from dst"
   ];
 
-  optional MetricsResponseFlowResultTcpInfo tcp_info = 10 [
+  optional MetricsResponseFlowResultTcpInfo tcp_info_initiator = 10 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional MetricsResponseFlowResultTcpInfo tcp_info_responder = 11 [
     (fld_meta).description = "Description missing in models"
   ];
 }
