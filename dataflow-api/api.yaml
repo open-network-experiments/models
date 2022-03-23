@@ -76,6 +76,7 @@ paths:
       operationId: run_experiment
       description: |-
         Runs the currently configured experiment
+      deprecated: true
       requestBody:
         required: true
         content:
@@ -85,6 +86,51 @@ paths:
       responses:
         x-include:
         - '../common/common.yaml#/components/responses/Success'
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
+
+
+  /control/start:
+    post:
+      tags:
+      - Control
+      operationId: start
+      description: |-
+        Starts the currently configured experiment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Control.Start.Request'
+      responses:
+        x-include:
+        - '../common/common.yaml#/components/responses/Success'
+        - '../common/common.yaml#/components/responses/Error400'
+        - '../common/common.yaml#/components/responses/Error500'
+
+  /control/status:
+    get:
+      tags:
+      - Control
+      operationId: get_status
+      description: |-
+        Gets the control status (e.g. started/completed/error)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Control.Status.Request'
+      responses:
+        '200':
+          description: >-
+            Control status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Control.Status.Response'
+        x-include:
         - '../common/common.yaml#/components/responses/Error400'
         - '../common/common.yaml#/components/responses/Error500'
 

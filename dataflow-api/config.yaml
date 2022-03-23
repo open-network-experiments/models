@@ -23,6 +23,35 @@ components:
         Experiment request details
       type: object
 
+    Control.Start.Request:
+      description: |-
+        Start request details
+      type: object
+
+
+    Control.Status.Request:
+      description: |-
+        control.state request details
+      type: object
+
+    Control.Status.Response:
+      description: |-
+        control/state response details
+      type: object
+      properties:
+        dataflow_status:
+          description: |-
+            dataflow status:
+            started - data flow traffic is running
+            completed - all traffic flows completed, metrics are available
+            error - an error occurred
+          type: string
+          enum: [started, completed, error]
+        errors:
+          type: array
+          items:
+            $ref: "../common/common.yaml#/components/schemas/Error.Item"
+
     Metrics.Request:
       description: |-
         Metrics request details
