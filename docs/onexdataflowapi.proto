@@ -99,6 +99,34 @@ message ExperimentRequest {
   option (msg_meta).description = "Experiment request details";
 }
 
+message ControlStartRequest {
+  option (msg_meta).description = "Start request details";
+}
+
+message ControlStatusRequest {
+  option (msg_meta).description = "control.state request details";
+}
+
+message ControlStatusResponse {
+  option (msg_meta).description = "control/state response details";
+
+  message DataflowStatus {
+    enum Enum {
+      unspecified = 0;
+      started = 1;
+      completed = 2;
+      error = 3;
+    }
+  }
+  optional DataflowStatus.Enum dataflow_status = 1 [
+    (fld_meta).description = "dataflow status:\nstarted - data flow traffic is running\ncompleted - all traffic flows completed, metrics are available\nerror - an error occurred"
+  ];
+
+  repeated ErrorItem errors = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
 message MetricsRequest {
   option (msg_meta).description = "Metrics request details";
 }
@@ -640,6 +668,26 @@ message RunExperimentResponse {
 }
 
 
+message StartRequest {
+  ControlStartRequest control_start_request = 1;
+}
+message StartResponse {
+  optional ErrorDetails status_code_400 = 1;
+  optional ErrorDetails status_code_500 = 2;
+  optional WarningDetails status_code_200 = 3;
+}
+
+
+message GetStatusRequest {
+  ControlStatusRequest control_status_request = 1;
+}
+message GetStatusResponse {
+  optional ControlStatusResponse status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
+
 message GetMetricsRequest {
   MetricsRequest metrics_request = 1;
 }
@@ -661,6 +709,12 @@ service Openapi {
   }
   rpc RunExperiment(RunExperimentRequest) returns (RunExperimentResponse) {
     option (rpc_meta).description = "Runs the currently configured experiment";
+  }
+  rpc Start(StartRequest) returns (StartResponse) {
+    option (rpc_meta).description = "Starts the currently configured experiment";
+  }
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
+    option (rpc_meta).description = "Gets the control status (e.g. started/completed/error)";
   }
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (rpc_meta).description = "Description missing in models";

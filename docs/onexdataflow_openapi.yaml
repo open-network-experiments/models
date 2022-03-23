@@ -51,6 +51,34 @@ components:
       description: |-
         Experiment request details
       type: object
+    Control.Start.Request:
+      description: |-
+        Start request details
+      type: object
+    Control.Status.Request:
+      description: |-
+        control.state request details
+      type: object
+    Control.Status.Response:
+      description: |-
+        control/state response details
+      type: object
+      properties:
+        dataflow_status:
+          description: |-
+            dataflow status:
+            started - data flow traffic is running
+            completed - all traffic flows completed, metrics are available
+            error - an error occurred
+          type: string
+          enum:
+          - started
+          - completed
+          - error
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error.Item'
     Metrics.Request:
       description: |-
         Metrics request details
@@ -614,6 +642,7 @@ paths:
       operationId: run_experiment
       description: |-
         Runs the currently configured experiment
+      deprecated: true
       requestBody:
         required: true
         content:
@@ -642,6 +671,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Warning.Details'
+  /control/start:
+    post:
+      tags:
+      - Control
+      operationId: start
+      description: |-
+        Starts the currently configured experiment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Control.Start.Request'
+      responses:
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '200':
+          description: |-
+            Success with possible warnings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warning.Details'
+  /control/status:
+    get:
+      tags:
+      - Control
+      operationId: get_status
+      description: |-
+        Gets the control status (e.g. started/completed/error)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Control.Status.Request'
+      responses:
+        '200':
+          description: |-
+            Control status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Control.Status.Response'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
   /results/metrics:
     description: |-
       Metrics API
