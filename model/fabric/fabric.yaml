@@ -20,12 +20,8 @@ components:
       description: An emulation of a spine/pod/rack topology
       type: object
       properties:
-        spines:
-          description: |-
-            The spines in the topology.
-          type: array
-          items:
-            $ref: "#/components/schemas/Fabric.Spine"
+        spine:
+          $ref: "#/components/schemas/Fabric.Spine"
         pods:
           description: |-
             The pods in the topology.
@@ -51,6 +47,12 @@ components:
           items:
             $ref: "#/components/schemas/Fabric.RackProfile"
 
+        parallel_fabric_count:
+          description: |-
+            Number of parallel fabrics (aka fabric colors). Spine and pod switches 
+            are fully meshed within a fabric
+          type: integer
+          default: 1
 
 
     Fabric.Spine:
@@ -81,22 +83,28 @@ components:
           default: 1
         pod_profile_name:
           description: |-
-            The pod profile associated with this pod.
-          type: array
-          items:
-            type: string
-            x-constraint:
-              - "#/components/schemas/PodProfile/properties/name"
+            The pod profile associated with the pod(s).
+          type: string
+          x-constraint:
+            - "#/components/schemas/PodProfile/properties/name"
 
     Fabric.PodProfile:
       type: object
       properties:
         name:
+          description: Uniquely identifies a pod profile
           type: string
         pod_switch:
           $ref: "#/components/schemas/Fabric.PodSwitch"
-        rack:
-          $ref: "#/components/schemas/Fabric.Rack"
+        racks:
+          description: |-
+              The racks in the pod
+          type: array
+          items:
+            $ref: "#/components/schemas/Fabric.Rack"
+        pod_to_spine_oversubscription: 
+          description: Oversubscription ratio of the pod switches
+          type: string
 
     Fabric.PodSwitch:
       type: object
@@ -104,11 +112,6 @@ components:
         count:
           type: integer
           default: 1
-      
-        pod_to_spine_oversubscription: 
-          description: oversubscription ratio of the pod switches
-          type: string
-
         uplink_ecmp_mode:
           x-include:
             - "#/components/schemas/EcmpMode"
@@ -117,7 +120,7 @@ components:
             - "#/components/schemas/EcmpMode"
         qos_profile_name:
           description: |-
-            The name of a qos profile associated with this pod switch.
+            The name of a qos profile associated with the switches in this pod.
           type: string
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
@@ -127,16 +130,14 @@ components:
       properties:
         count:
           type: integer
-          description: number of racks (and thus ToRs) in the pod
+          description: number of racks (and thus ToRs) that will share the same profile
           default: 1
-        rack_profile_names:
+        rack_profile_name:
           description: |-
-            The names of rack profiles associated with this rack.
-          type: array
-          items:
-            type: string
-            x-constraint:
-              - "#/components/schemas/RackProfile/properties/name"
+            The names of rack profiles associated with the rack(s)
+          type: string
+          x-constraint:
+            - "#/components/schemas/RackProfile/properties/name"
 
     EcmpMode:
       description: |-
@@ -147,26 +148,31 @@ components:
       type: string
       enum: [random_spray, hash_3_tuple, hash_5_tuple]
 
+    TorMode:
+      description: ToR switch mode
+      type: string
+      enum: [layer2, layer3]
+
     Fabric.RackProfile:
       type: object
       properties:
         name:
           type: string
-        tor_uplink_ecmp_mode:
+        tor_mode:
+          x-include:
+            - "#/components/schemas/TorMode"
+        uplink_ecmp_mode:
           x-include:
             - "#/components/schemas/EcmpMode"
-        tor_downlink_ecmp_mode:
-          x-include:
-            - "#/components/schemas/EcmpMode"
-        tor_qos_profile_name:
+        qos_profile_name:
           description: |-
-            The name of a qos profile associated with the ToR of this rack
+            The name of a qos profile associated with the ToR(s) of this rack
           type: string
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
         tor_to_pod_oversubscription:
           description: |-
-            The oversubscription ratio of the ToR switch
+            The oversubscription ratio of the ToR switch(es)
           type: string
 
     Fabric.QosProfile:
@@ -181,6 +187,9 @@ components:
           $ref: "#/components/schemas/Fabric.QosProfile.Scheduler"
         packet_classification:
           $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification"
+        wred:
+          $ref: "#/components/schemas/Fabric.QosProfile.Wred"
+
         
 
     Fabric.QosProfile.IngressAdmission:
@@ -194,6 +203,12 @@ components:
           description: Amount of shared buffer space (in bytes) available 
           type: integer
           default: 0
+        priority_list:
+          description: List of priorities for which the buffer sizes should be applied
+          type: array
+          items:
+            type: string
+            default: "0"
 
     Fabric.QosProfile.Scheduler:
       type: object
@@ -202,7 +217,7 @@ components:
           x-include:
             - "#/components/schemas/QosSchedulerMode"
         weight_list:
-          description: A list of queue weights
+          description: A list of egress queue weights for weighted round robin scheduler mode
           type: array
           items:
             type: integer
@@ -226,3 +241,29 @@ components:
       additionalProperties:
         type: string
 
+    Fabric.QosProfile.Wred:
+      description: |-
+        WRED (weighted random early detection) configuration
+      type: object
+      properties:
+        queue_list:
+          description: List of queues for which WRED is enabled
+          type: array
+          items:
+            type: string
+            default: "0"
+        ecn_marking_enabled:
+          type: boolean
+          default: false
+        min_threshold_bytes:
+          description: Egress queue threshold beyond which packets will be droppes or marked
+          type: integer
+          default: 1
+        max_threshold_bytes:
+          description: Egress queue threshold beyond which packets will be droppes or marked
+          type: integer
+          default: 2
+        max_probability_percent:
+          description: Probability of dropping/marking packets at max threshold
+          type: integer
+          default: 100

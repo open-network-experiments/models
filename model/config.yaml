@@ -15,3 +15,5 @@ components:
           $ref: "./dataflow/dataflow.yaml#/components/schemas/Dataflow"
         chaos:
           $ref: "./chaos/chaos.yaml#/components/schemas/Chaos"
+        insights:
+          $ref: "./insights/insights.yaml#/components/schemas/Insights"

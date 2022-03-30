@@ -2,9 +2,12 @@ components:
   schemas:
     Chaos:
       type: object
+      description: "Configuration of chaos experiments"
       properties:
         background_traffic:
           $ref: "#/components/schemas/Chaos.BackgroundTraffic"
+        drop_frames:
+          $ref: "#/components/schemas/Chaos.DropFrames"
             
     Chaos.BackgroundTraffic:
       type: object
@@ -28,7 +31,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless"
-
 
     Chaos.BackgroundTraffic.Flow.EntryPoint:
       type: object
@@ -75,7 +77,6 @@ components:
           type: integer
           description: Front panel port number (if fabric is emulated on a device with front panel ports)
 
-
     Chaos.BackgroundTraffic.Flow.Stateless:
       type: object
       properties:
@@ -88,7 +89,6 @@ components:
           enum: [bps, Kbps, Mbps, Gbps]
         packet:
           $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet"
-
 
     Chaos.BackgroundTraffic.Flow.Stateless.Packet:
       type: object
@@ -118,3 +118,31 @@ components:
           type: string
           description: Layer 4 transport protocol
           enum: [tcp, udp]
+
+
+    Chaos.DropFrames:
+      type: object
+      description: Configures the percentage of time during a 1 second period during which frames are dropped on selected links
+      properties:
+        configs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chaos.DropFrames.Config"
+
+    Chaos.DropFrames.Config:
+      type: object
+      description: Configures the percentage of time during a 1 second period during which frames are dropped on a link
+      properties:
+        name:
+          type: string
+          description: Uniquely identifies a config entry
+        link:
+          type: string
+          description: Emulated link name, e.g. Link S.1/2
+        type:
+          type: string
+          description: Means to express the interval in which frames are dropped, either as a percentage or min possible time
+          enum: [percentage_time, min_time]
+        percentage:
+          type: number
+          description: "Percentage value, ignored if type is min_time"
