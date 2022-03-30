@@ -51,7 +51,7 @@ def test_qos_ingress_admission():
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
     rack_profile = config.fabric.spine_pod_rack.rack_profiles.add("Rack Profile 1")
     pod_profile.racks.add(count = 2, rack_profile_name=rack_profile.name)
-    rack_profile.tor_qos_profile_name = qos_profile.name
+    rack_profile.qos_profile_name = qos_profile.name
 
     assert config.serialize()
 
