@@ -234,6 +234,17 @@ message Host {
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
   ];
+
+  message HostType {
+    enum Enum {
+      unspecified = 0;
+      external = 1;
+      internal_traffic_sink = 2;
+    }
+  }
+  optional HostType.Enum host_type = 4 [
+    (fld_meta).description = "Optional host type, if fabric is rendered on physical box.\n- external for hosts/servers physically connected to front panel ports\n- internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the fabric)"
+  ];
 }
 
 message Dataflow {

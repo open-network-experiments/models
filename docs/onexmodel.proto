@@ -97,6 +97,10 @@ message Config {
   optional Chaos chaos = 4 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional Insights insights = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message Host {
@@ -113,6 +117,17 @@ message Host {
   optional int32 prefix = 3 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
+  ];
+
+  message HostType {
+    enum Enum {
+      unspecified = 0;
+      external = 1;
+      internal_traffic_sink = 2;
+    }
+  }
+  optional HostType.Enum host_type = 4 [
+    (fld_meta).description = "Optional host type, if fabric is rendered on physical box.\n- external for hosts/servers physically connected to front panel ports\n- internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the fabric)"
   ];
 }
 
@@ -141,8 +156,8 @@ message Fabric {
 message FabricSpinePodRack {
   option (msg_meta).description = "An emulation of a spine/pod/rack topology";
 
-  repeated FabricSpine spines = 1 [
-    (fld_meta).description = "The spines in the topology."
+  optional FabricSpine spine = 1 [
+    (fld_meta).description = "Description missing in models"
   ];
 
   repeated FabricPod pods = 2 [
@@ -159,6 +174,11 @@ message FabricSpinePodRack {
 
   repeated FabricRackProfile rack_profiles = 5 [
     (fld_meta).description = "A list of rack profiles"
+  ];
+
+  optional int32 parallel_fabric_count = 6 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Number of parallel fabrics (aka fabric colors). Spine and pod switches \nare fully meshed within a fabric"
   ];
 }
 
@@ -195,8 +215,8 @@ message FabricPod {
     (fld_meta).description = "The number of pods that will share the same profile"
   ];
 
-  repeated string pod_profile_name = 2 [
-    (fld_meta).description = "The pod profile associated with this pod."
+  optional string pod_profile_name = 2 [
+    (fld_meta).description = "The pod profile associated with the pod(s).\n\nx-constraint:\n- #/components/schemas/PodProfile/properties/name\n"
   ];
 }
 
@@ -204,15 +224,19 @@ message FabricPodProfile {
   option (msg_meta).description = "Description missing in models";
 
   optional string name = 1 [
-    (fld_meta).description = "Description missing in models"
+    (fld_meta).description = "Uniquely identifies a pod profile"
   ];
 
   optional FabricPodSwitch pod_switch = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional FabricRack rack = 3 [
-    (fld_meta).description = "Description missing in models"
+  repeated FabricRack racks = 3 [
+    (fld_meta).description = "The racks in the pod"
+  ];
+
+  optional string pod_to_spine_oversubscription = 4 [
+    (fld_meta).description = "Oversubscription ratio of the pod switches"
   ];
 }
 
@@ -224,8 +248,64 @@ message FabricPodSwitch {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional string pod_to_spine_oversubscription = 2 [
-    (fld_meta).description = "oversubscription ratio of the pod switches"
+  message UplinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
+    }
+  }
+  optional UplinkEcmpMode.Enum uplink_ecmp_mode = 2 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  message DownlinkEcmpMode {
+    enum Enum {
+      unspecified = 0;
+      random_spray = 1;
+      hash_3_tuple = 2;
+      hash_5_tuple = 3;
+    }
+  }
+  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 3 [
+    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
+  ];
+
+  optional string qos_profile_name = 4 [
+    (fld_meta).description = "The name of a qos profile associated with the switches in this pod.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  ];
+}
+
+message FabricRack {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 count = 1 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "number of racks (and thus ToRs) that will share the same profile"
+  ];
+
+  optional string rack_profile_name = 2 [
+    (fld_meta).description = "The names of rack profiles associated with the rack(s)\n\nx-constraint:\n- #/components/schemas/RackProfile/properties/name\n"
+  ];
+}
+
+message FabricRackProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message TorMode {
+    enum Enum {
+      unspecified = 0;
+      layer2 = 1;
+      layer3 = 2;
+    }
+  }
+  optional TorMode.Enum tor_mode = 2 [
+    (fld_meta).description = "ToR switch mode"
   ];
 
   message UplinkEcmpMode {
@@ -240,73 +320,12 @@ message FabricPodSwitch {
     (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
   ];
 
-  message DownlinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional DownlinkEcmpMode.Enum downlink_ecmp_mode = 4 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  optional string qos_profile_name = 5 [
-    (fld_meta).description = "The name of a qos profile associated with this pod switch.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
-  ];
-}
-
-message FabricRack {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 count = 1 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "number of racks (and thus ToRs) in the pod"
-  ];
-
-  repeated string rack_profile_names = 2 [
-    (fld_meta).description = "The names of rack profiles associated with this rack."
-  ];
-}
-
-message FabricRackProfile {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string name = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  message TorUplinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional TorUplinkEcmpMode.Enum tor_uplink_ecmp_mode = 2 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  message TorDownlinkEcmpMode {
-    enum Enum {
-      unspecified = 0;
-      random_spray = 1;
-      hash_3_tuple = 2;
-      hash_5_tuple = 3;
-    }
-  }
-  optional TorDownlinkEcmpMode.Enum tor_downlink_ecmp_mode = 3 [
-    (fld_meta).description = "The algorithm for packet distribution over ECMP links.\n- random_spray randomly puts each packet on an ECMP member links \n- hash_3_tuple is a 3 tuple hash of ipv4 src, dst, protocol\n- hash_5_tuple is static_hash_ipv4_l4 but a different resulting RTAG7 hash mode"
-  ];
-
-  optional string tor_qos_profile_name = 4 [
-    (fld_meta).description = "The name of a qos profile associated with the ToR of this rack\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+  optional string qos_profile_name = 4 [
+    (fld_meta).description = "The name of a qos profile associated with the ToR(s) of this rack\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
 
   optional string tor_to_pod_oversubscription = 5 [
-    (fld_meta).description = "The oversubscription ratio of the ToR switch"
+    (fld_meta).description = "The oversubscription ratio of the ToR switch(es)"
   ];
 }
 
@@ -328,6 +347,10 @@ message FabricQosProfile {
   optional FabricQosProfilePacketClassification packet_classification = 4 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional FabricQosProfileWred wred = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricQosProfileIngressAdmission {
@@ -341,6 +364,10 @@ message FabricQosProfileIngressAdmission {
   optional int32 shared_buffer_bytes = 2 [
     (fld_meta).default = "0",
     (fld_meta).description = "Amount of shared buffer space (in bytes) available"
+  ];
+
+  repeated string priority_list = 3 [
+    (fld_meta).description = "List of priorities for which the buffer sizes should be applied"
   ];
 }
 
@@ -359,7 +386,7 @@ message FabricQosProfileScheduler {
   ];
 
   repeated int32 weight_list = 2 [
-    (fld_meta).description = "A list of queue weights"
+    (fld_meta).description = "A list of egress queue weights for weighted round robin scheduler mode"
   ];
 }
 
@@ -377,6 +404,34 @@ message FabricQosProfilePacketClassification {
 
 message FabricQosProfilePacketClassificationMap {
   option (msg_meta).description = "Description missing in models";
+}
+
+message FabricQosProfileWred {
+  option (msg_meta).description = "WRED (weighted random early detection) configuration";
+
+  repeated string queue_list = 1 [
+    (fld_meta).description = "List of queues for which WRED is enabled"
+  ];
+
+  optional bool ecn_marking_enabled = 2 [
+    (fld_meta).default = "False",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 min_threshold_bytes = 3 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Egress queue threshold beyond which packets will be droppes or marked"
+  ];
+
+  optional int32 max_threshold_bytes = 4 [
+    (fld_meta).default = "2",
+    (fld_meta).description = "Egress queue threshold beyond which packets will be droppes or marked"
+  ];
+
+  optional int32 max_probability_percent = 5 [
+    (fld_meta).default = "100",
+    (fld_meta).description = "Probability of dropping/marking packets at max threshold"
+  ];
 }
 
 message SwitchHostLink {
@@ -833,9 +888,13 @@ message DataflowHostManagement {
 }
 
 message Chaos {
-  option (msg_meta).description = "Description missing in models";
+  option (msg_meta).description = "Configuration of chaos experiments";
 
   optional ChaosBackgroundTraffic background_traffic = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosDropFrames drop_frames = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1017,6 +1076,69 @@ message ChaosBackgroundTrafficFlowStatelessPacket {
   }
   optional L4Protocol.Enum l4_protocol = 6 [
     (fld_meta).description = "Layer 4 transport protocol"
+  ];
+}
+
+message ChaosDropFrames {
+  option (msg_meta).description = "Configures the percentage of time during a 1 second period during which frames are dropped on selected links";
+
+  repeated ChaosDropFramesConfig configs = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosDropFramesConfig {
+  option (msg_meta).description = "Configures the percentage of time during a 1 second period during which frames are dropped on a link";
+
+  optional string name = 1 [
+    (fld_meta).description = "Uniquely identifies a config entry"
+  ];
+
+  optional string link = 2 [
+    (fld_meta).description = "Emulated link name, e.g. Link S.1/2"
+  ];
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      percentage_time = 1;
+      min_time = 2;
+    }
+  }
+  optional Type.Enum type = 3 [
+    (fld_meta).description = "Means to express the interval in which frames are dropped, either as a percentage or min possible time"
+  ];
+
+  optional float percentage = 4 [
+    (fld_meta).description = "Percentage value, ignored if type is min_time"
+  ];
+}
+
+message Insights {
+  option (msg_meta).description = "Configuration of insights providing methods";
+
+  optional InsightsPortMirroring port_mirroring = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message InsightsPortMirroring {
+  option (msg_meta).description = "Description missing in models";
+}
+
+message InsightsPortMirroringConfig {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Uniquely identifies a config entry"
+  ];
+
+  optional string ingress_port_name = 2 [
+    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1"
+  ];
+
+  optional string mirror_port = 3 [
+    (fld_meta).description = "Front panel port number of an external host, e.g. 32"
   ];
 }
 

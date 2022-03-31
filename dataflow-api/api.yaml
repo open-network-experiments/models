@@ -17,8 +17,15 @@ info:
     name: MIT
     url: https://raw.githubusercontent.com/distributed-system-emulator/main/LICENSE
 
-servers: 
-  - url: /
+servers:
+  - url: https://{hostname}:{port}/{basePath}
+    variables:
+      hostname:
+        default: 0.0.0.0
+      port:
+        default: '443'
+      basePath:
+        default: /onex/api/v1/dataflow
 
 
 paths: 
@@ -56,7 +63,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetConfigDetails'
+              $ref: './config.yaml#/components/schemas/GetConfigDetails'
       responses:
         '200':
           description: >-
@@ -82,7 +89,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Experiment.Request'
+              $ref: './config.yaml#/components/schemas/Experiment.Request'
       responses:
         x-include:
         - '../common/common.yaml#/components/responses/Success'
@@ -102,7 +109,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Control.Start.Request'
+              $ref: './config.yaml#/components/schemas/Control.Start.Request'
       responses:
         x-include:
         - '../common/common.yaml#/components/responses/Success'
@@ -121,7 +128,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Control.Status.Request'
+              $ref: './config.yaml#/components/schemas/Control.Status.Request'
       responses:
         '200':
           description: >-
@@ -129,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Control.Status.Response'
+                $ref: './config.yaml#/components/schemas/Control.Status.Response'
         x-include:
         - '../common/common.yaml#/components/responses/Error400'
         - '../common/common.yaml#/components/responses/Error500'
@@ -147,7 +154,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Metrics.Request'
+              $ref: './config.yaml#/components/schemas/Metrics.Request'
       responses:
         '200':
           description: >-
@@ -155,7 +162,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Metrics.Response'
+                $ref: './config.yaml#/components/schemas/Metrics.Response'
         x-include:
         - '../common/common.yaml#/components/responses/Error400'
         - '../common/common.yaml#/components/responses/Error500'

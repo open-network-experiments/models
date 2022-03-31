@@ -4,7 +4,7 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 import setuptools
 
 pkg = "onex_fabricapi"
-version = "0.0.15"
+version = "0.0.16"
 
 setuptools.setup(
     name=pkg,
