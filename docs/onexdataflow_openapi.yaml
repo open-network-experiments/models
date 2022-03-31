@@ -573,7 +573,14 @@ info:
     name: MIT
     url: https://raw.githubusercontent.com/distributed-system-emulator/main/LICENSE
 servers:
-- url: /
+- url: https://{hostname}:{port}/{basePath}
+  variables:
+    hostname:
+      default: 0.0.0.0
+    port:
+      default: '443'
+    basePath:
+      default: /onex/api/v1/dataflow
 paths:
   /config:
     post:
