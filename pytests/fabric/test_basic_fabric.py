@@ -7,28 +7,28 @@ def test_simple_fabric_with_oversubscription():
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
 
-    config.fabric.spine_pod_rack.spine.count = 1
-    config.fabric.spine_pod_rack.pods.add(count=2, pod_profile_name="Pod Profile 1")
+    config.fabric.clos.spine.count = 1
+    config.fabric.clos.pods.add(count=2, pod_profile_name="Pod Profile 1")
 
-    pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1")
+    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1")
     pod_profile.pod_switch.count = 1
-    rack_profile = config.fabric.spine_pod_rack.rack_profiles.add(
-        name="Rack Profile 1",
+    tor_profile = config.fabric.clos.tor_profiles.add(
+        name="ToR Profile 1",
         tor_to_pod_oversubscription="2:1"
     )
-    pod_profile.racks.add(count=2, rack_profile_name=rack_profile.name)
+    pod_profile.tors.add(count=2, tor_profile_name=tor_profile.name)
 
-    datastorage1_link = config.fabric.spine_pod_rack.host_links.add(host_name=datastorage1.name)
-    datastorage1_link.rack.pod_index = 1
-    datastorage1_link.rack.switch_index = 1
+    datastorage1_link = config.fabric.clos.host_links.add(host_name=datastorage1.name)
+    datastorage1_link.tor.pod_index = 1
+    datastorage1_link.tor.switch_index = 1
     
-    compute1_link = config.fabric.spine_pod_rack.host_links.add(host_name=compute1.name)
-    compute1_link.rack.pod_index = 2
-    compute1_link.rack.switch_index = 1
+    compute1_link = config.fabric.clos.host_links.add(host_name=compute1.name)
+    compute1_link.tor.pod_index = 2
+    compute1_link.tor.switch_index = 1
 
-    compute2_link = config.fabric.spine_pod_rack.host_links.add(host_name=compute2.name)
-    compute2_link.rack.pod_index = 2
-    compute2_link.rack.switch_index = 1
+    compute2_link = config.fabric.clos.host_links.add(host_name=compute2.name)
+    compute2_link.tor.pod_index = 2
+    compute2_link.tor.switch_index = 1
 
     config.serialize()
 
@@ -45,13 +45,13 @@ def test_qos_ingress_admission():
 
     # 2. create a topology with a single pod (and 1 switch in the pod),
     #    assign the qos profile to it
-    pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1")
-    config.fabric.spine_pod_rack.pods.add(count=1, pod_profile_name=pod_profile.name)
+    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1")
+    config.fabric.clos.pods.add(count=1, pod_profile_name=pod_profile.name)
     pod_profile.pod_switch.count = 1
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
-    rack_profile = config.fabric.spine_pod_rack.rack_profiles.add("Rack Profile 1")
-    pod_profile.racks.add(count = 2, rack_profile_name=rack_profile.name)
-    rack_profile.qos_profile_name = qos_profile.name
+    tor_profile = config.fabric.clos.tor_profiles.add("ToR Profile 1")
+    pod_profile.tors.add(count = 2, tor_profile_name=tor_profile.name)
+    tor_profile.qos_profile_name = qos_profile.name
 
     assert config.serialize()
 
@@ -68,8 +68,8 @@ def test_qos_scheduling_discipline():
     qos_profile.scheduler.scheduler_mode = qos_profile.scheduler.WEIGHTED_ROUND_ROBIN
     qos_profile.scheduler.weight_list = [1, 2, 4]
 
-    config.fabric.spine_pod_rack.pods.add(count=1, pod_profile_name="Pod Profile 1")
-    pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1")
+    config.fabric.clos.pods.add(count=1, pod_profile_name="Pod Profile 1")
+    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1")
     pod_profile.pod_switch.count = 1
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
 
@@ -84,10 +84,10 @@ def test_qos_wred():
     qos_profile.wred.max_threshold_bytes = 20
     qos_profile.wred.max_probability_percent = 60
 
-    config.fabric.spine_pod_rack.spine.count = 1
-    pod_profile = config.fabric.spine_pod_rack.pod_profiles.add(name="Pod Profile 1", pod_to_spine_oversubscription="")
+    config.fabric.clos.spine.count = 1
+    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1", pod_to_spine_oversubscription="")
     pod_profile.pod_switch.count = 2
     pod_profile.pod_switch.qos_profile_name = qos_profile.name
-    config.fabric.spine_pod_rack.pods.add(count=1, pod_profile_name=pod_profile.name)
+    config.fabric.clos.pods.add(count=1, pod_profile_name=pod_profile.name)
 
     assert config.serialize()

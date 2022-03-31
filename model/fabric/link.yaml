@@ -3,8 +3,7 @@ components:
     SwitchHostLink:
       type: object
       description: |-
-        The ingress point of a host which is the index of a spine switch, 
-        a pod/rack switch.
+        The ingress point of a host which is the index of a spine, pod or tor switch.
       required: [host_name]
       properties:
         host_name:
@@ -16,17 +15,17 @@ components:
           description: Optional front panel port number, if fabric is rendered on physical box
         choice:
           type: string
-          enum: [spine, pod, rack]
-          default: rack
+          enum: [spine, pod, tor]
+          default: tor
         spine:
           description: |-
             One based index of the spine switch based on the number of spines 
-            configured in the spine_pod_rack topology.
+            configured in the clos topology.
           type: integer
           minimum: 1
         pod:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
-        rack:
+        tor:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
 
     SwitchHostLink.SwitchRef:
@@ -42,7 +41,7 @@ components:
           minimum: 1
         switch_index:
           description: |-
-            One-based index of the pod or rack switch in the indicated pod
+            One-based index of the pod or ToR switch in the indicated pod
           type: integer
           default: 1
           minimum: 1

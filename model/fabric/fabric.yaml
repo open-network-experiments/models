@@ -5,9 +5,9 @@ components:
       properties:
         choice:
           type: string
-          enum: [spine_pod_rack]
-        spine_pod_rack:
-          $ref: "#/components/schemas/Fabric.SpinePodRack"
+          enum: [clos]
+        clos:
+          $ref: "#/components/schemas/Fabric.Clos"
         qos_profiles:
           description: |-
             A list of Quality of Service (QoS) profiles
@@ -16,8 +16,10 @@ components:
             $ref: "#/components/schemas/Fabric.QosProfile"
 
 
-    Fabric.SpinePodRack:
-      description: An emulation of a spine/pod/rack topology
+    Fabric.Clos:
+      description: |-
+        An emulation of a multistage switch topology. When folded, results in a topology with (up to) 3 tiers identified as 
+        spine, pod and tor tier.
       type: object
       properties:
         spine:
@@ -40,12 +42,12 @@ components:
           items:
             $ref: "#/components/schemas/Fabric.PodProfile"
 
-        rack_profiles:
+        tor_profiles:
           description: |-
-            A list of rack profiles
+            A list of ToR switch profiles
           type: array
           items:
-            $ref: "#/components/schemas/Fabric.RackProfile"
+            $ref: "#/components/schemas/Fabric.TorProfile"
 
         parallel_fabric_count:
           description: |-
@@ -96,12 +98,12 @@ components:
           type: string
         pod_switch:
           $ref: "#/components/schemas/Fabric.PodSwitch"
-        racks:
+        tors:
           description: |-
-              The racks in the pod
+              The ToRs in the pod
           type: array
           items:
-            $ref: "#/components/schemas/Fabric.Rack"
+            $ref: "#/components/schemas/Fabric.Tor"
         pod_to_spine_oversubscription: 
           description: Oversubscription ratio of the pod switches
           type: string
@@ -125,19 +127,41 @@ components:
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
 
-    Fabric.Rack:
+    Fabric.Tor:
       type: object
       properties:
         count:
           type: integer
-          description: number of racks (and thus ToRs) that will share the same profile
+          description: number of ToR switches that will share the same profile
           default: 1
-        rack_profile_name:
+        tor_profile_name:
           description: |-
-            The names of rack profiles associated with the rack(s)
+            The names of ToR profiles associated with the ToR switch(es)
           type: string
           x-constraint:
-            - "#/components/schemas/RackProfile/properties/name"
+            - "#/components/schemas/TorProfile/properties/name"
+
+    Fabric.TorProfile:
+      type: object
+      properties:
+        name:
+          type: string
+        tor_mode:
+          x-include:
+            - "#/components/schemas/TorMode"
+        uplink_ecmp_mode:
+          x-include:
+            - "#/components/schemas/EcmpMode"
+        qos_profile_name:
+          description: |-
+            The name of a qos profile associated with the ToR switch(es)
+          type: string
+          x-constraint:
+            - "#/components/schemas/QosProfile/properties/name"
+        tor_to_pod_oversubscription:
+          description: |-
+            The oversubscription ratio of the ToR switch(es)
+          type: string
 
     EcmpMode:
       description: |-
@@ -152,28 +176,6 @@ components:
       description: ToR switch mode
       type: string
       enum: [layer2, layer3]
-
-    Fabric.RackProfile:
-      type: object
-      properties:
-        name:
-          type: string
-        tor_mode:
-          x-include:
-            - "#/components/schemas/TorMode"
-        uplink_ecmp_mode:
-          x-include:
-            - "#/components/schemas/EcmpMode"
-        qos_profile_name:
-          description: |-
-            The name of a qos profile associated with the ToR(s) of this rack
-          type: string
-          x-constraint:
-            - "#/components/schemas/QosProfile/properties/name"
-        tor_to_pod_oversubscription:
-          description: |-
-            The oversubscription ratio of the ToR switch(es)
-          type: string
 
     Fabric.QosProfile:
       type: object
@@ -190,7 +192,6 @@ components:
         wred:
           $ref: "#/components/schemas/Fabric.QosProfile.Wred"
 
-        
 
     Fabric.QosProfile.IngressAdmission:
       type: object
