@@ -137,14 +137,14 @@ message Fabric {
   message Choice {
     enum Enum {
       unspecified = 0;
-      spine_pod_rack = 1;
+      clos = 1;
     }
   }
   optional Choice.Enum choice = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional FabricSpinePodRack spine_pod_rack = 2 [
+  optional FabricClos clos = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -153,8 +153,8 @@ message Fabric {
   ];
 }
 
-message FabricSpinePodRack {
-  option (msg_meta).description = "An emulation of a spine/pod/rack topology";
+message FabricClos {
+  option (msg_meta).description = "An emulation of a multistage switch topology. When folded, results in a topology with (up to) 3 tiers identified as \nspine, pod and tor tier.";
 
   optional FabricSpine spine = 1 [
     (fld_meta).description = "Description missing in models"
@@ -172,8 +172,8 @@ message FabricSpinePodRack {
     (fld_meta).description = "A list of pod profiles"
   ];
 
-  repeated FabricRackProfile rack_profiles = 5 [
-    (fld_meta).description = "A list of rack profiles"
+  repeated FabricTorProfile tor_profiles = 5 [
+    (fld_meta).description = "A list of ToR switch profiles"
   ];
 
   optional int32 parallel_fabric_count = 6 [
@@ -231,8 +231,8 @@ message FabricPodProfile {
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated FabricRack racks = 3 [
-    (fld_meta).description = "The racks in the pod"
+  repeated FabricTor tors = 3 [
+    (fld_meta).description = "The ToRs in the pod"
   ];
 
   optional string pod_to_spine_oversubscription = 4 [
@@ -277,20 +277,20 @@ message FabricPodSwitch {
   ];
 }
 
-message FabricRack {
+message FabricTor {
   option (msg_meta).description = "Description missing in models";
 
   optional int32 count = 1 [
     (fld_meta).default = "1",
-    (fld_meta).description = "number of racks (and thus ToRs) that will share the same profile"
+    (fld_meta).description = "number of ToR switches that will share the same profile"
   ];
 
-  optional string rack_profile_name = 2 [
-    (fld_meta).description = "The names of rack profiles associated with the rack(s)\n\nx-constraint:\n- #/components/schemas/RackProfile/properties/name\n"
+  optional string tor_profile_name = 2 [
+    (fld_meta).description = "The names of ToR profiles associated with the ToR switch(es)\n\nx-constraint:\n- #/components/schemas/TorProfile/properties/name\n"
   ];
 }
 
-message FabricRackProfile {
+message FabricTorProfile {
   option (msg_meta).description = "Description missing in models";
 
   optional string name = 1 [
@@ -321,7 +321,7 @@ message FabricRackProfile {
   ];
 
   optional string qos_profile_name = 4 [
-    (fld_meta).description = "The name of a qos profile associated with the ToR(s) of this rack\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
+    (fld_meta).description = "The name of a qos profile associated with the ToR switch(es)\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
 
   optional string tor_to_pod_oversubscription = 5 [
@@ -435,7 +435,7 @@ message FabricQosProfileWred {
 }
 
 message SwitchHostLink {
-  option (msg_meta).description = "The ingress point of a host which is the index of a spine switch, \na pod/rack switch.";
+  option (msg_meta).description = "The ingress point of a host which is the index of a spine, pod or tor switch.";
 
   string host_name = 1 [
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
@@ -450,23 +450,23 @@ message SwitchHostLink {
       unspecified = 0;
       spine = 1;
       pod = 2;
-      rack = 3;
+      tor = 3;
     }
   }
   optional Choice.Enum choice = 3 [
-    (fld_meta).default = "Choice.Enum.rack",
+    (fld_meta).default = "Choice.Enum.tor",
     (fld_meta).description = "Description missing in models"
   ];
 
   optional int32 spine = 4 [
-    (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the spine_pod_rack topology."
+    (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the clos topology."
   ];
 
   optional SwitchHostLinkSwitchRef pod = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional SwitchHostLinkSwitchRef rack = 6 [
+  optional SwitchHostLinkSwitchRef tor = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -481,7 +481,7 @@ message SwitchHostLinkSwitchRef {
 
   optional int32 switch_index = 2 [
     (fld_meta).default = "1",
-    (fld_meta).description = "One-based index of the pod or rack switch in the indicated pod"
+    (fld_meta).description = "One-based index of the pod or ToR switch in the indicated pod"
   ];
 }
 

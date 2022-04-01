@@ -82,18 +82,18 @@ components:
         choice:
           type: string
           enum:
-          - spine_pod_rack
-        spine_pod_rack:
-          $ref: '#/components/schemas/Fabric.SpinePodRack'
+          - clos
+        clos:
+          $ref: '#/components/schemas/Fabric.Clos'
         qos_profiles:
           description: |-
             A list of Quality of Service (QoS) profiles
           type: array
           items:
             $ref: '#/components/schemas/Fabric.QosProfile'
-    Fabric.SpinePodRack:
-      description: |-
-        An emulation of a spine/pod/rack topology
+    Fabric.Clos:
+      description: "An emulation of a multistage switch topology. When folded, results\
+        \ in a topology with (up to) 3 tiers identified as \nspine, pod and tor tier."
       type: object
       properties:
         spine:
@@ -114,12 +114,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fabric.PodProfile'
-        rack_profiles:
+        tor_profiles:
           description: |-
-            A list of rack profiles
+            A list of ToR switch profiles
           type: array
           items:
-            $ref: '#/components/schemas/Fabric.RackProfile'
+            $ref: '#/components/schemas/Fabric.TorProfile'
         parallel_fabric_count:
           description: "Number of parallel fabrics (aka fabric colors). Spine and\
             \ pod switches \nare fully meshed within a fabric"
@@ -179,12 +179,12 @@ components:
           type: string
         pod_switch:
           $ref: '#/components/schemas/Fabric.PodSwitch'
-        racks:
+        tors:
           description: |-
-            The racks in the pod
+            The ToRs in the pod
           type: array
           items:
-            $ref: '#/components/schemas/Fabric.Rack'
+            $ref: '#/components/schemas/Fabric.Tor'
         pod_to_spine_oversubscription:
           description: |-
             Oversubscription ratio of the pod switches
@@ -224,24 +224,24 @@ components:
           type: string
           x-constraint:
           - '#/components/schemas/QosProfile/properties/name'
-    Fabric.Rack:
+    Fabric.Tor:
       type: object
       properties:
         count:
           type: integer
           description: |-
-            number of racks (and thus ToRs) that will share the same profile
+            number of ToR switches that will share the same profile
           default: 1
-        rack_profile_name:
+        tor_profile_name:
           description: |
-            The names of rack profiles associated with the rack(s)
+            The names of ToR profiles associated with the ToR switch(es)
 
             x-constraint:
-            - #/components/schemas/RackProfile/properties/name
+            - #/components/schemas/TorProfile/properties/name
           type: string
           x-constraint:
-          - '#/components/schemas/RackProfile/properties/name'
-    Fabric.RackProfile:
+          - '#/components/schemas/TorProfile/properties/name'
+    Fabric.TorProfile:
       type: object
       properties:
         name:
@@ -265,7 +265,7 @@ components:
           - hash_5_tuple
         qos_profile_name:
           description: |
-            The name of a qos profile associated with the ToR(s) of this rack
+            The name of a qos profile associated with the ToR switch(es)
 
             x-constraint:
             - #/components/schemas/QosProfile/properties/name
@@ -369,8 +369,8 @@ components:
           default: 100
     SwitchHostLink:
       type: object
-      description: "The ingress point of a host which is the index of a spine switch,\
-        \ \na pod/rack switch."
+      description: |-
+        The ingress point of a host which is the index of a spine, pod or tor switch.
       required:
       - host_name
       properties:
@@ -392,16 +392,16 @@ components:
           enum:
           - spine
           - pod
-          - rack
-          default: rack
+          - tor
+          default: tor
         spine:
           description: "One based index of the spine switch based on the number of\
-            \ spines \nconfigured in the spine_pod_rack topology."
+            \ spines \nconfigured in the clos topology."
           type: integer
           minimum: 1
         pod:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
-        rack:
+        tor:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
     SwitchHostLink.SwitchRef:
       description: |-
@@ -416,7 +416,7 @@ components:
           minimum: 1
         switch_index:
           description: |-
-            One-based index of the pod or rack switch in the indicated pod
+            One-based index of the pod or ToR switch in the indicated pod
           type: integer
           default: 1
           minimum: 1
@@ -975,7 +975,14 @@ info:
   license:
     name: MIT
 servers:
-- url: /
+- url: https://{hostname}:{port}/{basePath}
+  variables:
+    hostname:
+      default: 0.0.0.0
+    port:
+      default: '443'
+    basePath:
+      default: /onex/api/v1
 paths:
   /config:
     post:
