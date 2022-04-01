@@ -4,7 +4,7 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 import setuptools
 
 pkg = "onex_model"
-version = "0.0.16"
+version = "0.0.17"
 
 setuptools.setup(
     name=pkg,
