@@ -59,15 +59,6 @@ components:
             The prefix of the host
           type: integer
           default: 24
-        host_type:
-          description: |-
-            Optional host type, if fabric is rendered on physical box.
-            - external for hosts/servers physically connected to front panel ports
-            - internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the fabric)
-          type: string
-          enum:
-          - external
-          - internal_traffic_sink
     Fabric:
       type: object
       properties:
@@ -83,6 +74,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fabric.QosProfile'
+        layer1_profiles:
+          description: |-
+            A list of Layer 1 settings profiles
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.L1SettingsProfile'
     Fabric.Clos:
       description: "An emulation of a multistage switch topology. When folded, results\
         \ in a topology with (up to) 3 tiers identified as \nspine, pod and tor tier."
@@ -359,6 +356,53 @@ components:
             Probability of dropping/marking packets at max threshold
           type: integer
           default: 100
+    Fabric.L1SettingsProfile:
+      type: object
+      properties:
+        name:
+          description: |-
+            Uniquely identifies a layer 1 settings profile
+          type: string
+        link_speed:
+          description: |-
+            Link speed
+          type: string
+          enum:
+          - speed_100_gbps
+          - speed_200_gbps
+          - speed_50_gbps
+          default: speed_100_gbps
+        autonegotiation:
+          $ref: '#/components/schemas/Fabric.L1SettingsProfile.Autonegotiation'
+    Fabric.L1SettingsProfile.Autonegotiation:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          default: enabled
+        enabled:
+          $ref: '#/components/schemas/Fabric.L1SettingsProfile.Autonegotiation.Enabled'
+        disabled:
+          $ref: '#/components/schemas/Fabric.L1SettingsProfile.Autonegotiation.Disabled'
+    Fabric.L1SettingsProfile.Autonegotiation.Enabled:
+      type: object
+      properties:
+        advertise_fec:
+          type: boolean
+          default: true
+    Fabric.L1SettingsProfile.Autonegotiation.Disabled:
+      type: object
+      properties:
+        fec_mode:
+          type: string
+          enum:
+          - reed_solomon
+          - firecode
+          - kp4
+          default: reed_solomon
     SwitchHostLink:
       type: object
       description: |-
@@ -375,10 +419,29 @@ components:
 
             x-constraint:
             - #components/schemas/Host/properties/name
+        host_type:
+          description: |-
+            Optional host type, if fabric is rendered on physical box.
+            - external for hosts/servers physically connected to front panel ports
+            - internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the emulated fabric)
+          type: string
+          enum:
+          - external
+          - internal_traffic_sink
+          default: external
         front_panel_port:
           type: integer
           description: |-
             Optional front panel port number, if fabric is rendered on physical box
+        l1_profile_name:
+          description: |
+            The layer 1 settings profile associated with the host/front panel port.
+
+            x-constraint:
+            - #/components/schemas/Fabric.L1SettingsProfile/properties/name
+          type: string
+          x-constraint:
+          - '#/components/schemas/Fabric.L1SettingsProfile/properties/name'
         choice:
           type: string
           enum:

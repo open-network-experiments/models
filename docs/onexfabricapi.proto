@@ -106,17 +106,6 @@ message Host {
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
   ];
-
-  message HostType {
-    enum Enum {
-      unspecified = 0;
-      external = 1;
-      internal_traffic_sink = 2;
-    }
-  }
-  optional HostType.Enum host_type = 4 [
-    (fld_meta).description = "Optional host type, if fabric is rendered on physical box.\n- external for hosts/servers physically connected to front panel ports\n- internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the fabric)"
-  ];
 }
 
 message Fabric {
@@ -138,6 +127,10 @@ message Fabric {
 
   repeated FabricQosProfile qos_profiles = 3 [
     (fld_meta).description = "A list of Quality of Service (QoS) profiles"
+  ];
+
+  repeated FabricL1SettingsProfile layer1_profiles = 4 [
+    (fld_meta).description = "A list of Layer 1 settings profiles"
   ];
 }
 
@@ -422,6 +415,81 @@ message FabricQosProfileWred {
   ];
 }
 
+message FabricL1SettingsProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Uniquely identifies a layer 1 settings profile"
+  ];
+
+  message LinkSpeed {
+    enum Enum {
+      unspecified = 0;
+      speed_100_gbps = 1;
+      speed_200_gbps = 2;
+      speed_50_gbps = 3;
+    }
+  }
+  optional LinkSpeed.Enum link_speed = 2 [
+    (fld_meta).default = "LinkSpeed.Enum.speed_100_gbps",
+    (fld_meta).description = "Link speed"
+  ];
+
+  optional FabricL1SettingsProfileAutonegotiation autonegotiation = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricL1SettingsProfileAutonegotiation {
+  option (msg_meta).description = "Description missing in models";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      enabled = 1;
+      disabled = 2;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).default = "Choice.Enum.enabled",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricL1SettingsProfileAutonegotiationEnabled enabled = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional FabricL1SettingsProfileAutonegotiationDisabled disabled = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricL1SettingsProfileAutonegotiationEnabled {
+  option (msg_meta).description = "Description missing in models";
+
+  optional bool advertise_fec = 1 [
+    (fld_meta).default = "True",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricL1SettingsProfileAutonegotiationDisabled {
+  option (msg_meta).description = "Description missing in models";
+
+  message FecMode {
+    enum Enum {
+      unspecified = 0;
+      reed_solomon = 1;
+      firecode = 2;
+      kp4 = 3;
+    }
+  }
+  optional FecMode.Enum fec_mode = 1 [
+    (fld_meta).default = "FecMode.Enum.reed_solomon",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
 message SwitchHostLink {
   option (msg_meta).description = "The ingress point of a host which is the index of a spine, pod or tor switch.";
 
@@ -429,8 +497,24 @@ message SwitchHostLink {
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
   ];
 
-  optional int32 front_panel_port = 2 [
+  message HostType {
+    enum Enum {
+      unspecified = 0;
+      external = 1;
+      internal_traffic_sink = 2;
+    }
+  }
+  optional HostType.Enum host_type = 2 [
+    (fld_meta).default = "HostType.Enum.external",
+    (fld_meta).description = "Optional host type, if fabric is rendered on physical box.\n- external for hosts/servers physically connected to front panel ports\n- internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the emulated fabric)"
+  ];
+
+  optional int32 front_panel_port = 3 [
     (fld_meta).description = "Optional front panel port number, if fabric is rendered on physical box"
+  ];
+
+  optional string l1_profile_name = 4 [
+    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- #/components/schemas/Fabric.L1SettingsProfile/properties/name\n"
   ];
 
   message Choice {
@@ -441,20 +525,20 @@ message SwitchHostLink {
       tor = 3;
     }
   }
-  optional Choice.Enum choice = 3 [
+  optional Choice.Enum choice = 5 [
     (fld_meta).default = "Choice.Enum.tor",
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 spine = 4 [
+  optional int32 spine = 6 [
     (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the clos topology."
   ];
 
-  optional SwitchHostLinkSwitchRef pod = 5 [
+  optional SwitchHostLinkSwitchRef pod = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional SwitchHostLinkSwitchRef tor = 6 [
+  optional SwitchHostLinkSwitchRef tor = 8 [
     (fld_meta).description = "Description missing in models"
   ];
 }
