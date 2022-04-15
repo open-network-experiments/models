@@ -10,9 +10,23 @@ components:
           type: string
           x-constraint:
           - '#components/schemas/Host/properties/name'
+        host_type:
+          description: |-
+            Optional host type, if fabric is rendered on physical box.
+            - external for hosts/servers physically connected to front panel ports
+            - internal_traffic_sink for an emulated server that acts as a traffic sink (i.e. packets sent to its IP address will be routed through the emulated fabric)
+          type: string
+          enum: [external, internal_traffic_sink]
+          default: external
         front_panel_port:
           type: integer
           description: Optional front panel port number, if fabric is rendered on physical box
+        l1_profile_name:
+          description: |-
+            The layer 1 settings profile associated with the host/front panel port.
+          type: string
+          x-constraint:
+            - "#/components/schemas/Fabric.L1SettingsProfile/properties/name"
         choice:
           type: string
           enum: [spine, pod, tor]
@@ -45,4 +59,3 @@ components:
           type: integer
           default: 1
           minimum: 1
-        
