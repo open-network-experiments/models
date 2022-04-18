@@ -9,8 +9,14 @@ components:
         link_speed:
           x-include:
             - '#/components/schemas/LinkSpeed'
+        choice:
+          type: string
+          enum: [autonegotiation, manual]
+          default: autonegotiation
         autonegotiation:
           $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation'
+        manual:
+          $ref: '#/components/schemas/L1SettingsProfile.Manual'
 
 
     LinkSpeed:
@@ -22,25 +28,12 @@ components:
 
     L1SettingsProfile.Autonegotiation:
       type: object
-      properties:
-        choice:
-          type: string
-          enum: [enabled, disabled]
-          default: enabled
-        enabled:
-          $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation.Enabled'
-        disabled:
-          $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation.Disabled'
-
-    
-    L1SettingsProfile.Autonegotiation.Enabled:
-      type: object
       properties: 
         advertise_fec:
           type: boolean
           default: true
 
-    L1SettingsProfile.Autonegotiation.Disabled:
+    L1SettingsProfile.Manual:
       type: object
       properties:
         fec_mode:

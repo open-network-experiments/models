@@ -14,14 +14,12 @@ def test_autoneg():
     # layer 1 setting profiles
     l1_profile_1 = config.layer1_profiles.add(name='200G Autoneg')
     l1_profile_1.link_speed = onex.L1SettingsProfile.SPEED_200_GBPS
-    l1_profile_1.autonegotiation.choice = onex.L1SettingsProfileAutonegotiation.ENABLED
-    l1_profile_1.autonegotiation.enabled.advertise_fec = True
+    l1_profile_1.autonegotiation.advertise_fec = True
 
 
     l1_profile_2 = config.layer1_profiles.add(name='100G Manual RS FEC')
     l1_profile_2.link_speed = onex.L1SettingsProfile.SPEED_100_GBPS
-    l1_profile_2.autonegotiation.choice = onex.L1SettingsProfileAutonegotiation.DISABLED
-    l1_profile_2.autonegotiation.disabled.fec_mode = onex.L1SettingsProfileAutonegotiationDisabled.REED_SOLOMON
+    l1_profile_2.manual.fec_mode = onex.L1SettingsProfileManual.REED_SOLOMON
 
     host1.l1_profile_name =l1_profile_1.name
     host2.l1_profile_name =l1_profile_1.name
