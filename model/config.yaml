@@ -17,3 +17,9 @@ components:
           $ref: "./chaos/chaos.yaml#/components/schemas/Chaos"
         insights:
           $ref: "./insights/insights.yaml#/components/schemas/Insights"
+        layer1_profiles:
+          description: |-
+            A list of Layer 1 settings profiles
+          type: array
+          items:
+            $ref: "./l1_profiles.yaml#/components/schemas/L1SettingsProfile"

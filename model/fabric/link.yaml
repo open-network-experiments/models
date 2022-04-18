@@ -21,12 +21,6 @@ components:
         front_panel_port:
           type: integer
           description: Optional front panel port number, if fabric is rendered on physical box
-        l1_profile_name:
-          description: |-
-            The layer 1 settings profile associated with the host/front panel port.
-          type: string
-          x-constraint:
-            - "#/components/schemas/Fabric.L1SettingsProfile/properties/name"
         choice:
           type: string
           enum: [spine, pod, tor]
