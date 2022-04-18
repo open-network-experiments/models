@@ -101,6 +101,10 @@ message Config {
   optional Insights insights = 5 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  repeated L1SettingsProfile layer1_profiles = 6 [
+    (fld_meta).description = "A list of Layer 1 settings profiles"
+  ];
 }
 
 message Host {
@@ -117,6 +121,10 @@ message Host {
   optional int32 prefix = 3 [
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
+  ];
+
+  optional string l1_profile_name = 4 [
+    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
   ];
 }
 
@@ -139,10 +147,6 @@ message Fabric {
 
   repeated FabricQosProfile qos_profiles = 3 [
     (fld_meta).description = "A list of Quality of Service (QoS) profiles"
-  ];
-
-  repeated FabricL1SettingsProfile layer1_profiles = 4 [
-    (fld_meta).description = "A list of Layer 1 settings profiles"
   ];
 }
 
@@ -427,81 +431,6 @@ message FabricQosProfileWred {
   ];
 }
 
-message FabricL1SettingsProfile {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string name = 1 [
-    (fld_meta).description = "Uniquely identifies a layer 1 settings profile"
-  ];
-
-  message LinkSpeed {
-    enum Enum {
-      unspecified = 0;
-      speed_100_gbps = 1;
-      speed_200_gbps = 2;
-      speed_50_gbps = 3;
-    }
-  }
-  optional LinkSpeed.Enum link_speed = 2 [
-    (fld_meta).default = "LinkSpeed.Enum.speed_100_gbps",
-    (fld_meta).description = "Link speed"
-  ];
-
-  optional FabricL1SettingsProfileAutonegotiation autonegotiation = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message FabricL1SettingsProfileAutonegotiation {
-  option (msg_meta).description = "Description missing in models";
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      enabled = 1;
-      disabled = 2;
-    }
-  }
-  optional Choice.Enum choice = 1 [
-    (fld_meta).default = "Choice.Enum.enabled",
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional FabricL1SettingsProfileAutonegotiationEnabled enabled = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional FabricL1SettingsProfileAutonegotiationDisabled disabled = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message FabricL1SettingsProfileAutonegotiationEnabled {
-  option (msg_meta).description = "Description missing in models";
-
-  optional bool advertise_fec = 1 [
-    (fld_meta).default = "True",
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message FabricL1SettingsProfileAutonegotiationDisabled {
-  option (msg_meta).description = "Description missing in models";
-
-  message FecMode {
-    enum Enum {
-      unspecified = 0;
-      reed_solomon = 1;
-      firecode = 2;
-      kp4 = 3;
-    }
-  }
-  optional FecMode.Enum fec_mode = 1 [
-    (fld_meta).default = "FecMode.Enum.reed_solomon",
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
 message SwitchHostLink {
   option (msg_meta).description = "The ingress point of a host which is the index of a spine, pod or tor switch.";
 
@@ -525,10 +454,6 @@ message SwitchHostLink {
     (fld_meta).description = "Optional front panel port number, if fabric is rendered on physical box"
   ];
 
-  optional string l1_profile_name = 4 [
-    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- #/components/schemas/Fabric.L1SettingsProfile/properties/name\n"
-  ];
-
   message Choice {
     enum Enum {
       unspecified = 0;
@@ -537,20 +462,20 @@ message SwitchHostLink {
       tor = 3;
     }
   }
-  optional Choice.Enum choice = 5 [
+  optional Choice.Enum choice = 4 [
     (fld_meta).default = "Choice.Enum.tor",
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 spine = 6 [
+  optional int32 spine = 5 [
     (fld_meta).description = "One based index of the spine switch based on the number of spines \nconfigured in the clos topology."
   ];
 
-  optional SwitchHostLinkSwitchRef pod = 7 [
+  optional SwitchHostLinkSwitchRef pod = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional SwitchHostLinkSwitchRef tor = 8 [
+  optional SwitchHostLinkSwitchRef tor = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1223,6 +1148,73 @@ message InsightsPortMirroringConfig {
 
   optional string mirror_port = 3 [
     (fld_meta).description = "Front panel port number of an external host, e.g. 32"
+  ];
+}
+
+message L1SettingsProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Uniquely identifies a layer 1 settings profile"
+  ];
+
+  message LinkSpeed {
+    enum Enum {
+      unspecified = 0;
+      speed_100_gbps = 1;
+      speed_200_gbps = 2;
+      speed_50_gbps = 3;
+    }
+  }
+  optional LinkSpeed.Enum link_speed = 2 [
+    (fld_meta).default = "LinkSpeed.Enum.speed_100_gbps",
+    (fld_meta).description = "Link speed"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      autonegotiation = 1;
+      manual = 2;
+    }
+  }
+  optional Choice.Enum choice = 3 [
+    (fld_meta).default = "Choice.Enum.autonegotiation",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L1SettingsProfileAutonegotiation autonegotiation = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L1SettingsProfileManual manual = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L1SettingsProfileAutonegotiation {
+  option (msg_meta).description = "Description missing in models";
+
+  optional bool advertise_fec = 1 [
+    (fld_meta).default = "True",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L1SettingsProfileManual {
+  option (msg_meta).description = "Description missing in models";
+
+  message FecMode {
+    enum Enum {
+      unspecified = 0;
+      reed_solomon = 1;
+      firecode = 2;
+      kp4 = 3;
+    }
+  }
+  optional FecMode.Enum fec_mode = 1 [
+    (fld_meta).default = "FecMode.Enum.reed_solomon",
+    (fld_meta).description = "Description missing in models"
   ];
 }
 

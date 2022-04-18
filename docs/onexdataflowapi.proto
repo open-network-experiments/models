@@ -234,6 +234,10 @@ message Host {
     (fld_meta).default = "24",
     (fld_meta).description = "The prefix of the host"
   ];
+
+  optional string l1_profile_name = 4 [
+    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
+  ];
 }
 
 message Dataflow {
