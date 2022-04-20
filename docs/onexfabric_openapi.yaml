@@ -265,9 +265,23 @@ components:
           x-constraint:
           - '#/components/schemas/QosProfile/properties/name'
         tor_to_pod_oversubscription:
-          description: |-
-            The oversubscription ratio of the ToR switch(es)
+          $ref: '#/components/schemas/Fabric.TorProfile.Oversubscription'
+    Fabric.TorProfile.Oversubscription:
+      description: |-
+        The oversubscription of the ToR switch(es)
+      type: object
+      properties:
+        ratio:
           type: string
+        mode:
+          type: string
+          enum:
+          - use_host_capacity
+          - use_fabric_host_links
+          default: use_host_capacity
+        host_capacity:
+          type: integer
+          default: 1
     Fabric.QosProfile:
       type: object
       required:
