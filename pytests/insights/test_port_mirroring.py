@@ -6,3 +6,5 @@ def test_port_mirroring():
     mirror.mirror_type = onex.InsightsPortMirroring.INGRESS_FRAMES
     mirror.source_port = "Spine Switch 1 Port 1"
     mirror.destination_port = 10
+
+    config.serialize()
