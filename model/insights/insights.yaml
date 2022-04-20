@@ -5,22 +5,24 @@ components:
       description: Configuration of insights providing methods
       properties:
         port_mirroring:
-          $ref: "#/components/schemas/Insights.PortMirroring"
+          type: array
+          items: 
+            $ref: "#/components/schemas/Insights.PortMirroring"
 
     Insights.PortMirroring:
-      type: array
-      items: 
-        $ref: "#/components/schemas/Insights.PortMirroring.Config"
-
-    Insights.PortMirroring.Config:
       type: object
+      required: [name]
       properties:
         name:
           type: string
-          description: Uniquely identifies a config entry
-        ingress_port_name:
+          description: Uniquely identifies a port port_mirroring entry
+        source_port:
           type: string
-          description: Emulated port name, e.g. Spine Switch 1 Port 1
-        mirror_port:
+          description: Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored
+        destination_port:
+          type: integer
+          description: Front panel port number of an external host, e.g. 32 on which to mirror
+        mirror_type:
           type: string
-          description: Front panel port number of an external host, e.g. 32
+          enum: [ingress_frames, egress_frames]
+          default: ingress_frames
