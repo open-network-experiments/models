@@ -30,5 +30,5 @@ def test_autoneg():
     host1_link.host_type = onex.SwitchHostLink.EXTERNAL
     host1_link.spine = 1
 
-    print(config.serialize())
+    config.serialize()
     
