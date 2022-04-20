@@ -15,7 +15,6 @@ components:
           items:
             $ref: "#/components/schemas/Fabric.QosProfile"
 
-
     Fabric.Clos:
       description: |-
         An emulation of a multistage switch topology. When folded, results in a topology with (up to) 3 tiers identified as 
@@ -158,9 +157,23 @@ components:
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
         tor_to_pod_oversubscription:
+          $ref: "#/components/schemas/Fabric.TorProfile.Oversubscription"
+
+    Fabric.TorProfile.Oversubscription:
           description: |-
-            The oversubscription ratio of the ToR switch(es)
-          type: string
+            The oversubscription of the ToR switch(es)
+          type: object
+          properties:
+            ratio:
+              type: string
+            mode:
+              type: string
+              enum: [use_host_capacity, use_fabric_host_links]
+              default: use_host_capacity
+            host_capacity:
+              type: integer
+              default: 1
+
 
     EcmpMode:
       description: |-
@@ -190,7 +203,6 @@ components:
           $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification"
         wred:
           $ref: "#/components/schemas/Fabric.QosProfile.Wred"
-
 
     Fabric.QosProfile.IngressAdmission:
       type: object

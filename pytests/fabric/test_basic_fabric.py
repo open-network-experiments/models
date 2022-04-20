@@ -12,10 +12,8 @@ def test_simple_fabric_with_oversubscription():
 
     pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1")
     pod_profile.pod_switch.count = 1
-    tor_profile = config.fabric.clos.tor_profiles.add(
-        name="ToR Profile 1",
-        tor_to_pod_oversubscription="2:1"
-    )
+    tor_profile = config.fabric.clos.tor_profiles.add(name="ToR Profile 1")
+    tor_profile.tor_to_pod_oversubscription.ratio="2:1"
     pod_profile.tors.add(count=2, tor_profile_name=tor_profile.name)
 
     datastorage1_link = config.fabric.clos.host_links.add(host_name=datastorage1.name)
