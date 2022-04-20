@@ -11,7 +11,7 @@ components:
 
     Insights.PortMirroring:
       type: object
-      required: [name]
+      required: [name, source_port, destination_port]
       properties:
         name:
           type: string
