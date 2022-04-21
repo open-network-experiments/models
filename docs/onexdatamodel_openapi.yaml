@@ -812,7 +812,9 @@ components:
         background_traffic:
           $ref: '#/components/schemas/Chaos.BackgroundTraffic'
         drop_frames:
-          $ref: '#/components/schemas/Chaos.DropFrames'
+          type: array
+          items:
+            $ref: '#/components/schemas/Chaos.DropFrames'
     Chaos.BackgroundTraffic:
       type: object
       properties:
@@ -936,36 +938,37 @@ components:
     Chaos.DropFrames:
       type: object
       description: |-
-        Configures the percentage of time during a 1 second period during which frames are dropped on selected links
-      properties:
-        configs:
-          type: array
-          items:
-            $ref: '#/components/schemas/Chaos.DropFrames.Config'
-    Chaos.DropFrames.Config:
-      type: object
-      description: |-
-        Configures the percentage of time during a 1 second period during which frames are dropped on a link
+        Configures an emulated link to periodically drop frames for a percentage of the specified time interval
+      required:
+      - name
+      - link
       properties:
         name:
           type: string
           description: |-
-            Uniquely identifies a config entry
+            Uniquely identifies a drop frames config entry
         link:
           type: string
           description: |-
             Emulated link name, e.g. Link S.1/2
-        type:
+        mode:
           type: string
           description: |-
-            Means to express the interval in which frames are dropped, either as a percentage or min possible time
+            Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time
           enum:
           - percentage_time
           - min_time
+          default: percentage_time
         percentage:
           type: number
           description: |-
             Percentage value, ignored if type is min_time
+          default: 5
+        interval:
+          type: integer
+          description: |-
+            Interval of time (seconds)
+          default: 1
     Insights:
       type: object
       description: |-
@@ -979,6 +982,8 @@ components:
       type: object
       required:
       - name
+      - source_port
+      - destination_port
       properties:
         name:
           type: string

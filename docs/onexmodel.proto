@@ -928,7 +928,7 @@ message Chaos {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional ChaosDropFrames drop_frames = 2 [
+  repeated ChaosDropFrames drop_frames = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1114,37 +1114,36 @@ message ChaosBackgroundTrafficFlowStatelessPacket {
 }
 
 message ChaosDropFrames {
-  option (msg_meta).description = "Configures the percentage of time during a 1 second period during which frames are dropped on selected links";
+  option (msg_meta).description = "Configures an emulated link to periodically drop frames for a percentage of the specified time interval";
 
-  repeated ChaosDropFramesConfig configs = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosDropFramesConfig {
-  option (msg_meta).description = "Configures the percentage of time during a 1 second period during which frames are dropped on a link";
-
-  optional string name = 1 [
-    (fld_meta).description = "Uniquely identifies a config entry"
+  string name = 1 [
+    (fld_meta).description = "Uniquely identifies a drop frames config entry"
   ];
 
-  optional string link = 2 [
+  string link = 2 [
     (fld_meta).description = "Emulated link name, e.g. Link S.1/2"
   ];
 
-  message Type {
+  message Mode {
     enum Enum {
       unspecified = 0;
       percentage_time = 1;
       min_time = 2;
     }
   }
-  optional Type.Enum type = 3 [
-    (fld_meta).description = "Means to express the interval in which frames are dropped, either as a percentage or min possible time"
+  optional Mode.Enum mode = 3 [
+    (fld_meta).default = "Mode.Enum.percentage_time",
+    (fld_meta).description = "Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time"
   ];
 
   optional float percentage = 4 [
+    (fld_meta).default = "5",
     (fld_meta).description = "Percentage value, ignored if type is min_time"
+  ];
+
+  optional int32 interval = 5 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Interval of time (seconds)"
   ];
 }
 
@@ -1163,11 +1162,11 @@ message InsightsPortMirroring {
     (fld_meta).description = "Uniquely identifies a port port_mirroring entry"
   ];
 
-  optional string source_port = 2 [
+  string source_port = 2 [
     (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored"
   ];
 
-  optional int32 destination_port = 3 [
+  int32 destination_port = 3 [
     (fld_meta).description = "Front panel port number of an external host, e.g. 32 on which to mirror"
   ];
 
