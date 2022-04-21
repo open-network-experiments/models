@@ -321,8 +321,33 @@ message FabricTorProfile {
     (fld_meta).description = "The name of a qos profile associated with the ToR switch(es)\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
 
-  optional string tor_to_pod_oversubscription = 5 [
-    (fld_meta).description = "The oversubscription ratio of the ToR switch(es)"
+  optional FabricTorProfileOversubscription tor_to_pod_oversubscription = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricTorProfileOversubscription {
+  option (msg_meta).description = "The oversubscription of the ToR switch(es)";
+
+  optional string ratio = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      use_host_capacity = 1;
+      use_fabric_host_links = 2;
+    }
+  }
+  optional Mode.Enum mode = 2 [
+    (fld_meta).default = "Mode.Enum.use_host_capacity",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 host_capacity = 3 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
   ];
 }
 
@@ -1126,28 +1151,36 @@ message ChaosDropFramesConfig {
 message Insights {
   option (msg_meta).description = "Configuration of insights providing methods";
 
-  optional InsightsPortMirroring port_mirroring = 1 [
+  repeated InsightsPortMirroring port_mirroring = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
 message InsightsPortMirroring {
   option (msg_meta).description = "Description missing in models";
-}
 
-message InsightsPortMirroringConfig {
-  option (msg_meta).description = "Description missing in models";
-
-  optional string name = 1 [
-    (fld_meta).description = "Uniquely identifies a config entry"
+  string name = 1 [
+    (fld_meta).description = "Uniquely identifies a port port_mirroring entry"
   ];
 
-  optional string ingress_port_name = 2 [
-    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1"
+  optional string source_port = 2 [
+    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored"
   ];
 
-  optional string mirror_port = 3 [
-    (fld_meta).description = "Front panel port number of an external host, e.g. 32"
+  optional int32 destination_port = 3 [
+    (fld_meta).description = "Front panel port number of an external host, e.g. 32 on which to mirror"
+  ];
+
+  message MirrorType {
+    enum Enum {
+      unspecified = 0;
+      ingress_frames = 1;
+      egress_frames = 2;
+    }
+  }
+  optional MirrorType.Enum mirror_type = 4 [
+    (fld_meta).default = "MirrorType.Enum.ingress_frames",
+    (fld_meta).description = "Description missing in models"
   ];
 }
 

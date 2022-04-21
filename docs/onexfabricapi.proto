@@ -305,8 +305,33 @@ message FabricTorProfile {
     (fld_meta).description = "The name of a qos profile associated with the ToR switch(es)\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
 
-  optional string tor_to_pod_oversubscription = 5 [
-    (fld_meta).description = "The oversubscription ratio of the ToR switch(es)"
+  optional FabricTorProfileOversubscription tor_to_pod_oversubscription = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricTorProfileOversubscription {
+  option (msg_meta).description = "The oversubscription of the ToR switch(es)";
+
+  optional string ratio = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      use_host_capacity = 1;
+      use_fabric_host_links = 2;
+    }
+  }
+  optional Mode.Enum mode = 2 [
+    (fld_meta).default = "Mode.Enum.use_host_capacity",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 host_capacity = 3 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Description missing in models"
   ];
 }
 

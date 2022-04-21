@@ -279,9 +279,23 @@ components:
           x-constraint:
           - '#/components/schemas/QosProfile/properties/name'
         tor_to_pod_oversubscription:
-          description: |-
-            The oversubscription ratio of the ToR switch(es)
+          $ref: '#/components/schemas/Fabric.TorProfile.Oversubscription'
+    Fabric.TorProfile.Oversubscription:
+      description: |-
+        The oversubscription of the ToR switch(es)
+      type: object
+      properties:
+        ratio:
           type: string
+        mode:
+          type: string
+          enum:
+          - use_host_capacity
+          - use_fabric_host_links
+          default: use_host_capacity
+        host_capacity:
+          type: integer
+          default: 1
     Fabric.QosProfile:
       type: object
       required:
@@ -958,26 +972,32 @@ components:
         Configuration of insights providing methods
       properties:
         port_mirroring:
-          $ref: '#/components/schemas/Insights.PortMirroring'
+          type: array
+          items:
+            $ref: '#/components/schemas/Insights.PortMirroring'
     Insights.PortMirroring:
-      type: array
-      items:
-        $ref: '#/components/schemas/Insights.PortMirroring.Config'
-    Insights.PortMirroring.Config:
       type: object
+      required:
+      - name
       properties:
         name:
           type: string
           description: |-
-            Uniquely identifies a config entry
-        ingress_port_name:
+            Uniquely identifies a port port_mirroring entry
+        source_port:
           type: string
           description: |-
-            Emulated port name, e.g. Spine Switch 1 Port 1
-        mirror_port:
-          type: string
+            Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored
+        destination_port:
+          type: integer
           description: |-
-            Front panel port number of an external host, e.g. 32
+            Front panel port number of an external host, e.g. 32 on which to mirror
+        mirror_type:
+          type: string
+          enum:
+          - ingress_frames
+          - egress_frames
+          default: ingress_frames
     L1SettingsProfile:
       type: object
       properties:
