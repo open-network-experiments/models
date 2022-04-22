@@ -933,6 +933,40 @@ message Chaos {
   ];
 }
 
+message ChaosDropFrames {
+  option (msg_meta).description = "Configures an emulated link to periodically drop frames for a percentage of the specified time interval";
+
+  string name = 1 [
+    (fld_meta).description = "Uniquely identifies a drop frames config entry"
+  ];
+
+  string link = 2 [
+    (fld_meta).description = "Emulated link name, e.g. Link S.1/2"
+  ];
+
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      percentage_time = 1;
+      min_time = 2;
+    }
+  }
+  optional Mode.Enum mode = 3 [
+    (fld_meta).default = "Mode.Enum.percentage_time",
+    (fld_meta).description = "Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time"
+  ];
+
+  optional float percentage = 4 [
+    (fld_meta).default = "5",
+    (fld_meta).description = "Percentage value, ignored if type is min_time"
+  ];
+
+  optional int32 interval = 5 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Interval of time (seconds)"
+  ];
+}
+
 message ChaosBackgroundTraffic {
   option (msg_meta).description = "Description missing in models";
 
@@ -948,8 +982,8 @@ message ChaosBackgroundTrafficFlow {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional ChaosBackgroundTrafficFlowEntryPoint fabric_entry_point = 2 [
-    (fld_meta).description = "Description missing in models"
+  optional string injection_port = 2 [
+    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1"
   ];
 
   message Choice {
@@ -962,87 +996,8 @@ message ChaosBackgroundTrafficFlow {
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated ChaosBackgroundTrafficFlowStateless stateless = 4 [
+  optional ChaosBackgroundTrafficFlowStateless stateless = 4 [
     (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosBackgroundTrafficFlowEntryPoint {
-  option (msg_meta).description = "Description missing in models";
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      switch_reference = 1;
-      front_panel_port = 2;
-    }
-  }
-  optional Choice.Enum choice = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional ChaosBackgroundTrafficFlowEntryPointSwitchReference switch_reference = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional ChaosBackgroundTrafficFlowEntryPointFrontPanelPort front_panel_port = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosBackgroundTrafficFlowEntryPointSwitchReference {
-  option (msg_meta).description = "Description missing in models";
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      spine = 1;
-      pod = 2;
-      tor = 3;
-    }
-  }
-  optional Choice.Enum choice = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferenceSpine spine = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference pod = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference tor = 4 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosBackgroundTrafficFlowEntryPointSwitchReferenceSpine {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 switch_index = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosBackgroundTrafficFlowEntryPointSwitchReferencePodSwitchReference {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 pod_index = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional int32 switch_index = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message ChaosBackgroundTrafficFlowEntryPointFrontPanelPort {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 front_panel_port = 1 [
-    (fld_meta).description = "Front panel port number (if fabric is emulated on a device with front panel ports)"
   ];
 }
 
@@ -1054,19 +1009,17 @@ message ChaosBackgroundTrafficFlowStateless {
   ];
 
   optional int32 rate = 2 [
-    (fld_meta).description = "Description missing in models"
+    (fld_meta).description = "Transmission rate specified as a percentage of the injection port speed"
   ];
 
-  message RateUnit {
+  message TransmissionMode {
     enum Enum {
       unspecified = 0;
-      bps = 1;
-      kbps = 2;
-      mbps = 3;
-      gbps = 4;
+      continuous = 1;
+      burst = 2;
     }
   }
-  optional RateUnit.Enum rate_unit = 3 [
+  optional TransmissionMode.Enum transmission_mode = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -1111,39 +1064,23 @@ message ChaosBackgroundTrafficFlowStatelessPacket {
   optional L4Protocol.Enum l4_protocol = 6 [
     (fld_meta).description = "Layer 4 transport protocol"
   ];
+
+  optional ChaosBackgroundTrafficFlowStatelessPacketDsField ds_field = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
-message ChaosDropFrames {
-  option (msg_meta).description = "Configures an emulated link to periodically drop frames for a percentage of the specified time interval";
+message ChaosBackgroundTrafficFlowStatelessPacketDsField {
+  option (msg_meta).description = "Differentiated Services or Traffic Class field";
 
-  string name = 1 [
-    (fld_meta).description = "Uniquely identifies a drop frames config entry"
+  optional int32 dscp = 1 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Differentiated Service CodePoint filed"
   ];
 
-  string link = 2 [
-    (fld_meta).description = "Emulated link name, e.g. Link S.1/2"
-  ];
-
-  message Mode {
-    enum Enum {
-      unspecified = 0;
-      percentage_time = 1;
-      min_time = 2;
-    }
-  }
-  optional Mode.Enum mode = 3 [
-    (fld_meta).default = "Mode.Enum.percentage_time",
-    (fld_meta).description = "Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time"
-  ];
-
-  optional float percentage = 4 [
-    (fld_meta).default = "5",
-    (fld_meta).description = "Percentage value, ignored if type is min_time"
-  ];
-
-  optional int32 interval = 5 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "Interval of time (seconds)"
+  optional int32 ecn = 2 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Explicit Congestion Notification field"
   ];
 }
 

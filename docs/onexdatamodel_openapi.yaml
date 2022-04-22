@@ -815,6 +815,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Chaos.DropFrames'
+    Chaos.DropFrames:
+      type: object
+      description: |-
+        Configures an emulated link to periodically drop frames for a percentage of the specified time interval
+      required:
+      - name
+      - link
+      properties:
+        name:
+          type: string
+          description: |-
+            Uniquely identifies a drop frames config entry
+        link:
+          type: string
+          description: |-
+            Emulated link name, e.g. Link S.1/2
+        mode:
+          type: string
+          description: |-
+            Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time
+          enum:
+          - percentage_time
+          - min_time
+          default: percentage_time
+        percentage:
+          type: number
+          description: |-
+            Percentage value, ignored if type is min_time
+          default: 5
+        interval:
+          type: integer
+          description: |-
+            Interval of time (seconds)
+          default: 1
     Chaos.BackgroundTraffic:
       type: object
       properties:
@@ -827,62 +861,16 @@ components:
       properties:
         name:
           type: string
-        fabric_entry_point:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint'
+        injection_port:
+          type: string
+          description: |-
+            Emulated port name, e.g. Spine Switch 1 Port 1
         choice:
           type: string
           enum:
           - stateless
         stateless:
-          type: array
-          items:
-            $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless'
-    Chaos.BackgroundTraffic.Flow.EntryPoint:
-      type: object
-      properties:
-        choice:
-          type: string
-          enum:
-          - switch_reference
-          - front_panel_port
-        switch_reference:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference'
-        front_panel_port:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.FrontPanelPort'
-    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference:
-      type: object
-      properties:
-        choice:
-          type: string
-          enum:
-          - spine
-          - pod
-          - tor
-        spine:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.Spine'
-        pod:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference'
-        tor:
-          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference'
-    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.Spine:
-      type: object
-      properties:
-        switch_index:
-          type: integer
-    Chaos.BackgroundTraffic.Flow.EntryPoint.SwitchReference.PodSwitchReference:
-      type: object
-      properties:
-        pod_index:
-          type: integer
-        switch_index:
-          type: integer
-    Chaos.BackgroundTraffic.Flow.EntryPoint.FrontPanelPort:
-      type: object
-      properties:
-        front_panel_port:
-          type: integer
-          description: |-
-            Front panel port number (if fabric is emulated on a device with front panel ports)
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless'
     Chaos.BackgroundTraffic.Flow.Stateless:
       type: object
       properties:
@@ -890,13 +878,13 @@ components:
           type: string
         rate:
           type: integer
-        rate_unit:
+          description: |-
+            Transmission rate specified as a percentage of the injection port speed
+        transmission_mode:
           type: string
           enum:
-          - bps
-          - Kbps
-          - Mbps
-          - Gbps
+          - continuous
+          - burst
         packet:
           $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet'
     Chaos.BackgroundTraffic.Flow.Stateless.Packet:
@@ -935,40 +923,27 @@ components:
           enum:
           - tcp
           - udp
-    Chaos.DropFrames:
+        ds_field:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField'
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField:
       type: object
       description: |-
-        Configures an emulated link to periodically drop frames for a percentage of the specified time interval
-      required:
-      - name
-      - link
+        Differentiated Services or Traffic Class field
       properties:
-        name:
-          type: string
+        dscp:
           description: |-
-            Uniquely identifies a drop frames config entry
-        link:
-          type: string
-          description: |-
-            Emulated link name, e.g. Link S.1/2
-        mode:
-          type: string
-          description: |-
-            Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time
-          enum:
-          - percentage_time
-          - min_time
-          default: percentage_time
-        percentage:
-          type: number
-          description: |-
-            Percentage value, ignored if type is min_time
-          default: 5
-        interval:
+            Differentiated Service CodePoint filed
           type: integer
+          minimum: 0
+          maximum: 63
+          default: 0
+        ecn:
           description: |-
-            Interval of time (seconds)
-          default: 1
+            Explicit Congestion Notification field
+          type: integer
+          minimum: 0
+          maximum: 3
+          default: 0
     Insights:
       type: object
       description: |-
