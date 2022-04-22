@@ -4,7 +4,7 @@ To build distribution: python setup.py sdist bdist_wheel --universal
 import setuptools
 
 pkg = "onex_dataflowapi"
-version = "0.0.22"
+version = "0.0.23"
 
 setuptools.setup(
     name=pkg,

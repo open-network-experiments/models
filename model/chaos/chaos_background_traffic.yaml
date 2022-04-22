@@ -1,0 +1,90 @@
+components:
+  schemas:
+    Chaos.BackgroundTraffic:
+      type: object
+      properties:
+        flows:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow"
+
+    Chaos.BackgroundTraffic.Flow:
+      type: object
+      properties:
+        name:
+          type: string
+        injection_port:
+          type: string
+          description: Emulated port name, e.g. Spine Switch 1 Port 1
+        choice:
+          type: string
+          enum: [stateless]
+        stateless:
+          $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless"
+
+
+    Chaos.BackgroundTraffic.Flow.Stateless:
+      type: object
+      properties:
+        name:
+          type: string
+        rate:
+          type: integer
+          description: Transmission rate specified as a percentage of the injection port speed
+        transmission_mode:
+          type: string
+          enum: [continuous, burst]
+        packet:
+          $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet"
+        
+
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet:
+      type: object
+      properties:
+        src_address:
+          description: source IP address
+          type: string
+        dst_address:
+          description: destination IP address
+          type: string
+        src_port:
+          type: integer
+          description: Layer 4 source port
+          maximum: 65535
+          default: 1024
+        dst_port:
+          type: integer
+          description: Layer 4 destination port
+          maximum: 65535
+          default: 1024
+        size:
+          type: integer
+          description: total packet size
+          minimum: 64
+          default: 1000
+        l4_protocol:
+          type: string
+          description: Layer 4 transport protocol
+          enum: [tcp, udp]
+        ds_field:
+          $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField"
+
+
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField:
+      type: object
+      description: Differentiated Services or Traffic Class field
+      properties:
+        dscp:
+          description: |-
+            Differentiated Service CodePoint filed
+          type: integer
+          minimum: 0
+          maximum: 63
+          default: 0
+        ecn:
+          description: |-
+            Explicit Congestion Notification field
+          type: integer
+          minimum: 0
+          maximum: 3
+          default: 0

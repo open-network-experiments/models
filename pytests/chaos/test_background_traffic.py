@@ -5,18 +5,25 @@ def test_background_traffic():
     config = api.config()
 
     flow1 = config.chaos.background_traffic.flows.add(name="Flow 1")
-    flow1.fabric_entry_point.front_panel_port.front_panel_port = 1
-    stateless_flow = flow1.stateless.add(name='UDP DSCP 46')
-    stateless_flow.packet.src_address = "1.1.1.1"
-    stateless_flow.packet.dst_address = "2.2.2.2"
-    stateless_flow.packet.src_port = 10000
-    stateless_flow.packet.dst_port = 50000
-    stateless_flow.packet.size = 1518
-    stateless_flow.packet.l4_protocol = 'udp'
-    stateless_flow.rate = 20
-    stateless_flow.rate_unit = 'Gbps'
-
+    flow1.injection_port = "Spine Switch 1 Port 1"
+    flow1.stateless.packet.src_address = "1.1.1.1"
+    flow1.stateless.packet.dst_address = "2.2.2.2"
+    flow1.stateless.packet.src_port = 10000
+    flow1.stateless.packet.dst_port = 50000
+    flow1.stateless.packet.size = 1518
+    flow1.stateless.packet.l4_protocol = 'udp'
+    flow1.stateless.packet.ds_field.dscp = 10
+    flow1.stateless.rate = 20
+    
     flow2 = config.chaos.background_traffic.flows.add(name="Flow 2")
-    flow2.fabric_entry_point.switch_reference.spine.switch_index = 1
+    flow2.injection_port = "Spine Switch 1 Port 1"
+    flow2.stateless.packet.src_address = "1.1.1.12"
+    flow2.stateless.packet.dst_address = "20.2.2.2"
+    flow2.stateless.packet.src_port = 10000
+    flow2.stateless.packet.dst_port = 50000
+    flow2.stateless.packet.size = 1518
+    flow2.stateless.packet.l4_protocol = 'tcp'
+    flow2.stateless.packet.ds_field.ecn = 2
+    flow2.stateless.rate = 10
 
     assert config.serialize()
