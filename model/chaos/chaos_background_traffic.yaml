@@ -26,8 +26,6 @@ components:
     Chaos.BackgroundTraffic.Flow.Stateless:
       type: object
       properties:
-        name:
-          type: string
         rate:
           type: integer
           description: Transmission rate specified as a percentage of the injection port speed
