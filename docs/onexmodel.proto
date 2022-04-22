@@ -1004,11 +1004,7 @@ message ChaosBackgroundTrafficFlow {
 message ChaosBackgroundTrafficFlowStateless {
   option (msg_meta).description = "Description missing in models";
 
-  optional string name = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional int32 rate = 2 [
+  optional int32 rate = 1 [
     (fld_meta).description = "Transmission rate specified as a percentage of the injection port speed"
   ];
 
@@ -1019,11 +1015,11 @@ message ChaosBackgroundTrafficFlowStateless {
       burst = 2;
     }
   }
-  optional TransmissionMode.Enum transmission_mode = 3 [
+  optional TransmissionMode.Enum transmission_mode = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional ChaosBackgroundTrafficFlowStatelessPacket packet = 4 [
+  optional ChaosBackgroundTrafficFlowStatelessPacket packet = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 }
