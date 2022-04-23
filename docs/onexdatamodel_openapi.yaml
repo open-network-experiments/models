@@ -874,8 +874,6 @@ components:
     Chaos.BackgroundTraffic.Flow.Stateless:
       type: object
       properties:
-        name:
-          type: string
         rate:
           type: integer
           description: |-
