@@ -14,6 +14,7 @@ def test_background_traffic():
     flow1.stateless.packet.l4_protocol = 'udp'
     flow1.stateless.packet.ds_field.dscp = 10
     flow1.stateless.rate = 20
+    flow1.stateless.transmission_mode = 'continuous'
     
     flow2 = config.chaos.background_traffic.flows.add(name="Flow 2")
     flow2.injection_port = "Spine Switch 1 Port 1"
@@ -25,5 +26,8 @@ def test_background_traffic():
     flow2.stateless.packet.l4_protocol = 'tcp'
     flow2.stateless.packet.ds_field.ecn = 2
     flow2.stateless.rate = 10
+    flow2.stateless.transmission_mode = 'burst'
+    flow2.stateless.burst.transmit_duration = 1000
+    flow2.stateless.burst.transmit_gap = 100
 
     assert config.serialize()
