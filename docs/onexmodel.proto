@@ -1016,10 +1016,15 @@ message ChaosBackgroundTrafficFlowStateless {
     }
   }
   optional TransmissionMode.Enum transmission_mode = 2 [
+    (fld_meta).default = "TransmissionMode.Enum.continuous",
     (fld_meta).description = "Description missing in models"
   ];
 
   optional ChaosBackgroundTrafficFlowStatelessPacket packet = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStatelessBurst burst = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1077,6 +1082,29 @@ message ChaosBackgroundTrafficFlowStatelessPacketDsField {
   optional int32 ecn = 2 [
     (fld_meta).default = "0",
     (fld_meta).description = "Explicit Congestion Notification field"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStatelessBurst {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 transmit_duration = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 transmit_gap = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Unit {
+    enum Enum {
+      unspecified = 0;
+      ms = 1;
+    }
+  }
+  optional Unit.Enum unit = 3 [
+    (fld_meta).default = "Unit.Enum.ms",
+    (fld_meta).description = "Description missing in models"
   ];
 }
 

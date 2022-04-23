@@ -883,8 +883,11 @@ components:
           enum:
           - continuous
           - burst
+          default: continuous
         packet:
           $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet'
+        burst:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Burst'
     Chaos.BackgroundTraffic.Flow.Stateless.Packet:
       type: object
       properties:
@@ -942,6 +945,18 @@ components:
           minimum: 0
           maximum: 3
           default: 0
+    Chaos.BackgroundTraffic.Flow.Stateless.Burst:
+      type: object
+      properties:
+        transmit_duration:
+          type: integer
+        transmit_gap:
+          type: integer
+        unit:
+          type: string
+          enum:
+          - ms
+          default: ms
     Insights:
       type: object
       description: |-
