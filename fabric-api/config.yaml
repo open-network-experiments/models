@@ -9,3 +9,13 @@ components:
             $ref: "../model/host/host.yaml#/components/schemas/Host"
         fabric:
             $ref: "../model/fabric/fabric.yaml#/components/schemas/Fabric"
+        layer1_profiles:
+          description: |-
+            A list of Layer 1 settings profiles
+          type: array
+          items:
+            $ref: "../model/l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile"
+        chaos:
+          $ref: "../model/chaos/chaos.yaml#/components/schemas/Chaos"
+        insights:
+          $ref: "../model/insights/insights.yaml#/components/schemas/Insights"
