@@ -5,7 +5,7 @@ components:
       description: "Configuration of chaos experiments"
       properties:
         background_traffic:
-          $ref: "./chaos_background_traffic.yaml#/components/schemas/Chaos.BackgroundTraffic"
+          $ref: "./background_traffic.yaml#/components/schemas/Chaos.BackgroundTraffic"
         drop_frames:
           type: array
           items: 
