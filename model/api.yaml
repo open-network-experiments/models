@@ -28,7 +28,7 @@ paths:
     post:
       tags: ["Configuration"]
       operationId: set_config
-      description: unused
+      description: Sets the ONEx configuration.
       requestBody:
         required: true
         content:
@@ -40,3 +40,51 @@ paths:
           - "../common/common.yaml#/components/responses/Success"
           - '../common/common.yaml#/components/responses/Error400'
           - '../common/common.yaml#/components/responses/Error500'
+    get:
+      tags: ["Configuration"]
+      operationId: get_config
+      description: >-
+        Gets the ONEx configuration.
+      responses:
+        '200':
+          description: Current ONEx fabric configuration.
+          content:
+            application/json:
+              schema:
+                $ref: "./config.yaml#/components/schemas/Config"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+
+  /state:
+    post:
+      tags: ["State"]
+      operationId: set_state
+      description: >-
+        Updates the state of ONEx configured experiment(s).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./state/state.yaml#/components/schemas/StateRequest"
+      responses:
+        x-include:
+          - "../common/common.yaml#/components/responses/Success"
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+    get:
+      tags: ["State"]
+      operationId: get_state
+      description: >-
+        Gets the state of ONEx configured experiments.
+      responses:
+        '200':
+          description: Current ONEx experiment(s) state.
+          content:
+            application/json:
+              schema:
+                $ref: "./state/state.yaml#/components/schemas/StateResponse"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"

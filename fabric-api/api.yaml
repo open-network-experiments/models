@@ -29,7 +29,7 @@ paths:
       tags: ["Configuration"]
       operationId: set_config
       description: >-
-        Sets the fabric configuration.
+        Sets the ONEx fabric configuration.
       requestBody:
         required: true
         content:
@@ -45,10 +45,10 @@ paths:
       tags: ["Configuration"]
       operationId: get_config
       description: >-
-        Gets the fabric configuration.
+        Gets the ONEx fabric configuration.
       responses:
         '200':
-          description: The current configured fabric configuration.
+          description: Current ONEx fabric configuration.
           content:
             application/json:
               schema:
@@ -56,3 +56,38 @@ paths:
         x-include:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
+
+  /state:
+    post:
+      tags: ["State"]
+      operationId: set_state
+      description: >-
+        Updates the state of ONEx configured experiment(s).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../model/state/state.yaml#/components/schemas/StateRequest"
+      responses:
+        x-include:
+          - "../common/common.yaml#/components/responses/Success"
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+    get:
+      tags: ["State"]
+      operationId: get_state
+      description: >-
+        Gets the state of ONEx configured experiments.
+      responses:
+        '200':
+          description: Current ONEx experiment(s) state.
+          content:
+            application/json:
+              schema:
+                $ref: "../model/state/state.yaml#/components/schemas/StateResponse"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+
+  
