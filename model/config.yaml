@@ -22,4 +22,4 @@ components:
             A list of Layer 1 settings profiles
           type: array
           items:
-            $ref: "./l1_profiles.yaml#/components/schemas/L1SettingsProfile"
+            $ref: "./l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile"

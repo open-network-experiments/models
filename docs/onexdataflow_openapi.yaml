@@ -199,10 +199,10 @@ components:
             The layer 1 settings profile associated with the host/front panel port.
 
             x-constraint:
-            - ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+            - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
           type: string
           x-constraint:
-          - ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+          - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
     Dataflow:
       type: object
       properties:
