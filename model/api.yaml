@@ -1,9 +1,9 @@
 openapi: 3.0.3
 
 info:
-  title: ONEx Data Models
+  title: ONEx API
   description: |-
-    The data models for the entire ONEx ecosystem
+    The Open Network Experiments API and Data Models
   version: 0.0.1
   contact:
     x-info: |-
