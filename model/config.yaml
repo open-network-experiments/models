@@ -2,7 +2,7 @@ components:
   schemas:
     Config:
       description: |-
-        The resources that define a fabric configuration.
+        ONEx experiments configuration.
       type: object
       properties:
         hosts:
