@@ -41,6 +41,16 @@ components:
             $ref: '#/components/schemas/Host'
         fabric:
           $ref: '#/components/schemas/Fabric'
+        layer1_profiles:
+          description: |-
+            A list of Layer 1 settings profiles
+          type: array
+          items:
+            $ref: '#/components/schemas/L1SettingsProfile'
+        chaos:
+          $ref: '#/components/schemas/Chaos'
+        insights:
+          $ref: '#/components/schemas/Insights'
     Host:
       required:
       - address
@@ -64,10 +74,10 @@ components:
             The layer 1 settings profile associated with the host/front panel port.
 
             x-constraint:
-            - ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+            - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
           type: string
           x-constraint:
-          - ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+          - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
     Fabric:
       type: object
       properties:
@@ -436,6 +446,347 @@ components:
           type: integer
           default: 1
           minimum: 1
+    L1SettingsProfile:
+      type: object
+      properties:
+        name:
+          description: |-
+            Uniquely identifies a layer 1 settings profile
+          type: string
+        link_speed:
+          description: |-
+            Link speed
+          type: string
+          enum:
+          - speed_100_gbps
+          - speed_200_gbps
+          - speed_50_gbps
+          default: speed_100_gbps
+        choice:
+          type: string
+          enum:
+          - autonegotiation
+          - manual
+          default: autonegotiation
+        autonegotiation:
+          $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation'
+        manual:
+          $ref: '#/components/schemas/L1SettingsProfile.Manual'
+    L1SettingsProfile.Autonegotiation:
+      type: object
+      properties:
+        advertise_fec:
+          type: boolean
+          default: true
+    L1SettingsProfile.Manual:
+      type: object
+      properties:
+        fec_mode:
+          type: string
+          enum:
+          - reed_solomon
+          - firecode
+          - kp4
+          default: reed_solomon
+    Chaos:
+      type: object
+      description: |-
+        Configuration of chaos experiments
+      properties:
+        background_traffic:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic'
+        drop_frames:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chaos.DropFrames'
+    Chaos.DropFrames:
+      type: object
+      description: |-
+        Configures an emulated link to periodically drop frames for a percentage of the specified time interval
+      required:
+      - name
+      - link
+      properties:
+        name:
+          type: string
+          description: |-
+            Uniquely identifies a drop frames config entry
+        link:
+          type: string
+          description: |-
+            Emulated link name, e.g. Link S.1/2
+        mode:
+          type: string
+          description: |-
+            Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time
+          enum:
+          - percentage_time
+          - min_time
+          default: percentage_time
+        percentage:
+          type: number
+          description: |-
+            Percentage value, ignored if type is min_time
+          default: 5
+        interval:
+          type: integer
+          description: |-
+            Interval of time (seconds)
+          default: 1
+    Chaos.BackgroundTraffic:
+      type: object
+      properties:
+        flows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow'
+    Chaos.BackgroundTraffic.Flow:
+      type: object
+      properties:
+        name:
+          type: string
+        injection_port:
+          type: string
+          description: |-
+            Emulated port name, e.g. Spine Switch 1 Port 1
+        choice:
+          type: string
+          enum:
+          - stateless
+        stateless:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless'
+    Chaos.BackgroundTraffic.Flow.Stateless:
+      type: object
+      properties:
+        rate:
+          type: integer
+          description: |-
+            Transmission rate specified as a percentage of the injection port speed
+        transmission_mode:
+          type: string
+          enum:
+          - continuous
+          - burst
+          default: continuous
+        packet:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet'
+        burst:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Burst'
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet:
+      type: object
+      properties:
+        src_address:
+          description: |-
+            source IP address
+          type: string
+        dst_address:
+          description: |-
+            destination IP address
+          type: string
+        src_port:
+          type: integer
+          description: |-
+            Layer 4 source port
+          maximum: 65535
+          default: 1024
+        dst_port:
+          type: integer
+          description: |-
+            Layer 4 destination port
+          maximum: 65535
+          default: 1024
+        size:
+          type: integer
+          description: |-
+            total packet size
+          minimum: 64
+          default: 1000
+        l4_protocol:
+          type: string
+          description: |-
+            Layer 4 transport protocol
+          enum:
+          - tcp
+          - udp
+        ds_field:
+          $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField'
+    Chaos.BackgroundTraffic.Flow.Stateless.Packet.DsField:
+      type: object
+      description: |-
+        Differentiated Services or Traffic Class field
+      properties:
+        dscp:
+          description: |-
+            Differentiated Service CodePoint filed
+          type: integer
+          minimum: 0
+          maximum: 63
+          default: 0
+        ecn:
+          description: |-
+            Explicit Congestion Notification field
+          type: integer
+          minimum: 0
+          maximum: 3
+          default: 0
+    Chaos.BackgroundTraffic.Flow.Stateless.Burst:
+      type: object
+      properties:
+        transmit_duration:
+          type: integer
+        transmit_gap:
+          type: integer
+        unit:
+          type: string
+          enum:
+          - ms
+          default: ms
+    Insights:
+      type: object
+      description: |-
+        Configuration of insights providing methods
+      properties:
+        port_mirroring:
+          type: array
+          items:
+            $ref: '#/components/schemas/Insights.PortMirroring'
+    Insights.PortMirroring:
+      type: object
+      required:
+      - name
+      - source_port
+      - destination_port
+      properties:
+        name:
+          type: string
+          description: |-
+            Uniquely identifies a port port_mirroring entry
+        source_port:
+          type: string
+          description: |-
+            Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored
+        destination_port:
+          type: integer
+          description: |-
+            Front panel port number of an external host, e.g. 32 on which to mirror
+        mirror_type:
+          type: string
+          enum:
+          - ingress_frames
+          - egress_frames
+          default: ingress_frames
+    StateRequest:
+      type: object
+      properties:
+        chaos:
+          $ref: '#/components/schemas/StateRequest.Chaos'
+    StateRequest.Chaos:
+      type: object
+      properties:
+        drop_frames:
+          $ref: '#/components/schemas/StateRequest.Chaos.DropFrames'
+        background_traffic:
+          $ref: '#/components/schemas/StateRequest.Chaos.BackgroundTraffic'
+    StateRequest.Chaos.BackgroundTraffic:
+      type: object
+      properties:
+        flow_names:
+          description: |
+            The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
+
+            x-constraint:
+            - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+        state:
+          type: string
+          enum:
+          - started
+          - stopped
+    StateRequest.Chaos.DropFrames:
+      type: object
+      properties:
+        config_names:
+          description: |
+            The names of the drop frams configs to which the transmit state will be applied to. If the list is empty or null the state will be applied to all drop frames entries.
+
+            x-constraint:
+            - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
+        state:
+          type: string
+          enum:
+          - started
+          - stopped
+    StateResponse:
+      type: object
+      properties:
+        chaos:
+          $ref: '#/components/schemas/StateResponse.Chaos'
+    StateResponse.Chaos:
+      type: object
+      properties:
+        drop_frames:
+          $ref: '#/components/schemas/StateResponse.Chaos.DropFrames'
+        background_traffic:
+          $ref: '#/components/schemas/StateResponse.Chaos.BackgroundTraffic'
+    StateResponse.Chaos.BackgroundTraffic:
+      type: object
+      properties:
+        started:
+          description: |
+            The names of the started flows.
+
+            x-constraint:
+            - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+        stopped:
+          description: |
+            The names of the stopped flows.
+
+            x-constraint:
+            - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
+    StateResponse.Chaos.DropFrames:
+      type: object
+      properties:
+        started:
+          description: |
+            The names of the started drop frames experiments.
+
+            x-constraint:
+            - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
+        stopped:
+          description: |
+            The names of the stopped drop frames experiments.
+
+            x-constraint:
+            - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
 openapi: 3.0.3
 info:
   title: ONEx Fabric API
@@ -464,7 +815,7 @@ paths:
       - Configuration
       operationId: set_config
       description: |-
-        Sets the fabric configuration.
+        Sets the ONEx fabric configuration.
       requestBody:
         required: true
         content:
@@ -498,15 +849,78 @@ paths:
       - Configuration
       operationId: get_config
       description: |-
-        Gets the fabric configuration.
+        Gets the ONEx fabric configuration.
       responses:
         '200':
           description: |-
-            The current configured fabric configuration.
+            Current ONEx fabric configuration.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Config'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+  /state:
+    post:
+      tags:
+      - State
+      operationId: set_state
+      description: |-
+        Updates the state of ONEx configured experiment(s).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateRequest'
+      responses:
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '200':
+          description: |-
+            Success with possible warnings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warning.Details'
+    get:
+      tags:
+      - State
+      operationId: get_state
+      description: |-
+        Gets the state of ONEx configured experiments.
+      responses:
+        '200':
+          description: |-
+            Current ONEx experiment(s) state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StateResponse'
         '400':
           description: |-
             error 4xx

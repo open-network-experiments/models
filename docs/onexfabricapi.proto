@@ -89,6 +89,18 @@ message Config {
   optional Fabric fabric = 2 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  repeated L1SettingsProfile layer1_profiles = 3 [
+    (fld_meta).description = "A list of Layer 1 settings profiles"
+  ];
+
+  optional Chaos chaos = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional Insights insights = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message Host {
@@ -108,7 +120,7 @@ message Host {
   ];
 
   optional string l1_profile_name = 4 [
-    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
+    (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
   ];
 }
 
@@ -503,6 +515,398 @@ message SwitchHostLinkSwitchRef {
   ];
 }
 
+message L1SettingsProfile {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Uniquely identifies a layer 1 settings profile"
+  ];
+
+  message LinkSpeed {
+    enum Enum {
+      unspecified = 0;
+      speed_100_gbps = 1;
+      speed_200_gbps = 2;
+      speed_50_gbps = 3;
+    }
+  }
+  optional LinkSpeed.Enum link_speed = 2 [
+    (fld_meta).default = "LinkSpeed.Enum.speed_100_gbps",
+    (fld_meta).description = "Link speed"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      autonegotiation = 1;
+      manual = 2;
+    }
+  }
+  optional Choice.Enum choice = 3 [
+    (fld_meta).default = "Choice.Enum.autonegotiation",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L1SettingsProfileAutonegotiation autonegotiation = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional L1SettingsProfileManual manual = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L1SettingsProfileAutonegotiation {
+  option (msg_meta).description = "Description missing in models";
+
+  optional bool advertise_fec = 1 [
+    (fld_meta).default = "True",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message L1SettingsProfileManual {
+  option (msg_meta).description = "Description missing in models";
+
+  message FecMode {
+    enum Enum {
+      unspecified = 0;
+      reed_solomon = 1;
+      firecode = 2;
+      kp4 = 3;
+    }
+  }
+  optional FecMode.Enum fec_mode = 1 [
+    (fld_meta).default = "FecMode.Enum.reed_solomon",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Chaos {
+  option (msg_meta).description = "Configuration of chaos experiments";
+
+  optional ChaosBackgroundTraffic background_traffic = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated ChaosDropFrames drop_frames = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosDropFrames {
+  option (msg_meta).description = "Configures an emulated link to periodically drop frames for a percentage of the specified time interval";
+
+  string name = 1 [
+    (fld_meta).description = "Uniquely identifies a drop frames config entry"
+  ];
+
+  string link = 2 [
+    (fld_meta).description = "Emulated link name, e.g. Link S.1/2"
+  ];
+
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      percentage_time = 1;
+      min_time = 2;
+    }
+  }
+  optional Mode.Enum mode = 3 [
+    (fld_meta).default = "Mode.Enum.percentage_time",
+    (fld_meta).description = "Mode to express the duration in which frames are dropped, either a percentage of the specified time interval or the min possible time"
+  ];
+
+  optional float percentage = 4 [
+    (fld_meta).default = "5",
+    (fld_meta).description = "Percentage value, ignored if type is min_time"
+  ];
+
+  optional int32 interval = 5 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "Interval of time (seconds)"
+  ];
+}
+
+message ChaosBackgroundTraffic {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated ChaosBackgroundTrafficFlow flows = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlow {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string injection_port = 2 [
+    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1"
+  ];
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      stateless = 1;
+    }
+  }
+  optional Choice.Enum choice = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStateless stateless = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStateless {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 rate = 1 [
+    (fld_meta).description = "Transmission rate specified as a percentage of the injection port speed"
+  ];
+
+  message TransmissionMode {
+    enum Enum {
+      unspecified = 0;
+      continuous = 1;
+      burst = 2;
+    }
+  }
+  optional TransmissionMode.Enum transmission_mode = 2 [
+    (fld_meta).default = "TransmissionMode.Enum.continuous",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStatelessPacket packet = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStatelessBurst burst = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStatelessPacket {
+  option (msg_meta).description = "Description missing in models";
+
+  optional string src_address = 1 [
+    (fld_meta).description = "source IP address"
+  ];
+
+  optional string dst_address = 2 [
+    (fld_meta).description = "destination IP address"
+  ];
+
+  optional int32 src_port = 3 [
+    (fld_meta).default = "1024",
+    (fld_meta).description = "Layer 4 source port"
+  ];
+
+  optional int32 dst_port = 4 [
+    (fld_meta).default = "1024",
+    (fld_meta).description = "Layer 4 destination port"
+  ];
+
+  optional int32 size = 5 [
+    (fld_meta).default = "1000",
+    (fld_meta).description = "total packet size"
+  ];
+
+  message L4Protocol {
+    enum Enum {
+      unspecified = 0;
+      tcp = 1;
+      udp = 2;
+    }
+  }
+  optional L4Protocol.Enum l4_protocol = 6 [
+    (fld_meta).description = "Layer 4 transport protocol"
+  ];
+
+  optional ChaosBackgroundTrafficFlowStatelessPacketDsField ds_field = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStatelessPacketDsField {
+  option (msg_meta).description = "Differentiated Services or Traffic Class field";
+
+  optional int32 dscp = 1 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Differentiated Service CodePoint filed"
+  ];
+
+  optional int32 ecn = 2 [
+    (fld_meta).default = "0",
+    (fld_meta).description = "Explicit Congestion Notification field"
+  ];
+}
+
+message ChaosBackgroundTrafficFlowStatelessBurst {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 transmit_duration = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int32 transmit_gap = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Unit {
+    enum Enum {
+      unspecified = 0;
+      ms = 1;
+    }
+  }
+  optional Unit.Enum unit = 3 [
+    (fld_meta).default = "Unit.Enum.ms",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message Insights {
+  option (msg_meta).description = "Configuration of insights providing methods";
+
+  repeated InsightsPortMirroring port_mirroring = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message InsightsPortMirroring {
+  option (msg_meta).description = "Description missing in models";
+
+  string name = 1 [
+    (fld_meta).description = "Uniquely identifies a port port_mirroring entry"
+  ];
+
+  string source_port = 2 [
+    (fld_meta).description = "Emulated port name, e.g. Spine Switch 1 Port 1 to be mirrored"
+  ];
+
+  int32 destination_port = 3 [
+    (fld_meta).description = "Front panel port number of an external host, e.g. 32 on which to mirror"
+  ];
+
+  message MirrorType {
+    enum Enum {
+      unspecified = 0;
+      ingress_frames = 1;
+      egress_frames = 2;
+    }
+  }
+  optional MirrorType.Enum mirror_type = 4 [
+    (fld_meta).default = "MirrorType.Enum.ingress_frames",
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateRequest {
+  option (msg_meta).description = "Description missing in models";
+
+  optional StateRequestChaos chaos = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateRequestChaos {
+  option (msg_meta).description = "Description missing in models";
+
+  optional StateRequestChaosDropFrames drop_frames = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional StateRequestChaosBackgroundTraffic background_traffic = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateRequestChaosBackgroundTraffic {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string flow_names = 1 [
+    (fld_meta).description = "The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
+  ];
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      started = 1;
+      stopped = 2;
+    }
+  }
+  optional State.Enum state = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateRequestChaosDropFrames {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string config_names = 1 [
+    (fld_meta).description = "The names of the drop frams configs to which the transmit state will be applied to. If the list is empty or null the state will be applied to all drop frames entries.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
+  ];
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      started = 1;
+      stopped = 2;
+    }
+  }
+  optional State.Enum state = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateResponse {
+  option (msg_meta).description = "Description missing in models";
+
+  optional StateResponseChaos chaos = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateResponseChaos {
+  option (msg_meta).description = "Description missing in models";
+
+  optional StateResponseChaosDropFrames drop_frames = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional StateResponseChaosBackgroundTraffic background_traffic = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message StateResponseChaosBackgroundTraffic {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string started = 1 [
+    (fld_meta).description = "The names of the started flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
+  ];
+
+  repeated string stopped = 2 [
+    (fld_meta).description = "The names of the stopped flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
+  ];
+}
+
+message StateResponseChaosDropFrames {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated string started = 1 [
+    (fld_meta).description = "The names of the started drop frames experiments.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
+  ];
+
+  repeated string stopped = 2 [
+    (fld_meta).description = "The names of the stopped drop frames experiments.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
+  ];
+}
+
 message SetConfigRequest {
   Config config = 1;
 }
@@ -519,13 +923,35 @@ message GetConfigResponse {
 }
 
 
+message SetStateRequest {
+  StateRequest state_request = 1;
+}
+message SetStateResponse {
+  optional ErrorDetails status_code_400 = 1;
+  optional ErrorDetails status_code_500 = 2;
+  optional WarningDetails status_code_200 = 3;
+}
+
+message GetStateResponse {
+  optional StateResponse status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
+
 service Openapi {
   option (svc_meta).description = "Description missing in models";
 
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
-    option (rpc_meta).description = "Sets the fabric configuration.";
+    option (rpc_meta).description = "Sets the ONEx fabric configuration.";
   }
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse) {
-    option (rpc_meta).description = "Gets the fabric configuration.";
+    option (rpc_meta).description = "Gets the ONEx fabric configuration.";
+  }
+  rpc SetState(SetStateRequest) returns (SetStateResponse) {
+    option (rpc_meta).description = "Updates the state of ONEx configured experiment(s).";
+  }
+  rpc GetState(google.protobuf.Empty) returns (GetStateResponse) {
+    option (rpc_meta).description = "Gets the state of ONEx configured experiments.";
   }
 }
