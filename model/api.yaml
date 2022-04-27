@@ -25,7 +25,7 @@ servers:
 
 paths:
   /config:
-    post:
+    put:
       tags: ["Configuration"]
       operationId: set_config
       description: Sets the ONEx configuration.
