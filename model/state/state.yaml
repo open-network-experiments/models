@@ -1,31 +1,34 @@
 components:
   schemas:
-    State:
+    StateType:
       type: string
       enum: [started, stopped]
 
-    StateRequest:
+    State:
       type: object
       properties:
         chaos:
-          $ref: "#/components/schemas/StateRequest.Chaos"
+          $ref: "#/components/schemas/State.Chaos"
 
-    StateRequest.Chaos:
+    State.Chaos:
       type: object
       properties:
         drop_frames:
-          $ref: "#/components/schemas/StateRequest.Chaos.DropFrames"
+          type: array
+          items:
+            $ref: "#/components/schemas/State.Chaos.DropFrames"
         background_traffic:
-          $ref: "#/components/schemas/StateRequest.Chaos.BackgroundTraffic"
+          type: array
+          items:
+            $ref: "#/components/schemas/State.Chaos.BackgroundTraffic"
 
-    StateRequest.Chaos.BackgroundTraffic:
+    State.Chaos.BackgroundTraffic:
           type: object
+          required: [state, flow_names]
           properties:
             flow_names:
               description: >-
                 The names of flows to which the transmit state will be applied to.
-                If the list of flow_names is empty or null the state will be applied
-                to all configured flows.
               type: array
               items:
                 type: string
@@ -33,15 +36,15 @@ components:
               - '../chaos/background_traffic.yaml/components/schemas/Flow/properties/name'
             state:
               x-include:
-              - "#/components/schemas/State"
+              - "#/components/schemas/StateType"
 
-    StateRequest.Chaos.DropFrames:
+    State.Chaos.DropFrames:
           type: object
+          required: [state, config_names]
           properties:
             config_names:
               description: >-
                 The names of the drop frams configs to which the transmit state will be applied to.
-                If the list is empty or null the state will be applied to all drop frames entries.
               type: array
               items:
                 type: string
@@ -49,60 +52,4 @@ components:
               - '../chaos/chaos.yaml/components/schemas/DropFrames/properties/name'
             state:
               x-include:
-              - "#/components/schemas/State"
-
-
-    StateResponse:
-      type: object
-      properties:
-        chaos:
-          $ref: "#/components/schemas/StateResponse.Chaos"
-
-    StateResponse.Chaos:
-      type: object
-      properties:
-        drop_frames:
-          $ref: "#/components/schemas/StateResponse.Chaos.DropFrames"
-        background_traffic:
-          $ref: "#/components/schemas/StateResponse.Chaos.BackgroundTraffic"
-
-    StateResponse.Chaos.BackgroundTraffic:
-          type: object
-          properties:
-            started:
-              description: >-
-                The names of the started flows.
-              type: array
-              items:
-                type: string
-              x-constraint:
-              - '../chaos/background_traffic.yaml/components/schemas/Flow/properties/name'
-            stopped:
-              description: >-
-                The names of the stopped flows.
-              type: array
-              items:
-                type: string
-              x-constraint:
-              - '../chaos/background_traffic.yaml/components/schemas/Flow/properties/name'
-
-    StateResponse.Chaos.DropFrames:
-          type: object
-          properties:
-            started:
-              description: >-
-                The names of the started drop frames experiments.
-              type: array
-              items:
-                type: string
-              x-constraint:
-              - '../chaos/chaos.yaml/components/schemas/DropFrames/properties/name'
-            stopped:
-              description: >-
-                The names of the stopped drop frames experiments.
-              type: array
-              items:
-                type: string
-              x-constraint:
-              - '../chaos/chaos.yaml/components/schemas/DropFrames/properties/name'
-    
+              - "#/components/schemas/StateType"

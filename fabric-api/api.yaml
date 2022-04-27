@@ -58,7 +58,7 @@ paths:
           - "../common/common.yaml#/components/responses/Error500"
 
   /state:
-    post:
+    put:
       tags: ["State"]
       operationId: set_state
       description: >-
@@ -68,7 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../model/state/state.yaml#/components/schemas/StateRequest"
+              $ref: "../model/state/state.yaml#/components/schemas/State"
       responses:
         x-include:
           - "../common/common.yaml#/components/responses/Success"
@@ -85,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../model/state/state.yaml#/components/schemas/StateResponse"
+                $ref: "../model/state/state.yaml#/components/schemas/State"
         x-include:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
