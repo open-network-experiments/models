@@ -675,24 +675,31 @@ components:
           - ingress_frames
           - egress_frames
           default: ingress_frames
-    StateRequest:
+    State:
       type: object
       properties:
         chaos:
-          $ref: '#/components/schemas/StateRequest.Chaos'
-    StateRequest.Chaos:
+          $ref: '#/components/schemas/State.Chaos'
+    State.Chaos:
       type: object
       properties:
         drop_frames:
-          $ref: '#/components/schemas/StateRequest.Chaos.DropFrames'
+          type: array
+          items:
+            $ref: '#/components/schemas/State.Chaos.DropFrames'
         background_traffic:
-          $ref: '#/components/schemas/StateRequest.Chaos.BackgroundTraffic'
-    StateRequest.Chaos.BackgroundTraffic:
+          type: array
+          items:
+            $ref: '#/components/schemas/State.Chaos.BackgroundTraffic'
+    State.Chaos.BackgroundTraffic:
       type: object
+      required:
+      - state
+      - flow_names
       properties:
         flow_names:
           description: |
-            The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
+            The names of flows to which the transmit state will be applied to.
 
             x-constraint:
             - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
@@ -706,12 +713,15 @@ components:
           enum:
           - started
           - stopped
-    StateRequest.Chaos.DropFrames:
+    State.Chaos.DropFrames:
       type: object
+      required:
+      - state
+      - config_names
       properties:
         config_names:
           description: |
-            The names of the drop frams configs to which the transmit state will be applied to. If the list is empty or null the state will be applied to all drop frames entries.
+            The names of the drop frams configs to which the transmit state will be applied to.
 
             x-constraint:
             - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
@@ -725,68 +735,6 @@ components:
           enum:
           - started
           - stopped
-    StateResponse:
-      type: object
-      properties:
-        chaos:
-          $ref: '#/components/schemas/StateResponse.Chaos'
-    StateResponse.Chaos:
-      type: object
-      properties:
-        drop_frames:
-          $ref: '#/components/schemas/StateResponse.Chaos.DropFrames'
-        background_traffic:
-          $ref: '#/components/schemas/StateResponse.Chaos.BackgroundTraffic'
-    StateResponse.Chaos.BackgroundTraffic:
-      type: object
-      properties:
-        started:
-          description: |
-            The names of the started flows.
-
-            x-constraint:
-            - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
-        stopped:
-          description: |
-            The names of the stopped flows.
-
-            x-constraint:
-            - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name
-    StateResponse.Chaos.DropFrames:
-      type: object
-      properties:
-        started:
-          description: |
-            The names of the started drop frames experiments.
-
-            x-constraint:
-            - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
-        stopped:
-          description: |
-            The names of the stopped drop frames experiments.
-
-            x-constraint:
-            - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name
 openapi: 3.0.3
 info:
   title: ONEx Fabric API
@@ -810,7 +758,7 @@ servers:
       default: /onex/api/v1/fabric
 paths:
   /config:
-    post:
+    put:
       tags:
       - Configuration
       operationId: set_config
@@ -873,7 +821,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error.Details'
   /state:
-    post:
+    put:
       tags:
       - State
       operationId: set_state
@@ -884,7 +832,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StateRequest'
+              $ref: '#/components/schemas/State'
       responses:
         '400':
           description: |-
@@ -920,7 +868,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StateResponse'
+                $ref: '#/components/schemas/State'
         '400':
           description: |-
             error 4xx

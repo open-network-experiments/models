@@ -559,9 +559,9 @@ components:
             unique idenfier for the network interface card (nic), e.g. "eth1"
 openapi: 3.0.3
 info:
-  title: Distributed System Emulator Dataflow API and Data Models
+  title: ONEx Dataflow API
   description: |-
-    The Dataflow API and Data Models
+    The Open Network Experiments Dataflow API and Data Models
   version: 0.0.1
   contact:
     x-info: "Any feedback such as bugs/enhancements/questions regarding the \nDataflow\
@@ -588,7 +588,7 @@ paths:
       - Configuration
       operationId: set_config
       description: |-
-        Sets the ONEx dataflow config
+        Sets the ONEx dataflow configuration
       requestBody:
         required: true
         content:
@@ -657,7 +657,7 @@ paths:
       - Control
       operationId: run_experiment
       description: |-
-        Runs the currently configured experiment
+        Runs the currently configured dataflow experiment
       deprecated: true
       requestBody:
         required: true
@@ -693,7 +693,7 @@ paths:
       - Control
       operationId: start
       description: |-
-        Starts the currently configured experiment
+        Starts the currently configured dataflow experiment
       requestBody:
         required: true
         content:
@@ -766,7 +766,7 @@ paths:
       operationId: get_metrics
       requestBody:
         description: |-
-          Request to obtain experiment metrics
+          Request to obtain dataflow experiment metrics
         required: true
         content:
           application/json:
@@ -775,7 +775,7 @@ paths:
       responses:
         '200':
           description: |-
-            Experiment metrics
+            Dataflow experiment metrics
           content:
             application/json:
               schema:

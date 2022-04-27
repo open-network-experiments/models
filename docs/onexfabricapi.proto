@@ -805,31 +805,31 @@ message InsightsPortMirroring {
   ];
 }
 
-message StateRequest {
+message State {
   option (msg_meta).description = "Description missing in models";
 
-  optional StateRequestChaos chaos = 1 [
+  optional StateChaos chaos = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message StateRequestChaos {
+message StateChaos {
   option (msg_meta).description = "Description missing in models";
 
-  optional StateRequestChaosDropFrames drop_frames = 1 [
+  repeated StateChaosDropFrames drop_frames = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional StateRequestChaosBackgroundTraffic background_traffic = 2 [
+  repeated StateChaosBackgroundTraffic background_traffic = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message StateRequestChaosBackgroundTraffic {
+message StateChaosBackgroundTraffic {
   option (msg_meta).description = "Description missing in models";
 
   repeated string flow_names = 1 [
-    (fld_meta).description = "The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
+    (fld_meta).description = "The names of flows to which the transmit state will be applied to.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
   ];
 
   message State {
@@ -839,16 +839,16 @@ message StateRequestChaosBackgroundTraffic {
       stopped = 2;
     }
   }
-  optional State.Enum state = 2 [
+  State.Enum state = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message StateRequestChaosDropFrames {
+message StateChaosDropFrames {
   option (msg_meta).description = "Description missing in models";
 
   repeated string config_names = 1 [
-    (fld_meta).description = "The names of the drop frams configs to which the transmit state will be applied to. If the list is empty or null the state will be applied to all drop frames entries.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
+    (fld_meta).description = "The names of the drop frams configs to which the transmit state will be applied to.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
   ];
 
   message State {
@@ -858,52 +858,8 @@ message StateRequestChaosDropFrames {
       stopped = 2;
     }
   }
-  optional State.Enum state = 2 [
+  State.Enum state = 2 [
     (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message StateResponse {
-  option (msg_meta).description = "Description missing in models";
-
-  optional StateResponseChaos chaos = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message StateResponseChaos {
-  option (msg_meta).description = "Description missing in models";
-
-  optional StateResponseChaosDropFrames drop_frames = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional StateResponseChaosBackgroundTraffic background_traffic = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-}
-
-message StateResponseChaosBackgroundTraffic {
-  option (msg_meta).description = "Description missing in models";
-
-  repeated string started = 1 [
-    (fld_meta).description = "The names of the started flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
-  ];
-
-  repeated string stopped = 2 [
-    (fld_meta).description = "The names of the stopped flows.\n\nx-constraint:\n- ../chaos/background_traffic.yaml/components/schemas/Flow/properties/name\n"
-  ];
-}
-
-message StateResponseChaosDropFrames {
-  option (msg_meta).description = "Description missing in models";
-
-  repeated string started = 1 [
-    (fld_meta).description = "The names of the started drop frames experiments.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
-  ];
-
-  repeated string stopped = 2 [
-    (fld_meta).description = "The names of the stopped drop frames experiments.\n\nx-constraint:\n- ../chaos/chaos.yaml/components/schemas/DropFrames/properties/name\n"
   ];
 }
 
@@ -924,7 +880,7 @@ message GetConfigResponse {
 
 
 message SetStateRequest {
-  StateRequest state_request = 1;
+  State state = 1;
 }
 message SetStateResponse {
   optional ErrorDetails status_code_400 = 1;
@@ -933,7 +889,7 @@ message SetStateResponse {
 }
 
 message GetStateResponse {
-  optional StateResponse status_code_200 = 1;
+  optional State status_code_200 = 1;
   optional ErrorDetails status_code_400 = 2;
   optional ErrorDetails status_code_500 = 3;
 }
@@ -942,14 +898,8 @@ message GetStateResponse {
 service Openapi {
   option (svc_meta).description = "Description missing in models";
 
-  rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
-    option (rpc_meta).description = "Sets the ONEx fabric configuration.";
-  }
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse) {
     option (rpc_meta).description = "Gets the ONEx fabric configuration.";
-  }
-  rpc SetState(SetStateRequest) returns (SetStateResponse) {
-    option (rpc_meta).description = "Updates the state of ONEx configured experiment(s).";
   }
   rpc GetState(google.protobuf.Empty) returns (GetStateResponse) {
     option (rpc_meta).description = "Gets the state of ONEx configured experiments.";
