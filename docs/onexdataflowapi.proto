@@ -1,4 +1,4 @@
-// Distributed System Emulator Dataflow API and Data Models 0.0.1
+// ONEx Dataflow API 0.0.1
 // License: MIT
 
 syntax = "proto3";
@@ -706,16 +706,16 @@ service Openapi {
   option (svc_meta).description = "Description missing in models";
 
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse) {
-    option (rpc_meta).description = "Sets the ONEx dataflow config";
+    option (rpc_meta).description = "Sets the ONEx dataflow configuration";
   }
   rpc GetConfig(GetConfigRequest) returns (GetConfigResponse) {
     option (rpc_meta).description = "Gets the ONEx dataflow config from the server, as currently configured";
   }
   rpc RunExperiment(RunExperimentRequest) returns (RunExperimentResponse) {
-    option (rpc_meta).description = "Runs the currently configured experiment";
+    option (rpc_meta).description = "Runs the currently configured dataflow experiment";
   }
   rpc Start(StartRequest) returns (StartResponse) {
-    option (rpc_meta).description = "Starts the currently configured experiment";
+    option (rpc_meta).description = "Starts the currently configured dataflow experiment";
   }
   rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
     option (rpc_meta).description = "Gets the control status (e.g. started/completed/error)";
