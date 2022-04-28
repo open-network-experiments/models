@@ -264,8 +264,8 @@ components:
           description: List of queues for which WRED is enabled
           type: array
           items:
-            type: string
-            default: "0"
+            type: integer
+            default: 0
         ecn_marking_enabled:
           type: boolean
           default: false

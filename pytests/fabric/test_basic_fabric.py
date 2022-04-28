@@ -65,12 +65,6 @@ def test_qos_scheduling_discipline():
 
     qos_profile.scheduler.scheduler_mode = qos_profile.scheduler.WEIGHTED_ROUND_ROBIN
     qos_profile.scheduler.weight_list = [1, 2, 4]
-
-    config.fabric.clos.pods.add(count=1, pod_profile_name="Pod Profile 1")
-    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1")
-    pod_profile.pod_switch.count = 1
-    pod_profile.pod_switch.qos_profile_name = qos_profile.name
-
     assert config.serialize()
 
 def test_qos_wred():
@@ -81,13 +75,7 @@ def test_qos_wred():
     qos_profile.wred.min_threshold_bytes = 10
     qos_profile.wred.max_threshold_bytes = 20
     qos_profile.wred.max_probability_percent = 60
-
-    config.fabric.clos.spine.count = 1
-    pod_profile = config.fabric.clos.pod_profiles.add(name="Pod Profile 1", pod_to_spine_oversubscription="")
-    pod_profile.pod_switch.count = 2
-    pod_profile.pod_switch.qos_profile_name = qos_profile.name
-    config.fabric.clos.pods.add(count=1, pod_profile_name=pod_profile.name)
-
+    qos_profile.wred.queue_list = [1,2]
     assert config.serialize()
 
 def test_qos_pfc():
