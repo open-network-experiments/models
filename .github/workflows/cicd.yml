@@ -3,9 +3,9 @@ name: CICD
 
 on:
   push:
-  workflow_dispatch:
     paths-ignore:
-    - 'docs/**'
+      - 'docs/**'
+  workflow_dispatch:
 
 jobs:
   build:
