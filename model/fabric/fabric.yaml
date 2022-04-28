@@ -203,6 +203,8 @@ components:
           $ref: "#/components/schemas/Fabric.QosProfile.PacketClassification"
         wred:
           $ref: "#/components/schemas/Fabric.QosProfile.Wred"
+        pfc:
+          $ref: "#/components/schemas/Fabric.QosProfile.Pfc"
 
     Fabric.QosProfile.IngressAdmission:
       type: object
@@ -279,3 +281,20 @@ components:
           description: Probability of dropping/marking packets at max threshold
           type: integer
           default: 100
+
+    Fabric.QosProfile.Pfc:
+      description: |-
+        PFC (Priority based flow control) configuration
+      required: [priority_list, headroom_buffer_bytes, resume_threshold_bytes]
+      type: object
+      properties:
+        priority_list:
+          type: array
+          items:
+            type: integer
+        headroom_buffer_bytes:
+          description: Headroom buffer per PFC priority
+          type: integer
+        resume_threshold_bytes:
+          description: Space required before sending Resume frame
+          type: integer
