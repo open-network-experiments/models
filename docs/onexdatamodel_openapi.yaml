@@ -1122,27 +1122,16 @@ components:
     Metrics.Request:
       type: object
       properties:
-        choice:
-          description: |-
-            Selects the metric name
-          type: string
-          enum:
-          - port_link_status
-        port_link_status:
-          $ref: '#/components/schemas/PortLinkStatus.Request'
+        port_metrics:
+          $ref: '#/components/schemas/PortMetrics.Request'
     Metrics.Response:
       type: object
       properties:
-        choice:
-          type: string
-          enum:
-          - port_link_status
-        port_link_status:
+        port_metrics:
           type: array
           items:
-            type: string
-            $ref: '#/components/schemas/PortLinkStatus.Metric'
-    PortLinkStatus.Request:
+            $ref: '#/components/schemas/PortMetrics.Response'
+    PortMetrics.Request:
       type: object
       properties:
         choice:
@@ -1152,56 +1141,190 @@ components:
           - front_panel_ports
         port_names:
           description: |-
-            Emulated ports names for which metrics are being requested
+            Emulated ports names for which metrics are being requested. If empty metrics for all ports will be returned.
           type: array
           items:
             type: string
         front_panel_ports:
           description: |-
-            Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0
+            Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0. If empty metrics for all ports will be returned.
           type: array
           items:
             type: string
-        labels:
+        select_metrics:
+          description: |-
+            Requested specific port metrics
           type: array
           items:
             type: string
             enum:
-            - port_link_status
-            - front_panel_port
-            - enabled
-            - autoneg_mode
-            - fec_mode
-            - speed
-            - tx_switch
-            - rx_switch
-            - connected_to
-            - link_name
-            - meta
-    PortLinkStatus.Metric:
+            - link_status
+            - frames_transmitted_all
+            - frames_transmitted_multicast
+            - frames_transmitted_unicast
+            - frames_transmitted_broadcast
+            - frames_transmitted_by_length
+            - bytes_transmitted_all
+            - frames_transmitted_flow
+            - frames_transmitted_ecn_marked
+            - frames_transmitted_priority_pause
+            - frames_transmitted_pause
+            - frames_received_all
+            - frames_received_multicast
+            - frames_received_unicast
+            - frames_received_broadcast
+            - frames_received_by_length
+            - bytes_received_all
+            - frames_received_errors
+            - frames_received_pause
+            - frames_dropped_egress_buffer_full
+            - frames_dropped_ingress
+            - ingress_buffer_reserved_usage_current
+            - ingress_buffer_shared_usage_peak
+            - egress_buffer_reserved_usage_current
+            - egress_buffer_total_usage_peak
+            - multicast_buffer_total_usage_peak
+    PortMetrics.Response:
       type: object
       required:
       - port_name
-      - front_panel_port
-      - enabled
-      - link_status
+      - metrics
       properties:
         port_name:
+          type: string
           description: |-
             Emulated port name
-          type: string
+        config:
+          $ref: '#/components/schemas/PortConfig'
+        metrics:
+          $ref: '#/components/schemas/PortMetrics'
+    PortMetrics:
+      type: object
+      properties:
         link_status:
           type: string
           enum:
           - link_up
           - link_down
           - unknown
+        frames_transmitted_all:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_multicast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_unicast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_broadcast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_by_length:
+          type: integer
+          format: int64
+          minimum: 0
+        bytes_transmitted_all:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_flow:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_ecn_marked:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_priority_pause:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_pause:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_all:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_multicast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_unicast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_broadcast:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_by_length:
+          type: integer
+          format: int64
+          minimum: 0
+        bytes_received_all:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_errors:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_pause:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_dropped_egress_buffer_full:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_dropped_ingress:
+          type: integer
+          format: int64
+          minimum: 0
+        ingress_buffer_reserved_usage_current:
+          type: integer
+          format: int64
+          minimum: 0
+        ingress_buffer_shared_usage_peak:
+          type: integer
+          format: int64
+          minimum: 0
+        egress_buffer_reserved_usage_current:
+          type: integer
+          format: int64
+          minimum: 0
+        egress_buffer_total_usage_peak:
+          type: integer
+          format: int64
+          minimum: 0
+        multicast_buffer_total_usage_peak:
+          type: integer
+          format: int64
+          minimum: 0
+    PortConfig:
+      description: |-
+        Provides port configuration information.
+      type: object
+      required:
+      - front_panel_port
+      - autoneg_mode
+      - fec_mode
+      - speed
+      - tx_switch
+      - rx_switch
+      - connected_to
+      - link_name
+      properties:
         front_panel_port:
           description: |-
             The physical connector number and subchannel, for example 32/4 indicates connector  32 and subchannel(s) beginning with 4, depending upon the port breakout configuration. Port breakouts containing multiple lanes will only indicate the lowest-numbered channel
           type: string
-        enabled:
-          type: boolean
         autoneg_mode:
           type: string
           enum:
