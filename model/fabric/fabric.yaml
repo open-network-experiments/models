@@ -288,6 +288,9 @@ components:
       required: [priority_list, headroom_buffer_bytes, resume_threshold_bytes]
       type: object
       properties:
+        enabled:
+          type: boolean
+          default: false
         priority_list:
           type: array
           items:
