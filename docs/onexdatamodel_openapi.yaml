@@ -1119,6 +1119,122 @@ components:
           enum:
           - started
           - stopped
+    Metrics.Request:
+      type: object
+      properties:
+        choice:
+          description: |-
+            Selects the metric name
+          type: string
+          enum:
+          - port_link_status
+        port_link_status:
+          $ref: '#/components/schemas/PortLinkStatus.Request'
+    Metrics.Response:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - port_link_status
+        port_link_status:
+          type: array
+          items:
+            type: string
+            $ref: '#/components/schemas/PortLinkStatus.Metric'
+    PortLinkStatus.Request:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - port_names
+          - front_panel_ports
+        port_names:
+          description: |-
+            Emulated ports names for which metrics are being requested
+          type: array
+          items:
+            type: string
+        front_panel_ports:
+          description: |-
+            Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0
+          type: array
+          items:
+            type: string
+        labels:
+          type: array
+          items:
+            type: string
+            enum:
+            - port_link_status
+            - front_panel_port
+            - enabled
+            - autoneg_mode
+            - fec_mode
+            - speed
+            - tx_switch
+            - rx_switch
+            - connected_to
+            - link_name
+            - meta
+    PortLinkStatus.Metric:
+      type: object
+      required:
+      - port_name
+      - front_panel_port
+      - enabled
+      - link_status
+      properties:
+        port_name:
+          description: |-
+            Emulated port name
+          type: string
+        link_status:
+          type: string
+          enum:
+          - link_up
+          - link_down
+          - unknown
+        front_panel_port:
+          description: |-
+            The physical connector number and subchannel, for example 32/4 indicates connector  32 and subchannel(s) beginning with 4, depending upon the port breakout configuration. Port breakouts containing multiple lanes will only indicate the lowest-numbered channel
+          type: string
+        enabled:
+          type: boolean
+        autoneg_mode:
+          type: string
+          enum:
+          - enabled
+          - disabled
+        fec_mode:
+          type: string
+        speed:
+          type: string
+          enum:
+          - speed_100_gbps
+          - speed_200_gbps
+          - speed_50_gbps
+        tx_switch:
+          description: |-
+            The emulated device to which the port belongs to
+          type: string
+        rx_switch:
+          description: |-
+            The emulated device to which the port is connected to
+          type: string
+        connected_to:
+          description: |-
+            The host to which a front-panel port is connected to
+          type: string
+        link_name:
+          description: |-
+            Name of the emulated port link
+          type: string
+        meta:
+          description: |-
+            Metadata
+          type: string
 openapi: 3.0.3
 info:
   title: ONEx API
@@ -1253,6 +1369,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/State'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+  /metrics/fabric:
+    get:
+      tags:
+      - Metrics
+      operationId: get_metrics
+      description: |-
+        Gets the requested fabric metrics.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Metrics.Request'
+      responses:
+        '200':
+          description: |-
+            Current ONEx fabric metrics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Metrics.Response'
         '400':
           description: |-
             error 4xx
