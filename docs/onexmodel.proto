@@ -463,15 +463,20 @@ message FabricQosProfileWred {
 message FabricQosProfilePfc {
   option (msg_meta).description = "PFC (Priority based flow control) configuration";
 
-  repeated int32 priority_list = 1 [
+  optional bool enabled = 1 [
+    (fld_meta).default = "False",
     (fld_meta).description = "Description missing in models"
   ];
 
-  int32 headroom_buffer_bytes = 2 [
+  repeated int32 priority_list = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 headroom_buffer_bytes = 3 [
     (fld_meta).description = "Headroom buffer per PFC priority"
   ];
 
-  int32 resume_threshold_bytes = 3 [
+  int32 resume_threshold_bytes = 4 [
     (fld_meta).description = "Space required before sending Resume frame"
   ];
 }
