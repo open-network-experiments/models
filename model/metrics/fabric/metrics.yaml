@@ -3,48 +3,13 @@ components:
     Metrics.Request:
       type: object
       properties:
-        choice:
-          description: Selects the metric name
-          type: string
-          enum: 
-          - port_link_status
-          #- port_frames_transmitted_all
-          #- port_frames_transmitted_multicast
-          #- port_frames_transmitted_unicast
-          #- port_frames_transmitted_broadcast
-          #- port_frames_transmitted_by_length
-          #- port_bytes_transmitted_all
-          #- port_frames_transmitted_flow
-          #- port_frames_transmitted_ecn_marked
-          #- port_frames_transmitted_priority_pause
-          #- port_frames_transmitted_pause
-          #- port_frames_received_all
-          #- port_frames_received_multicast
-          #- port_frames_received_unicast
-          #- port_frames_received_broadcast
-          #- port_frames_received_by_length
-          #- port_bytes_received_all
-          #- port_frames_received_errors
-          #- port_frames_received_pause
-          #- port_frames_dropped_egress_buffer_full
-          #- port_frames_dropped_ingress
-          #- port_ingress_buffer_reserved_usage_current
-          #- port_ingress_buffer_shared_usage_peak
-          #- port_egress_buffer_reserved_usage_current
-          #- port_egress_buffer_total_usage_peak
-          #- port_multicast_buffer_total_usage_peak
-          #default: port_frames_transmitted_all
-        port_link_status:
-          $ref: './port_link_status.yaml#/components/schemas/PortLinkStatus.Request'
+        port_metrics:
+          $ref: "./port_metrics.yaml#/components/schemas/PortMetrics.Request"
+
     Metrics.Response:
       type: object
       properties:
-        choice:
-          type: string
-          enum:
-            - port_link_status
-        port_link_status:
+        port_metrics:
           type: array
           items:
-            type: string
-            $ref: './port_link_status.yaml#/components/schemas/PortLinkStatus.Metric'
+            $ref: "./port_metrics.yaml#/components/schemas/PortMetrics.Response"
