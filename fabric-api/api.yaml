@@ -90,4 +90,26 @@ paths:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
 
-  
+  /metrics:
+    get:
+      tags: ["Metrics"]
+      operationId: get_metrics
+      description: >-
+        Gets the requested metrics.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../model/metrics/fabric/metrics.yaml#/components/schemas/Metrics.Request"
+      responses:
+        '200':
+          description: Current ONEx fabric metrics.
+          content:
+            application/json:
+              schema:
+                $ref: "../model/metrics/fabric/metrics.yaml#/components/schemas/Metrics.Response"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+
