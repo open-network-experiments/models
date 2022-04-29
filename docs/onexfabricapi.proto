@@ -369,6 +369,10 @@ message FabricQosProfile {
   optional FabricQosProfileWred wred = 5 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional FabricQosProfilePfc pfc = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricQosProfileIngressAdmission {
@@ -427,7 +431,7 @@ message FabricQosProfilePacketClassificationMap {
 message FabricQosProfileWred {
   option (msg_meta).description = "WRED (weighted random early detection) configuration";
 
-  repeated string queue_list = 1 [
+  repeated int32 queue_list = 1 [
     (fld_meta).description = "List of queues for which WRED is enabled"
   ];
 
@@ -449,6 +453,22 @@ message FabricQosProfileWred {
   optional int32 max_probability_percent = 5 [
     (fld_meta).default = "100",
     (fld_meta).description = "Probability of dropping/marking packets at max threshold"
+  ];
+}
+
+message FabricQosProfilePfc {
+  option (msg_meta).description = "PFC (Priority based flow control) configuration";
+
+  repeated int32 priority_list = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 headroom_buffer_bytes = 2 [
+    (fld_meta).description = "Headroom buffer per PFC priority"
+  ];
+
+  int32 resume_threshold_bytes = 3 [
+    (fld_meta).description = "Space required before sending Resume frame"
   ];
 }
 
