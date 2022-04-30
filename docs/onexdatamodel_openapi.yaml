@@ -1153,7 +1153,7 @@ components:
             type: string
         select_metrics:
           description: |-
-            Requested specific port metrics
+            Filters port metrics to be returned
           type: array
           items:
             type: string
@@ -1200,6 +1200,8 @@ components:
           $ref: '#/components/schemas/PortMetrics'
     PortMetrics:
       type: object
+      description: |-
+        Port metrics
       properties:
         link_status:
           type: string
@@ -1309,7 +1311,7 @@ components:
           minimum: 0
     PortConfig:
       description: |-
-        Provides port configuration information.
+        Port configuration information.
       type: object
       required:
       - front_panel_port

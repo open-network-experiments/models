@@ -958,7 +958,7 @@ message PortMetricsRequest {
     }
   }
   repeated SelectMetrics.Enum select_metrics = 4 [
-    (fld_meta).description = "Requested specific port metrics"
+    (fld_meta).description = "Filters port metrics to be returned"
   ];
 }
 
@@ -979,7 +979,7 @@ message PortMetricsResponse {
 }
 
 message PortMetrics {
-  option (msg_meta).description = "Description missing in models";
+  option (msg_meta).description = "Port metrics";
 
   message LinkStatus {
     enum Enum {
@@ -1095,7 +1095,7 @@ message PortMetrics {
 }
 
 message PortConfig {
-  option (msg_meta).description = "Provides port configuration information.";
+  option (msg_meta).description = "Port configuration information.";
 
   string front_panel_port = 1 [
     (fld_meta).description = "The physical connector number and subchannel, for example 32/4 indicates connector  32 and subchannel(s) beginning with 4, depending upon the port breakout configuration. Port breakouts containing multiple lanes will only indicate the lowest-numbered channel"
