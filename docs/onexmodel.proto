@@ -1297,17 +1297,7 @@ message StateChaosDropFrames {
 message MetricsRequest {
   option (msg_meta).description = "Description missing in models";
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      port_link_status = 1;
-    }
-  }
-  optional Choice.Enum choice = 1 [
-    (fld_meta).description = "Selects the metric name"
-  ];
-
-  optional PortLinkStatusRequest port_link_status = 2 [
+  optional PortMetricsRequest port_metrics = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1315,22 +1305,12 @@ message MetricsRequest {
 message MetricsResponse {
   option (msg_meta).description = "Description missing in models";
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      port_link_status = 1;
-    }
-  }
-  optional Choice.Enum choice = 1 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  repeated string port_link_status = 2 [
+  repeated PortMetricsResponse port_metrics = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message PortLinkStatusRequest {
+message PortMetricsRequest {
   option (msg_meta).description = "Description missing in models";
 
   message Choice {
@@ -1345,40 +1325,67 @@ message PortLinkStatusRequest {
   ];
 
   repeated string port_names = 2 [
-    (fld_meta).description = "Emulated ports names for which metrics are being requested"
+    (fld_meta).description = "Emulated ports names for which metrics are being requested. If empty metrics for all ports will be returned."
   ];
 
   repeated string front_panel_ports = 3 [
-    (fld_meta).description = "Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0"
+    (fld_meta).description = "Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0. If empty metrics for all ports will be returned."
   ];
 
-  message Labels {
+  message SelectMetrics {
     enum Enum {
       unspecified = 0;
-      port_link_status = 1;
-      front_panel_port = 2;
-      enabled = 3;
-      autoneg_mode = 4;
-      fec_mode = 5;
-      speed = 6;
-      tx_switch = 7;
-      rx_switch = 8;
-      connected_to = 9;
-      link_name = 10;
-      meta = 11;
+      link_status = 1;
+      frames_transmitted_all = 2;
+      frames_transmitted_multicast = 3;
+      frames_transmitted_unicast = 4;
+      frames_transmitted_broadcast = 5;
+      frames_transmitted_by_length = 6;
+      bytes_transmitted_all = 7;
+      frames_transmitted_flow = 8;
+      frames_transmitted_ecn_marked = 9;
+      frames_transmitted_priority_pause = 10;
+      frames_transmitted_pause = 11;
+      frames_received_all = 12;
+      frames_received_multicast = 13;
+      frames_received_unicast = 14;
+      frames_received_broadcast = 15;
+      frames_received_by_length = 16;
+      bytes_received_all = 17;
+      frames_received_errors = 18;
+      frames_received_pause = 19;
+      frames_dropped_egress_buffer_full = 20;
+      frames_dropped_ingress = 21;
+      ingress_buffer_reserved_usage_current = 22;
+      ingress_buffer_shared_usage_peak = 23;
+      egress_buffer_reserved_usage_current = 24;
+      egress_buffer_total_usage_peak = 25;
+      multicast_buffer_total_usage_peak = 26;
     }
   }
-  repeated Labels.Enum labels = 4 [
-    (fld_meta).description = "Description missing in models"
+  repeated SelectMetrics.Enum select_metrics = 4 [
+    (fld_meta).description = "Requested specific port metrics"
   ];
 }
 
-message PortLinkStatusMetric {
+message PortMetricsResponse {
   option (msg_meta).description = "Description missing in models";
 
   string port_name = 1 [
     (fld_meta).description = "Emulated port name"
   ];
+
+  optional PortConfig config = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  PortMetrics metrics = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PortMetrics {
+  option (msg_meta).description = "Description missing in models";
 
   message LinkStatus {
     enum Enum {
@@ -1388,16 +1395,116 @@ message PortLinkStatusMetric {
       unknown = 3;
     }
   }
-  LinkStatus.Enum link_status = 2 [
+  optional LinkStatus.Enum link_status = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  string front_panel_port = 3 [
+  optional int64 frames_transmitted_all = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_multicast = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_unicast = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_broadcast = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_by_length = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 bytes_transmitted_all = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_flow = 8 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_ecn_marked = 9 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_priority_pause = 10 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted_pause = 11 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_all = 12 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_multicast = 13 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_unicast = 14 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_broadcast = 15 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_by_length = 16 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 bytes_received_all = 17 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_errors = 18 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_received_pause = 19 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_dropped_egress_buffer_full = 20 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_dropped_ingress = 21 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 ingress_buffer_reserved_usage_current = 22 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 ingress_buffer_shared_usage_peak = 23 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 egress_buffer_reserved_usage_current = 24 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 egress_buffer_total_usage_peak = 25 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 multicast_buffer_total_usage_peak = 26 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PortConfig {
+  option (msg_meta).description = "Provides port configuration information.";
+
+  string front_panel_port = 1 [
     (fld_meta).description = "The physical connector number and subchannel, for example 32/4 indicates connector  32 and subchannel(s) beginning with 4, depending upon the port breakout configuration. Port breakouts containing multiple lanes will only indicate the lowest-numbered channel"
-  ];
-
-  bool enabled = 4 [
-    (fld_meta).description = "Description missing in models"
   ];
 
   message AutonegMode {
@@ -1407,11 +1514,11 @@ message PortLinkStatusMetric {
       disabled = 2;
     }
   }
-  optional AutonegMode.Enum autoneg_mode = 5 [
+  AutonegMode.Enum autoneg_mode = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional string fec_mode = 6 [
+  string fec_mode = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -1423,27 +1530,27 @@ message PortLinkStatusMetric {
       speed_50_gbps = 3;
     }
   }
-  optional Speed.Enum speed = 7 [
+  Speed.Enum speed = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional string tx_switch = 8 [
+  string tx_switch = 5 [
     (fld_meta).description = "The emulated device to which the port belongs to"
   ];
 
-  optional string rx_switch = 9 [
+  string rx_switch = 6 [
     (fld_meta).description = "The emulated device to which the port is connected to"
   ];
 
-  optional string connected_to = 10 [
+  string connected_to = 7 [
     (fld_meta).description = "The host to which a front-panel port is connected to"
   ];
 
-  optional string link_name = 11 [
+  string link_name = 8 [
     (fld_meta).description = "Name of the emulated port link"
   ];
 
-  optional string meta = 12 [
+  optional string meta = 9 [
     (fld_meta).description = "Metadata"
   ];
 }
