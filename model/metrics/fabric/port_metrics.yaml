@@ -24,7 +24,7 @@ components:
           items:
             type: string
         select_metrics:
-          description: Requested specific port metrics
+          description: Filters port metrics to be returned
           type: array
           items:
             type: string
@@ -70,6 +70,8 @@ components:
 
     PortMetrics:
       type: object
+      description: >-
+        Port metrics
       properties:
         link_status:
           type: string
@@ -180,7 +182,7 @@ components:
 
     PortConfig:
       description: >-
-        Provides port configuration information.
+        Port configuration information.
       type: object
       required: [front_panel_port, autoneg_mode, fec_mode, speed, tx_switch, rx_switch, connected_to, link_name]
       properties:
