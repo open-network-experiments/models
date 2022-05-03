@@ -1190,13 +1190,12 @@ components:
             - bytes_received_all
             - frames_received_errors
             - frames_received_pause
+            - frames_received_priority_pause
             - frames_dropped_egress
             - frames_dropped_ingress
-            - ingress_buffer_reserved_usage_current
-            - ingress_buffer_shared_usage_peak
-            - egress_buffer_reserved_usage_current
-            - egress_buffer_total_usage_peak
-            - multicast_buffer_total_usage_peak
+            - per_egress_queue_metrics
+            - per_priority_group_metrics
+            - flow_counter_metrics
     PortMetrics.Response:
       type: object
       required:
@@ -1346,6 +1345,10 @@ components:
           type: integer
           format: int64
           minimum: 0
+        frames_received_priority_pause:
+          type: integer
+          format: int64
+          minimum: 0
         frames_dropped_egress:
           type: integer
           format: int64
@@ -1354,13 +1357,25 @@ components:
           type: integer
           format: int64
           minimum: 0
-        ingress_buffer_reserved_usage_current:
+        per_egress_queue_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerEgressQueueMetrics'
+        per_priority_group_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PerPriorityGroupMetrics'
+        flow_counter_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowCounterMetrics'
+    PerEgressQueueMetrics:
+      type: object
+      required:
+      - queue_number
+      properties:
+        queue_number:
           type: integer
-          format: int64
-          minimum: 0
-        ingress_buffer_shared_usage_peak:
-          type: integer
-          format: int64
           minimum: 0
         egress_buffer_reserved_usage_current:
           type: integer
@@ -1371,6 +1386,40 @@ components:
           format: int64
           minimum: 0
         multicast_buffer_total_usage_peak:
+          type: integer
+          format: int64
+          minimum: 0
+    PerPriorityGroupMetrics:
+      type: object
+      required:
+      - priority_group
+      properties:
+        priority_group:
+          type: integer
+          minimum: 0
+        ingress_buffer_reserved_usage_current:
+          type: integer
+          format: int64
+          minimum: 0
+        ingress_buffer_shared_usage_peak:
+          type: integer
+          format: int64
+          minimum: 0
+    FlowCounterMetrics:
+      type: object
+      properties:
+        per_background_traffic_flow:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowCounterMetrics.PerBackgroundTrafficFlow'
+    FlowCounterMetrics.PerBackgroundTrafficFlow:
+      type: object
+      required:
+      - flow_name
+      properties:
+        flow_name:
+          type: string
+        frames_transmitted:
           type: integer
           format: int64
           minimum: 0

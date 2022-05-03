@@ -1367,13 +1367,12 @@ message PortMetricsRequest {
       bytes_received_all = 30;
       frames_received_errors = 31;
       frames_received_pause = 32;
-      frames_dropped_egress = 33;
-      frames_dropped_ingress = 34;
-      ingress_buffer_reserved_usage_current = 35;
-      ingress_buffer_shared_usage_peak = 36;
-      egress_buffer_reserved_usage_current = 37;
-      egress_buffer_total_usage_peak = 38;
-      multicast_buffer_total_usage_peak = 39;
+      frames_received_priority_pause = 33;
+      frames_dropped_egress = 34;
+      frames_dropped_ingress = 35;
+      per_egress_queue_metrics = 36;
+      per_priority_group_metrics = 37;
+      flow_counter_metrics = 38;
     }
   }
   repeated SelectMetrics.Enum select_metrics = 4 [
@@ -1536,31 +1535,83 @@ message PortMetrics {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 frames_dropped_egress = 33 [
+  optional int64 frames_received_priority_pause = 33 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 frames_dropped_ingress = 34 [
+  optional int64 frames_dropped_egress = 34 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 ingress_buffer_reserved_usage_current = 35 [
+  optional int64 frames_dropped_ingress = 35 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 ingress_buffer_shared_usage_peak = 36 [
+  repeated PerEgressQueueMetrics per_egress_queue_metrics = 36 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 egress_buffer_reserved_usage_current = 37 [
+  repeated PerPriorityGroupMetrics per_priority_group_metrics = 37 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 egress_buffer_total_usage_peak = 38 [
+  repeated FlowCounterMetrics flow_counter_metrics = 38 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PerEgressQueueMetrics {
+  option (msg_meta).description = "Description missing in models";
+
+  int32 queue_number = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 multicast_buffer_total_usage_peak = 39 [
+  optional int64 egress_buffer_reserved_usage_current = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 egress_buffer_total_usage_peak = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 multicast_buffer_total_usage_peak = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PerPriorityGroupMetrics {
+  option (msg_meta).description = "Description missing in models";
+
+  int32 priority_group = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 ingress_buffer_reserved_usage_current = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 ingress_buffer_shared_usage_peak = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FlowCounterMetrics {
+  option (msg_meta).description = "Description missing in models";
+
+  repeated FlowCounterMetricsPerBackgroundTrafficFlow per_background_traffic_flow = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FlowCounterMetricsPerBackgroundTrafficFlow {
+  option (msg_meta).description = "Description missing in models";
+
+  string flow_name = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional int64 frames_transmitted = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
