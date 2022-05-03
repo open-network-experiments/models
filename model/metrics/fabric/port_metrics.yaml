@@ -42,7 +42,6 @@ components:
               - frames_transmitted_length_1519_2047
               - frames_transmitted_length_2048_4095
               - bytes_transmitted_all
-              - frames_transmitted_flow
               - frames_transmitted_ecn_marked
               - frames_transmitted_priority_pause
               - frames_transmitted_pause
@@ -141,10 +140,6 @@ components:
           format: int64
           minimum: 0
         bytes_transmitted_all:
-          type: integer
-          format: int64
-          minimum: 0
-        frames_transmitted_flow:
           type: integer
           format: int64
           minimum: 0
