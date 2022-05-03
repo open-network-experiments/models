@@ -1147,10 +1147,10 @@ components:
             type: string
         front_panel_ports:
           description: |-
-            Front panel ports for which metrics are being requested, in the format physical connector/subchannel, for example 32/0. If empty metrics for all ports will be returned.
+            Front panel ports for which metrics are being requested. If empty metrics for all ports will be returned.
           type: array
           items:
-            type: string
+            type: integer
         select_metrics:
           description: |-
             Filters port metrics to be returned
@@ -1163,9 +1163,15 @@ components:
             - frames_transmitted_multicast
             - frames_transmitted_unicast
             - frames_transmitted_broadcast
-            - frames_transmitted_by_length
+            - frames_transmitted_length_64
+            - frames_transmitted_length_65_127
+            - frames_transmitted_length_128_255
+            - frames_transmitted_length_256_511
+            - frames_transmitted_length_512_1023
+            - frames_transmitted_length_1024_1518
+            - frames_transmitted_length_1519_2047
+            - frames_transmitted_length_2048_4095
             - bytes_transmitted_all
-            - frames_transmitted_flow
             - frames_transmitted_ecn_marked
             - frames_transmitted_priority_pause
             - frames_transmitted_pause
@@ -1173,11 +1179,18 @@ components:
             - frames_received_multicast
             - frames_received_unicast
             - frames_received_broadcast
-            - frames_received_by_length
+            - frames_received_length_64
+            - frames_received_length_65_127
+            - frames_received_length_128_255
+            - frames_received_length_256_511
+            - frames_received_length_512_1023
+            - frames_received_length_1024_1518
+            - frames_received_length_1519_2047
+            - frames_received_length_2048_4095
             - bytes_received_all
             - frames_received_errors
             - frames_received_pause
-            - frames_dropped_egress_buffer_full
+            - frames_dropped_egress
             - frames_dropped_ingress
             - ingress_buffer_reserved_usage_current
             - ingress_buffer_shared_usage_peak
@@ -1225,15 +1238,39 @@ components:
           type: integer
           format: int64
           minimum: 0
-        frames_transmitted_by_length:
+        frames_transmitted_length_64:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_65_127:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_128_255:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_256_511:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_512_1023:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_1024_1518:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_1519_2047:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_2048_4095:
           type: integer
           format: int64
           minimum: 0
         bytes_transmitted_all:
-          type: integer
-          format: int64
-          minimum: 0
-        frames_transmitted_flow:
           type: integer
           format: int64
           minimum: 0
@@ -1265,7 +1302,35 @@ components:
           type: integer
           format: int64
           minimum: 0
-        frames_received_by_length:
+        frames_received_length_64:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_65_127:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_128_255:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_256_511:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_512_1023:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_1024_1518:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_1519_2047:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_2048_4095:
           type: integer
           format: int64
           minimum: 0
@@ -1281,7 +1346,7 @@ components:
           type: integer
           format: int64
           minimum: 0
-        frames_dropped_egress_buffer_full:
+        frames_dropped_egress:
           type: integer
           format: int64
           minimum: 0
@@ -1313,20 +1378,11 @@ components:
       description: |-
         Port configuration information.
       type: object
-      required:
-      - front_panel_port
-      - autoneg_mode
-      - fec_mode
-      - speed
-      - tx_switch
-      - rx_switch
-      - connected_to
-      - link_name
       properties:
         front_panel_port:
           description: |-
-            The physical connector number and subchannel, for example 32/4 indicates connector  32 and subchannel(s) beginning with 4, depending upon the port breakout configuration. Port breakouts containing multiple lanes will only indicate the lowest-numbered channel
-          type: string
+            The corresponding front panel port, if any.
+          type: integer
         autoneg_mode:
           type: string
           enum:
