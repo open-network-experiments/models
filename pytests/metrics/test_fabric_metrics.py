@@ -42,10 +42,10 @@ def test_flow_counters_port_metrics():
 
     metric_response = onex.MetricsResponse()
     port_metric_response = metric_response.port_metrics.add(port_name='ToR Switch 1.1 Port 10')
-    flow_counter_metric = port_metric_response.metrics.flow_counter_metrics.add()
-    flow_counter_metric.per_background_traffic_flow.add(flow_name="Flow 1", frames_transmitted=100)
-    flow_counter_metric.per_background_traffic_flow.add(flow_name="Flow 2", frames_transmitted=200)
-    metric_response.serialize()
+    port_metric_response.metrics.flow_counter_metrics.per_background_traffic_flow.add(flow_name="Flow 1", frames_transmitted=100)
+    port_metric_response.metrics.flow_counter_metrics.per_background_traffic_flow.add(flow_name="Flow 2", frames_transmitted=200)
+    print(metric_response.serialize())
+
 
 
 def test_per_priority_group_port_metrics():
