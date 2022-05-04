@@ -1366,9 +1366,7 @@ components:
           items:
             $ref: '#/components/schemas/PerPriorityGroupMetrics'
         flow_counter_metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/FlowCounterMetrics'
+          $ref: '#/components/schemas/FlowCounterMetrics'
     PerEgressQueueMetrics:
       type: object
       required:

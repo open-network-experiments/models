@@ -1149,7 +1149,7 @@ message PortMetrics {
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated FlowCounterMetrics flow_counter_metrics = 38 [
+  optional FlowCounterMetrics flow_counter_metrics = 38 [
     (fld_meta).description = "Description missing in models"
   ];
 }
