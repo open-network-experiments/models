@@ -24,14 +24,11 @@ def test_port_metrics_response():
     port_metric_response2.metrics.link_status = 'link_down'
     port_metric_response2.metrics.frames_transmitted_broadcast = 100
     port_metric_response2.metrics.frames_received_broadcast = 100
-    port_metric_response2.config.front_panel_port = 1
-    port_metric_response2.config.connected_to = 'Host 1'
-    port_metric_response2.config.link_name = 'Link T.1.1/1'
-    port_metric_response2.config.tx_switch = 'ToR Switch 1.1'
-    port_metric_response2.config.rx_switch = 'ToR Switch 1.1'
-    port_metric_response2.config.speed = 'speed_100_gbps'
-    port_metric_response2.config.fec_mode = 'rs_fec'
-    port_metric_response2.config.autoneg_mode = 'disabled'
+    port_metric_response2.meta.front_panel_port = 1
+    port_metric_response2.meta.connected_to = 'Host 1'
+    port_metric_response2.meta.link_name = 'Link T.1.1/1'
+    port_metric_response2.meta.tx_switch = 'ToR Switch 1.1'
+    port_metric_response2.meta.rx_switch = 'ToR Switch 1.1'
     metric_response.serialize()
 
 def test_flow_counters_port_metrics():
@@ -44,7 +41,7 @@ def test_flow_counters_port_metrics():
     port_metric_response = metric_response.port_metrics.add(port_name='ToR Switch 1.1 Port 10')
     port_metric_response.metrics.flow_counter_metrics.per_background_traffic_flow.add(flow_name="Flow 1", frames_transmitted=100)
     port_metric_response.metrics.flow_counter_metrics.per_background_traffic_flow.add(flow_name="Flow 2", frames_transmitted=200)
-    print(metric_response.serialize())
+    metric_response.serialize()
 
 
 
