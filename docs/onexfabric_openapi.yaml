@@ -848,8 +848,8 @@ components:
           type: string
           description: |-
             Emulated port name
-        config:
-          $ref: '#/components/schemas/PortConfig'
+        meta:
+          $ref: '#/components/schemas/PortMeta'
         metrics:
           $ref: '#/components/schemas/PortMetrics'
     PortMetrics:
@@ -1063,28 +1063,15 @@ components:
           type: integer
           format: int64
           minimum: 0
-    PortConfig:
+    PortMeta:
       description: |-
-        Port configuration information.
+        Port metadata.
       type: object
       properties:
         front_panel_port:
           description: |-
             The corresponding front panel port, if any.
           type: integer
-        autoneg_mode:
-          type: string
-          enum:
-          - enabled
-          - disabled
-        fec_mode:
-          type: string
-        speed:
-          type: string
-          enum:
-          - speed_100_gbps
-          - speed_200_gbps
-          - speed_50_gbps
         tx_switch:
           description: |-
             The emulated device to which the port belongs to
@@ -1101,9 +1088,9 @@ components:
           description: |-
             Name of the emulated port link
           type: string
-        meta:
+        annotations:
           description: |-
-            Metadata
+            Other metadata
           type: string
 openapi: 3.0.3
 info:

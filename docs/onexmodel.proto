@@ -1387,7 +1387,7 @@ message PortMetricsResponse {
     (fld_meta).description = "Emulated port name"
   ];
 
-  optional PortConfig config = 2 [
+  optional PortMeta meta = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
@@ -1616,58 +1616,31 @@ message FlowCounterMetricsPerBackgroundTrafficFlow {
   ];
 }
 
-message PortConfig {
-  option (msg_meta).description = "Port configuration information.";
+message PortMeta {
+  option (msg_meta).description = "Port metadata.";
 
   optional int32 front_panel_port = 1 [
     (fld_meta).description = "The corresponding front panel port, if any."
   ];
 
-  message AutonegMode {
-    enum Enum {
-      unspecified = 0;
-      enabled = 1;
-      disabled = 2;
-    }
-  }
-  optional AutonegMode.Enum autoneg_mode = 2 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional string fec_mode = 3 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  message Speed {
-    enum Enum {
-      unspecified = 0;
-      speed_100_gbps = 1;
-      speed_200_gbps = 2;
-      speed_50_gbps = 3;
-    }
-  }
-  optional Speed.Enum speed = 4 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional string tx_switch = 5 [
+  optional string tx_switch = 2 [
     (fld_meta).description = "The emulated device to which the port belongs to"
   ];
 
-  optional string rx_switch = 6 [
+  optional string rx_switch = 3 [
     (fld_meta).description = "The emulated device to which the port is connected to"
   ];
 
-  optional string connected_to = 7 [
+  optional string connected_to = 4 [
     (fld_meta).description = "The host to which a front-panel port is connected to"
   ];
 
-  optional string link_name = 8 [
+  optional string link_name = 5 [
     (fld_meta).description = "Name of the emulated port link"
   ];
 
-  optional string meta = 9 [
-    (fld_meta).description = "Metadata"
+  optional string annotations = 6 [
+    (fld_meta).description = "Other metadata"
   ];
 }
 
