@@ -82,6 +82,8 @@ components:
           type: string
           x-constraint:
           - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+        annotations:
+          type: string
     Fabric:
       type: object
       properties:
@@ -131,6 +133,8 @@ components:
             \ pod switches \nare fully meshed within a fabric"
           type: integer
           default: 1
+        annotations:
+          type: string
     Fabric.Spine:
       type: object
       properties:
@@ -159,6 +163,8 @@ components:
           type: string
           x-constraint:
           - '#/components/schemas/QosProfile/properties/name'
+        annotations:
+          type: string
     Fabric.Pod:
       type: object
       properties:
@@ -176,6 +182,8 @@ components:
           type: string
           x-constraint:
           - '#/components/schemas/PodProfile/properties/name'
+        annotations:
+          type: string
     Fabric.PodProfile:
       type: object
       properties:
@@ -194,6 +202,8 @@ components:
         pod_to_spine_oversubscription:
           description: |-
             Oversubscription ratio of the pod switches
+          type: string
+        annotations:
           type: string
     Fabric.PodSwitch:
       type: object
@@ -230,6 +240,8 @@ components:
           type: string
           x-constraint:
           - '#/components/schemas/QosProfile/properties/name'
+        annotations:
+          type: string
     Fabric.Tor:
       type: object
       properties:
@@ -247,6 +259,8 @@ components:
           type: string
           x-constraint:
           - '#/components/schemas/TorProfile/properties/name'
+        annotations:
+          type: string
     Fabric.TorProfile:
       type: object
       properties:
@@ -280,6 +294,8 @@ components:
           - '#/components/schemas/QosProfile/properties/name'
         tor_to_pod_oversubscription:
           $ref: '#/components/schemas/Fabric.TorProfile.Oversubscription'
+        annotations:
+          type: string
     Fabric.TorProfile.Oversubscription:
       description: |-
         The oversubscription of the ToR switch(es)
@@ -313,6 +329,8 @@ components:
           $ref: '#/components/schemas/Fabric.QosProfile.Wred'
         pfc:
           $ref: '#/components/schemas/Fabric.QosProfile.Pfc'
+        annotations:
+          type: string
     Fabric.QosProfile.IngressAdmission:
       type: object
       properties:
@@ -459,6 +477,8 @@ components:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
         tor:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
+        annotations:
+          type: string
     SwitchHostLink.SwitchRef:
       description: |-
         Location of the switch based on pod and switch index
@@ -875,6 +895,8 @@ components:
           description: |-
             Interval of time (seconds)
           default: 1
+        annotations:
+          type: string
     Chaos.BackgroundTraffic:
       type: object
       properties:
@@ -897,6 +919,8 @@ components:
           - stateless
         stateless:
           $ref: '#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless'
+        annotations:
+          type: string
     Chaos.BackgroundTraffic.Flow.Stateless:
       type: object
       properties:
@@ -1017,6 +1041,8 @@ components:
           - ingress_frames
           - egress_frames
           default: ingress_frames
+        annotations:
+          type: string
     L1SettingsProfile:
       type: object
       properties:
@@ -1043,6 +1069,8 @@ components:
           $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation'
         manual:
           $ref: '#/components/schemas/L1SettingsProfile.Manual'
+        annotations:
+          type: string
     L1SettingsProfile.Autonegotiation:
       type: object
       properties:

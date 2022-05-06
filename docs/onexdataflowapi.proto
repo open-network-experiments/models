@@ -238,6 +238,10 @@ message Host {
   optional string l1_profile_name = 4 [
     (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
   ];
+
+  optional string annotations = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message Dataflow {

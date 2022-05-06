@@ -122,6 +122,10 @@ message Host {
   optional string l1_profile_name = 4 [
     (fld_meta).description = "The layer 1 settings profile associated with the host/front panel port.\n\nx-constraint:\n- ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name\n"
   ];
+
+  optional string annotations = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message Fabric {
@@ -173,6 +177,10 @@ message FabricClos {
     (fld_meta).default = "1",
     (fld_meta).description = "Number of parallel fabrics (aka fabric colors). Spine and pod switches \nare fully meshed within a fabric"
   ];
+
+  optional string annotations = 7 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricSpine {
@@ -198,6 +206,10 @@ message FabricSpine {
   optional string qos_profile_name = 3 [
     (fld_meta).description = "The name of a qos profile shared by the spines.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
+
+  optional string annotations = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricPod {
@@ -210,6 +222,10 @@ message FabricPod {
 
   optional string pod_profile_name = 2 [
     (fld_meta).description = "The pod profile associated with the pod(s).\n\nx-constraint:\n- #/components/schemas/PodProfile/properties/name\n"
+  ];
+
+  optional string annotations = 3 [
+    (fld_meta).description = "Description missing in models"
   ];
 }
 
@@ -230,6 +246,10 @@ message FabricPodProfile {
 
   optional string pod_to_spine_oversubscription = 4 [
     (fld_meta).description = "Oversubscription ratio of the pod switches"
+  ];
+
+  optional string annotations = 5 [
+    (fld_meta).description = "Description missing in models"
   ];
 }
 
@@ -268,6 +288,10 @@ message FabricPodSwitch {
   optional string qos_profile_name = 4 [
     (fld_meta).description = "The name of a qos profile associated with the switches in this pod.\n\nx-constraint:\n- #/components/schemas/QosProfile/properties/name\n"
   ];
+
+  optional string annotations = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricTor {
@@ -280,6 +304,10 @@ message FabricTor {
 
   optional string tor_profile_name = 2 [
     (fld_meta).description = "The names of ToR profiles associated with the ToR switch(es)\n\nx-constraint:\n- #/components/schemas/TorProfile/properties/name\n"
+  ];
+
+  optional string annotations = 3 [
+    (fld_meta).description = "Description missing in models"
   ];
 }
 
@@ -318,6 +346,10 @@ message FabricTorProfile {
   ];
 
   optional FabricTorProfileOversubscription tor_to_pod_oversubscription = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -371,6 +403,10 @@ message FabricQosProfile {
   ];
 
   optional FabricQosProfilePfc pfc = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -524,6 +560,10 @@ message SwitchHostLink {
   optional SwitchHostLinkSwitchRef tor = 7 [
     (fld_meta).description = "Description missing in models"
   ];
+
+  optional string annotations = 8 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message SwitchHostLinkSwitchRef {
@@ -577,6 +617,10 @@ message L1SettingsProfile {
   ];
 
   optional L1SettingsProfileManual manual = 5 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -651,6 +695,10 @@ message ChaosDropFrames {
     (fld_meta).default = "1",
     (fld_meta).description = "Interval of time (seconds)"
   ];
+
+  optional string annotations = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message ChaosBackgroundTraffic {
@@ -683,6 +731,10 @@ message ChaosBackgroundTrafficFlow {
   ];
 
   optional ChaosBackgroundTrafficFlowStateless stateless = 4 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -826,6 +878,10 @@ message InsightsPortMirroring {
   }
   optional MirrorType.Enum mirror_type = 4 [
     (fld_meta).default = "MirrorType.Enum.ingress_frames",
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 }

@@ -203,6 +203,8 @@ components:
           type: string
           x-constraint:
           - ../l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile/properties/name
+        annotations:
+          type: string
     Dataflow:
       type: object
       properties:
