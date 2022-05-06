@@ -26,3 +26,6 @@ components:
           type: string
           enum: [ingress_frames, egress_frames]
           default: ingress_frames
+        annotations:
+          type: string
+

@@ -21,6 +21,9 @@ components:
           enum: [stateless]
         stateless:
           $ref: "#/components/schemas/Chaos.BackgroundTraffic.Flow.Stateless"
+        annotations:
+          type: string
+
 
 
     Chaos.BackgroundTraffic.Flow.Stateless:

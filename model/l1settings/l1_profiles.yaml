@@ -17,6 +17,9 @@ components:
           $ref: '#/components/schemas/L1SettingsProfile.Autonegotiation'
         manual:
           $ref: '#/components/schemas/L1SettingsProfile.Manual'
+        annotations:
+          type: string
+
 
 
     LinkSpeed:

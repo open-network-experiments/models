@@ -36,3 +36,5 @@ components:
           type: integer
           description: Interval of time (seconds)
           default: 1
+        annotations:
+          type: string

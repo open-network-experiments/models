@@ -33,27 +33,26 @@ components:
           type: array
           items:
             $ref: './link.yaml#/components/schemas/SwitchHostLink'
-
         pod_profiles:
           description: |-
             A list of pod profiles
           type: array
           items:
             $ref: "#/components/schemas/Fabric.PodProfile"
-
         tor_profiles:
           description: |-
             A list of ToR switch profiles
           type: array
           items:
             $ref: "#/components/schemas/Fabric.TorProfile"
-
         parallel_fabric_count:
           description: |-
             Number of parallel fabrics (aka fabric colors). Spine and pod switches 
             are fully meshed within a fabric
           type: integer
           default: 1
+        annotations:
+          type: string
 
     Fabric.Spine:
       type: object
@@ -73,6 +72,8 @@ components:
           type: string
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
+        annotations:
+          type: string
 
     Fabric.Pod:
       type: object
@@ -87,6 +88,8 @@ components:
           type: string
           x-constraint:
             - "#/components/schemas/PodProfile/properties/name"
+        annotations:
+          type: string
 
     Fabric.PodProfile:
       type: object
@@ -104,6 +107,8 @@ components:
             $ref: "#/components/schemas/Fabric.Tor"
         pod_to_spine_oversubscription: 
           description: Oversubscription ratio of the pod switches
+          type: string
+        annotations:
           type: string
 
     Fabric.PodSwitch:
@@ -124,6 +129,8 @@ components:
           type: string
           x-constraint:
             - "#/components/schemas/QosProfile/properties/name"
+        annotations:
+          type: string
 
     Fabric.Tor:
       type: object
@@ -138,6 +145,8 @@ components:
           type: string
           x-constraint:
             - "#/components/schemas/TorProfile/properties/name"
+        annotations:
+          type: string
 
     Fabric.TorProfile:
       type: object
@@ -158,6 +167,8 @@ components:
             - "#/components/schemas/QosProfile/properties/name"
         tor_to_pod_oversubscription:
           $ref: "#/components/schemas/Fabric.TorProfile.Oversubscription"
+        annotations:
+          type: string
 
     Fabric.TorProfile.Oversubscription:
           description: |-
@@ -173,7 +184,6 @@ components:
             host_capacity:
               type: integer
               default: 1
-
 
     EcmpMode:
       description: |-
@@ -205,6 +215,8 @@ components:
           $ref: "#/components/schemas/Fabric.QosProfile.Wred"
         pfc:
           $ref: "#/components/schemas/Fabric.QosProfile.Pfc"
+        annotations:
+          type: string
 
     Fabric.QosProfile.IngressAdmission:
       type: object

@@ -35,6 +35,8 @@ components:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
         tor:
           $ref: '#/components/schemas/SwitchHostLink.SwitchRef'
+        annotations:
+          type: string
 
     SwitchHostLink.SwitchRef:
       description: |-
