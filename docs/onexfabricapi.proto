@@ -955,7 +955,7 @@ message MetricsRequest {
 message MetricsResponse {
   option (msg_meta).description = "Description missing in models";
 
-  repeated PortMetricsResponse port_metrics = 1 [
+  optional PortMetricsResponse port_metrics = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -1028,9 +1028,26 @@ message PortMetricsRequest {
   repeated SelectMetrics.Enum select_metrics = 4 [
     (fld_meta).description = "Filters port metrics to be returned"
   ];
+
+  optional bool from_cache = 5 [
+    (fld_meta).default = "False",
+    (fld_meta).description = "Determines whether to retrieve metrics from cache or not"
+  ];
 }
 
 message PortMetricsResponse {
+  option (msg_meta).description = "Description missing in models";
+
+  float timestamp = 1 [
+    (fld_meta).description = "Unix epoch time when metrics were sampled"
+  ];
+
+  repeated PortMetricsPortEntry metrics = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message PortMetricsPortEntry {
   option (msg_meta).description = "Description missing in models";
 
   string port_name = 1 [

@@ -798,9 +798,7 @@ components:
       type: object
       properties:
         port_metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortMetrics.Response'
+          $ref: '#/components/schemas/PortMetrics.Response'
     PortMetrics.Request:
       type: object
       properties:
@@ -866,7 +864,26 @@ components:
             - per_egress_queue_metrics
             - per_priority_group_metrics
             - flow_counter_metrics
+        from_cache:
+          description: |-
+            Determines whether to retrieve metrics from cache or not
+          type: boolean
+          default: false
     PortMetrics.Response:
+      type: object
+      required:
+      - timestamp
+      - metrics
+      properties:
+        timestamp:
+          description: |-
+            Unix epoch time when metrics were sampled
+          type: number
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortMetrics.PortEntry'
+    PortMetrics.PortEntry:
       type: object
       required:
       - port_name
