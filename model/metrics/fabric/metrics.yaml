@@ -10,6 +10,4 @@ components:
       type: object
       properties:
         port_metrics:
-          type: array
-          items:
-            $ref: "./port_metrics.yaml#/components/schemas/PortMetrics.Response"
+          $ref: "./port_metrics.yaml#/components/schemas/PortMetrics.Response"
