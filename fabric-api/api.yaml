@@ -91,7 +91,7 @@ paths:
           - "../common/common.yaml#/components/responses/Error500"
 
   /metrics:
-    get:
+    post:
       tags: ["Metrics"]
       operationId: get_metrics
       description: >-

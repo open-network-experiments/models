@@ -90,7 +90,7 @@ paths:
           - "../common/common.yaml#/components/responses/Error500"
 
   /metrics/fabric:
-    get:
+    post:
       tags: ["Metrics"]
       operationId: get_metrics
       description: >-
