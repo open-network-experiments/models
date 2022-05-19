@@ -1286,7 +1286,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error.Details'
   /metrics:
-    get:
+    post:
       tags:
       - Metrics
       operationId: get_metrics

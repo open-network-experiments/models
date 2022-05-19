@@ -1644,7 +1644,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error.Details'
   /metrics/fabric:
-    get:
+    post:
       tags:
       - Metrics
       operationId: get_metrics
