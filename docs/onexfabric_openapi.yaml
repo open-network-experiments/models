@@ -877,7 +877,7 @@ components:
       properties:
         timestamp:
           description: |-
-            Unix epoch time when metrics were sampled
+            Unix epoch time when metrics were sampled expressed in miliseconds
           type: number
         metrics:
           type: array
@@ -1285,7 +1285,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error.Details'
-  /metrics:
+  /metrics/operations/query:
     post:
       tags:
       - Metrics
@@ -1306,6 +1306,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Metrics.Response'
+        '400':
+          description: |-
+            error 4xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+        '500':
+          description: |-
+            error 5xx
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error.Details'
+  /metrics/operations/clear:
+    post:
+      tags:
+      - Metrics
+      operationId: clear_metrics
+      description: |-
+        Clear the metrics.
+      responses:
+        '200':
+          description: |-
+            Operation successful
         '400':
           description: |-
             error 4xx
