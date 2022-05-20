@@ -1039,7 +1039,7 @@ message PortMetricsResponse {
   option (msg_meta).description = "Description missing in models";
 
   float timestamp = 1 [
-    (fld_meta).description = "Unix epoch time when metrics were sampled"
+    (fld_meta).description = "Unix epoch time when metrics were sampled expressed in miliseconds"
   ];
 
   repeated PortMetricsPortEntry metrics = 2 [
@@ -1352,6 +1352,12 @@ message GetMetricsResponse {
   optional ErrorDetails status_code_500 = 3;
 }
 
+message ClearMetricsResponse {
+  optional string status_code_200 = 1;
+  optional ErrorDetails status_code_400 = 2;
+  optional ErrorDetails status_code_500 = 3;
+}
+
 
 service Openapi {
   option (svc_meta).description = "Description missing in models";
@@ -1364,5 +1370,8 @@ service Openapi {
   }
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
     option (rpc_meta).description = "Gets the requested metrics.";
+  }
+  rpc ClearMetrics(google.protobuf.Empty) returns (ClearMetricsResponse) {
+    option (rpc_meta).description = "Clear the metrics.";
   }
 }
