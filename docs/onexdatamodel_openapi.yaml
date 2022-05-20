@@ -1058,6 +1058,7 @@ components:
           - speed_100_gbps
           - speed_200_gbps
           - speed_50_gbps
+          - speed_25_gbps
           default: speed_100_gbps
         choice:
           type: string
