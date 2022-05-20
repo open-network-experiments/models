@@ -78,7 +78,7 @@ components:
       properties:
         timestamp:
           description: |-
-            Unix epoch time when metrics were sampled
+            Unix epoch time when metrics were sampled expressed in miliseconds
           type: number
         metrics:
           type: array

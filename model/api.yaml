@@ -89,7 +89,7 @@ paths:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
 
-  /metrics/fabric:
+  /fabric/metrics/operations/query:
     post:
       tags: ["Metrics"]
       operationId: get_metrics
@@ -108,6 +108,20 @@ paths:
             application/json:
               schema:
                 $ref: "./metrics/fabric/metrics.yaml#/components/schemas/Metrics.Response"
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
+
+
+  /fabric/metrics/operations/clear:
+    post:
+      tags: ["Metrics"]
+      operationId: clear_metrics
+      description: >-
+        Clear the metrics.
+      responses:
+        '200':
+          description: Operation successful
         x-include:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"

@@ -90,7 +90,7 @@ paths:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
 
-  /metrics:
+  /metrics/operations/query:
     post:
       tags: ["Metrics"]
       operationId: get_metrics
@@ -113,3 +113,16 @@ paths:
           - "../common/common.yaml#/components/responses/Error400"
           - "../common/common.yaml#/components/responses/Error500"
 
+
+  /metrics/operations/clear:
+    post:
+      tags: ["Metrics"]
+      operationId: clear_metrics
+      description: >-
+        Clear the metrics.
+      responses:
+        '200':
+          description: Operation successful
+        x-include:
+          - "../common/common.yaml#/components/responses/Error400"
+          - "../common/common.yaml#/components/responses/Error500"
