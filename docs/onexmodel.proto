@@ -1234,6 +1234,7 @@ message L1SettingsProfile {
       speed_100_gbps = 1;
       speed_200_gbps = 2;
       speed_50_gbps = 3;
+      speed_25_gbps = 4;
     }
   }
   optional LinkSpeed.Enum link_speed = 2 [
