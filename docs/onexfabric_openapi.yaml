@@ -35,6 +35,8 @@ components:
     Config:
       type: object
       properties:
+        name:
+          type: string
         hosts:
           type: array
           items:
@@ -51,6 +53,8 @@ components:
           $ref: '#/components/schemas/Chaos'
         insights:
           $ref: '#/components/schemas/Insights'
+        annotations:
+          type: string
     Host:
       required:
       - address

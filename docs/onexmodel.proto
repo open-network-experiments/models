@@ -82,28 +82,36 @@ message ErrorItem {
 message Config {
   option (msg_meta).description = "ONEx experiments configuration.";
 
-  repeated Host hosts = 1 [
+  optional string name = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Fabric fabric = 2 [
+  repeated Host hosts = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Dataflow dataflow = 3 [
+  optional Fabric fabric = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Chaos chaos = 4 [
+  optional Dataflow dataflow = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Insights insights = 5 [
+  optional Chaos chaos = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated L1SettingsProfile layer1_profiles = 6 [
+  optional Insights insights = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated L1SettingsProfile layer1_profiles = 7 [
     (fld_meta).description = "A list of Layer 1 settings profiles"
+  ];
+
+  optional string annotations = 8 [
+    (fld_meta).description = "Description missing in models"
   ];
 }
 

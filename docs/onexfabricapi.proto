@@ -82,23 +82,31 @@ message ErrorItem {
 message Config {
   option (msg_meta).description = "Description missing in models";
 
-  repeated Host hosts = 1 [
+  optional string name = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Fabric fabric = 2 [
+  repeated Host hosts = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated L1SettingsProfile layer1_profiles = 3 [
+  optional Fabric fabric = 3 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  repeated L1SettingsProfile layer1_profiles = 4 [
     (fld_meta).description = "A list of Layer 1 settings profiles"
   ];
 
-  optional Chaos chaos = 4 [
+  optional Chaos chaos = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional Insights insights = 5 [
+  optional Insights insights = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional string annotations = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 }
