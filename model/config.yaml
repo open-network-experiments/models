@@ -5,6 +5,8 @@ components:
         ONEx experiments configuration.
       type: object
       properties:
+        name:
+          type: string
         hosts:
           type: array
           items:
@@ -23,3 +25,5 @@ components:
           type: array
           items:
             $ref: "./l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile"
+        annotations:
+          type: string

@@ -3,6 +3,8 @@ components:
     Config:
       type: object
       properties:
+        name:
+          type: string
         hosts:
           type: array
           items:
@@ -19,3 +21,5 @@ components:
           $ref: "../model/chaos/chaos.yaml#/components/schemas/Chaos"
         insights:
           $ref: "../model/insights/insights.yaml#/components/schemas/Insights"
+        annotations:
+          type: string
