@@ -10,6 +10,12 @@ components:
           type: string
           x-constraint:
           - '#components/schemas/Host/properties/name'
+        eth_nic:
+          $ref: "#/components/schemas/Dataflow.HostManagement.EthNic"
+
+    Dataflow.HostManagement.EthNic:
+      type: object
+      properties:
         nic_rx_buffer:
           type: integer
           description: RX buffer size in bytes
