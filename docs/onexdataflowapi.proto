@@ -625,24 +625,104 @@ message DataflowHostManagement {
     (fld_meta).description = "TBD\n\nx-constraint:\n- #components/schemas/Host/properties/name\n"
   ];
 
-  optional int32 nic_rx_buffer = 2 [
+  optional DataflowHostManagementEthNic eth_nic = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowHostManagementEthNic {
+  option (msg_meta).description = "Description missing in models";
+
+  optional int32 nic_rx_buffer = 1 [
     (fld_meta).description = "RX buffer size in bytes"
   ];
 
-  optional int32 nic_tx_buffer = 3 [
+  optional int32 nic_tx_buffer = 2 [
     (fld_meta).description = "TX buffer size in bytes"
   ];
 
-  optional int32 nic_speed = 4 [
+  optional int32 nic_speed = 3 [
     (fld_meta).description = "configured link speed Mbps (e.g. 100000 for 100G)"
   ];
 
-  optional string management_address = 5 [
+  optional string management_address = 4 [
     (fld_meta).description = "Hostname or address of management interface of a server running dataflow traffic"
   ];
 
-  optional string nic_name = 6 [
+  optional string nic_name = 5 [
     (fld_meta).description = "unique idenfier for the network interface card (nic), e.g. eth1"
+  ];
+
+  optional bool flow_control_autoneg = 6 [
+    (fld_meta).description = "Value for the autonegotiate pause parameter"
+  ];
+
+  optional bool flow_control_rx = 7 [
+    (fld_meta).description = "Value for the RX pause parameter"
+  ];
+
+  optional bool flow_control_tx = 8 [
+    (fld_meta).description = "Value for the TX pause parameter"
+  ];
+
+  optional bool coalesce_adaptive_rx = 9 [
+    (fld_meta).description = "An algorithm to improve rx latency at low packet-receiving rates and improve throughput at high packet-receiving rates. Some NIC drivers do not support this feature."
+  ];
+
+  optional bool coalesce_adaptive_tx = 10 [
+    (fld_meta).description = "An algorithm to improve tx latency at low packet-sending rates and improve throughput at high packet-sending rates. Some NIC drivers do not support this feature."
+  ];
+
+  optional bool coalesce_tx_frames = 11 [
+    (fld_meta).description = "Number of packets to delay a TX interrupt after sending a packet. If 0, only tx-usecs is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated."
+  ];
+
+  optional bool coalesce_rx_frames = 12 [
+    (fld_meta).description = "Number of packets to delay an RX interrupt after packet arrival. If 0, only rx-usecs is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated."
+  ];
+
+  optional bool coalesce_tx_usecs = 13 [
+    (fld_meta).description = "Number of microseconds to delay a TX interrupt after a sending a packet. If 0, only tx-max-frames is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated."
+  ];
+
+  optional bool coalesce_rx_usecs = 14 [
+    (fld_meta).description = "Number of microseconds to delay an RX interrupt after packet arrival. If 0, only rx-max-frames is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated."
+  ];
+
+  optional bool offload_rx_checksum = 15 [
+    (fld_meta).description = "Specifies whether RX checksumming should be enabled."
+  ];
+
+  optional bool offload_tx_checksum = 16 [
+    (fld_meta).description = "Specifies whether TX checksumming should be enabled."
+  ];
+
+  optional bool offload_sg = 17 [
+    (fld_meta).description = "Specifies whether scatter-gather should be enabled."
+  ];
+
+  optional bool offload_tso = 18 [
+    (fld_meta).description = "Specifies whether TCP segmentation offload should be enabled."
+  ];
+
+  optional bool offload_gso = 19 [
+    (fld_meta).description = "Specifies whether generic segmentation offload should be enabled"
+  ];
+
+  optional bool offload_lro = 20 [
+    (fld_meta).description = "Specifies whether large receive offload should be enabled"
+  ];
+
+  optional bool offload_tx_nocache_copy = 21 [
+    (fld_meta).description = "Helps to reduce CPU cycles by bypassing the local cache and writing user-space data directly into memory."
+  ];
+
+  optional bool offload_tx_udp_segmentation = 22 [
+    (fld_meta).description = "Specifies whether UDP TX segmentation offload should be enabled."
+  ];
+
+  optional int32 tx_queue_len = 23 [
+    (fld_meta).description = "Sets the TX queue size"
   ];
 }
 

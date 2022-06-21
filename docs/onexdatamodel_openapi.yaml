@@ -834,6 +834,11 @@ components:
 
             x-constraint:
             - #components/schemas/Host/properties/name
+        eth_nic:
+          $ref: '#/components/schemas/Dataflow.HostManagement.EthNic'
+    Dataflow.HostManagement.EthNic:
+      type: object
+      properties:
         nic_rx_buffer:
           type: integer
           description: |-
@@ -854,6 +859,78 @@ components:
           type: string
           description: |-
             unique idenfier for the network interface card (nic), e.g. "eth1"
+        flow_control_autoneg:
+          type: boolean
+          description: |-
+            Value for the autonegotiate pause parameter
+        flow_control_rx:
+          type: boolean
+          description: |-
+            Value for the RX pause parameter
+        flow_control_tx:
+          type: boolean
+          description: |-
+            Value for the TX pause parameter
+        coalesce_adaptive_rx:
+          type: boolean
+          description: |-
+            An algorithm to improve rx latency at low packet-receiving rates and improve throughput at high packet-receiving rates. Some NIC drivers do not support this feature.
+        coalesce_adaptive_tx:
+          type: boolean
+          description: |-
+            An algorithm to improve tx latency at low packet-sending rates and improve throughput at high packet-sending rates. Some NIC drivers do not support this feature.
+        coalesce_tx_frames:
+          type: boolean
+          description: |-
+            Number of packets to delay a TX interrupt after sending a packet. If 0, only tx-usecs is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated.
+        coalesce_rx_frames:
+          type: boolean
+          description: |-
+            Number of packets to delay an RX interrupt after packet arrival. If 0, only rx-usecs is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated.
+        coalesce_tx_usecs:
+          type: boolean
+          description: |-
+            Number of microseconds to delay a TX interrupt after a sending a packet. If 0, only tx-max-frames is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated.
+        coalesce_rx_usecs:
+          type: boolean
+          description: |-
+            Number of microseconds to delay an RX interrupt after packet arrival. If 0, only rx-max-frames is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated.
+        offload_rx_checksum:
+          type: boolean
+          description: |-
+            Specifies whether RX checksumming should be enabled.
+        offload_tx_checksum:
+          type: boolean
+          description: |-
+            Specifies whether TX checksumming should be enabled.
+        offload_sg:
+          type: boolean
+          description: |-
+            Specifies whether scatter-gather should be enabled.
+        offload_tso:
+          type: boolean
+          description: |-
+            Specifies whether TCP segmentation offload should be enabled.
+        offload_gso:
+          type: boolean
+          description: |-
+            Specifies whether generic segmentation offload should be enabled
+        offload_lro:
+          type: boolean
+          description: |-
+            Specifies whether large receive offload should be enabled
+        offload_tx_nocache_copy:
+          type: boolean
+          description: |-
+            Helps to reduce CPU cycles by bypassing the local cache and writing user-space data directly into memory.
+        offload_tx_udp_segmentation:
+          type: boolean
+          description: |-
+            Specifies whether UDP TX segmentation offload should be enabled.
+        tx_queue_len:
+          type: integer
+          description: |-
+            Sets the TX queue size
     Chaos:
       type: object
       description: |-
