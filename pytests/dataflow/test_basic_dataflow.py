@@ -19,9 +19,17 @@ def test_simple_dataflow():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    config.dataflow.host_management.add(host_name=aggregator.name, management_address="10.36.12.32", nic_name='eth1')
-    config.dataflow.host_management.add(host_name=compute1.name, management_address="10.36.12.33", nic_name='eth1')
-    config.dataflow.host_management.add(host_name=compute2.name, management_address="10.36.12.33", nic_name='eth2')
+    host1 = config.dataflow.host_management.add(host_name=aggregator.name)
+    host1.eth_nic.management_address="10.36.12.32"
+    host1.eth_nic.nic_name='eth1'
+
+    host2 = config.dataflow.host_management.add(host_name=compute1.name)
+    host2.eth_nic.management_address="10.36.12.33"
+    host2.eth_nic.nic_name='eth1'
+
+    host3 = config.dataflow.host_management.add(host_name=compute2.name)
+    host3.eth_nic.management_address="10.36.12.33"
+    host3.eth_nic.nic_name='eth2'
 
     assert config.serialize()
 
@@ -42,9 +50,17 @@ def test_alltoall_workload():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    config.dataflow.host_management.add(host_name=aggregator.name, management_address="10.36.12.32", nic_name='eth1')
-    config.dataflow.host_management.add(host_name=compute1.name, management_address="10.36.12.33", nic_name='eth1')
-    config.dataflow.host_management.add(host_name=compute2.name, management_address="10.36.12.33", nic_name='eth2')
+    host1 = config.dataflow.host_management.add(host_name=aggregator.name)
+    host1.eth_nic.management_address="10.36.12.32"
+    host1.eth_nic.nic_name='eth1'
+
+    host2 = config.dataflow.host_management.add(host_name=compute1.name)
+    host2.eth_nic.management_address="10.36.12.33"
+    host2.eth_nic.nic_name='eth1'
+
+    host3 = config.dataflow.host_management.add(host_name=compute2.name)
+    host3.eth_nic.management_address="10.36.12.33"
+    host3.eth_nic.nic_name='eth2'
 
     assert config.serialize()
 
