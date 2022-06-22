@@ -47,16 +47,16 @@ components:
           type: boolean
           description: An algorithm to improve tx latency at low packet-sending rates and improve throughput at high packet-sending rates. Some NIC drivers do not support this feature.
         coalesce_tx_frames: 
-          type: boolean
+          type: integer
           description: Number of packets to delay a TX interrupt after sending a packet. If 0, only tx-usecs is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated.
         coalesce_rx_frames: 
-          type: boolean
+          type: integer
           description: Number of packets to delay an RX interrupt after packet arrival. If 0, only rx-usecs is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated.
         coalesce_tx_usecs: 
-          type: boolean
+          type: integer
           description: Number of microseconds to delay a TX interrupt after a sending a packet. If 0, only tx-max-frames is used. Do not set both tx-usecs and tx-max-frames to zero as this would cause TX interrupts to never be generated.
         coalesce_rx_usecs: 
-          type: boolean
+          type: integer
           description: Number of microseconds to delay an RX interrupt after packet arrival. If 0, only rx-max-frames is used. Do not set both rx-usecs and rx-max-frames to zero as this would cause RX interrupts to never be generated.
         offload_rx_checksum: 
           type: boolean
