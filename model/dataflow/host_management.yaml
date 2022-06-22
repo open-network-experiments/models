@@ -73,6 +73,9 @@ components:
         offload_gso: 
           type: boolean
           description: Specifies whether generic segmentation offload should be enabled
+        offload_gro: 
+          type: boolean
+          description: Specifies whether generic receive offload should be enabled
         offload_lro: 
           type: boolean
           description: Specifies whether large receive offload should be enabled
