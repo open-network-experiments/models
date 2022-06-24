@@ -19,17 +19,13 @@ def test_simple_dataflow():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    host1 = config.dataflow.host_management.add(host_name=aggregator.name)
-    host1.eth_nic.management_address="10.36.12.32"
-    host1.eth_nic.nic_name='eth1'
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
-    host2 = config.dataflow.host_management.add(host_name=compute1.name)
-    host2.eth_nic.management_address="10.36.12.33"
-    host2.eth_nic.nic_name='eth1'
-
-    host3 = config.dataflow.host_management.add(host_name=compute2.name)
-    host3.eth_nic.management_address="10.36.12.33"
-    host3.eth_nic.nic_name='eth2'
+    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile="Nic Profile 1")
+    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile="Nic Profile 2")
+    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile="Nic Profile 3")
 
     assert config.serialize()
 
@@ -48,19 +44,15 @@ def test_alltoall_workload():
     gather = config.dataflow.workload.add(name="Gather").gather
     gather.sources = [ compute1.name, compute2.name ]
     gather.destinations = [ aggregator.name ]
-    gather.flow_profile_name = data_transfer.name    
+    gather.flow_profile_name = data_transfer.name
 
-    host1 = config.dataflow.host_management.add(host_name=aggregator.name)
-    host1.eth_nic.management_address="10.36.12.32"
-    host1.eth_nic.nic_name='eth1'
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
+    config.dataflow.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
-    host2 = config.dataflow.host_management.add(host_name=compute1.name)
-    host2.eth_nic.management_address="10.36.12.33"
-    host2.eth_nic.nic_name='eth1'
-
-    host3 = config.dataflow.host_management.add(host_name=compute2.name)
-    host3.eth_nic.management_address="10.36.12.33"
-    host3.eth_nic.nic_name='eth2'
+    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile="Nic Profile 1")
+    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile="Nic Profile 2")
+    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile="Nic Profile 3")
 
     assert config.serialize()
 
