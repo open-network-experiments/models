@@ -10,9 +10,9 @@ components:
           type: string
           x-constraint:
           - '#components/schemas/Host/properties/name'
-        eth_nic_profile:
+        eth_nic_profile_name:
           description: |-
-            The pod profile associated with the pod(s).
+            The nic parameters profile associated with the host.
           type: string
           x-constraint:
             - "#/components/schemas/Dataflow.EthNicProfileSettings/properties/name"

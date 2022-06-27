@@ -17,7 +17,7 @@ def test_nic_parameters():
 
     config.dataflow.host_management.add(
         host_name=host.name,
-        eth_nic_profile="Nic Profile 1"
+        eth_nic_profile_name="Nic Profile 1"
     )
 
 

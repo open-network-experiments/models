@@ -23,9 +23,9 @@ def test_simple_dataflow():
     config.dataflow.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
     config.dataflow.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
-    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile="Nic Profile 1")
-    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile="Nic Profile 2")
-    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile="Nic Profile 3")
+    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile_name="Nic Profile 1")
+    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile_name="Nic Profile 2")
+    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile_name="Nic Profile 3")
 
     assert config.serialize()
 
@@ -50,9 +50,9 @@ def test_alltoall_workload():
     config.dataflow.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
     config.dataflow.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
-    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile="Nic Profile 1")
-    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile="Nic Profile 2")
-    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile="Nic Profile 3")
+    config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile_name="Nic Profile 1")
+    config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile_name="Nic Profile 2")
+    config.dataflow.host_management.add(host_name=compute2.name, eth_nic_profile_name="Nic Profile 3")
 
     assert config.serialize()
 
