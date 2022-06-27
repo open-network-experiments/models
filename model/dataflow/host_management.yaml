@@ -15,6 +15,6 @@ components:
             The nic parameters profile associated with the host.
           type: string
           x-constraint:
-            - "#/components/schemas/Dataflow.EthNicProfileSettings/properties/name"
+            - "#/components/schemas/Profiles.EthNicSetting/properties/name"
 
    

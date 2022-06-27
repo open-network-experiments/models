@@ -25,5 +25,7 @@ components:
           type: array
           items:
             $ref: "./l1settings/l1_profiles.yaml#/components/schemas/L1SettingsProfile"
+        profiles:
+          $ref: "./profiles/all_profiles.yaml#/components/schemas/Profiles"
         annotations:
           type: string
