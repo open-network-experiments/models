@@ -1,6 +1,6 @@
 components:
   schemas:
-    Profiles.EthNicSetting:
+    Profiles.Dataflow.HostManagement.EthNicSetting:
       type: object
       required: [name]
       properties:

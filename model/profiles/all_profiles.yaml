@@ -8,4 +8,4 @@ components:
         eth_nic_profiles:
           type: array
           items:
-            $ref: './eth_nic_settings.yaml#/components/schemas/Profiles.EthNicSetting'
+            $ref: './eth_nic_settings.yaml#/components/schemas/Profiles.Dataflow.HostManagement.EthNicSetting'
