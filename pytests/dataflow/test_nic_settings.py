@@ -7,7 +7,7 @@ def test_nic_parameters():
 
     host = config.hosts.add(name="Host 1", address="1.1.1.1")
 
-    config.profiles.eth_nic_profiles.add(
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(
         name="Nic Profile 1",
         management_address="192.168.0.100",
         nic_rx_buffer=1024*1024*1024,

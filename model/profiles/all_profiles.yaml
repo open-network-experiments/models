@@ -5,7 +5,23 @@ components:
         Key where all the profiles are stored
       type: object
       properties:
+        dataflow:
+          $ref: "#/components/schemas/Profiles.Dataflow"
+
+          
+    Profiles.Dataflow:
+      description: |-
+        Dataflow specific profiles
+      type: object
+      properties:
+        host_management:
+          $ref: "#/components/schemas/Profiles.Dataflow.HostManagement"
+
+
+    Profiles.Dataflow.HostManagement:     
+      type: object
+      properties:
         eth_nic_profiles:
           type: array
           items:
-            $ref: './eth_nic_settings.yaml#/components/schemas/Profiles.Dataflow.HostManagement.EthNicSetting'
+            $ref: './eth_nic_settings.yaml#/components/schemas/EthNicSettings'

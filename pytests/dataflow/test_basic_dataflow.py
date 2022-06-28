@@ -19,9 +19,9 @@ def test_simple_dataflow():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name    
 
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
     config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile_name="Nic Profile 1")
     config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile_name="Nic Profile 2")
@@ -46,9 +46,9 @@ def test_alltoall_workload():
     gather.destinations = [ aggregator.name ]
     gather.flow_profile_name = data_transfer.name
 
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
-    config.profiles.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 1",management_address="10.36.12.32",nic_name='eth1')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 2",management_address="10.36.12.33",nic_name='eth1')
+    config.profiles.dataflow.host_management.eth_nic_profiles.add(name="Nic Profile 3",management_address="10.36.12.33",nic_name='eth2')
 
     config.dataflow.host_management.add(host_name=aggregator.name, eth_nic_profile_name="Nic Profile 1")
     config.dataflow.host_management.add(host_name=compute1.name, eth_nic_profile_name="Nic Profile 2")
