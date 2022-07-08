@@ -41,6 +41,8 @@ components:
               - frames_transmitted_length_1024_1518
               - frames_transmitted_length_1519_2047
               - frames_transmitted_length_2048_4095
+              - frames_transmitted_length_4096_9216
+              - frames_transmitted_length_9217_16383
               - bytes_transmitted_all
               - frames_transmitted_ecn_marked
               - frames_transmitted_priority_pause
@@ -57,6 +59,8 @@ components:
               - frames_received_length_1024_1518
               - frames_received_length_1519_2047
               - frames_received_length_2048_4095
+              - frames_received_length_4096_9216
+              - frames_received_length_9217_16383
               - bytes_received_all
               - frames_received_errors
               - frames_received_pause
