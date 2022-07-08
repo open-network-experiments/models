@@ -1436,6 +1436,14 @@ components:
           type: integer
           format: int64
           minimum: 0
+        frames_transmitted_length_4096_9216:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_transmitted_length_9217_16383:
+          type: integer
+          format: int64
+          minimum: 0
         bytes_transmitted_all:
           type: integer
           format: int64
@@ -1497,6 +1505,14 @@ components:
           format: int64
           minimum: 0
         frames_received_length_2048_4095:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_4096_9216:
+          type: integer
+          format: int64
+          minimum: 0
+        frames_received_length_9217_16383:
           type: integer
           format: int64
           minimum: 0
