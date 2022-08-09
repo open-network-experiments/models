@@ -349,8 +349,8 @@ components:
             List of priorities for which the buffer sizes should be applied
           type: array
           items:
-            type: string
-            default: '0'
+            type: integer
+            default: 0
     Fabric.QosProfile.Scheduler:
       type: object
       properties:
@@ -370,13 +370,33 @@ components:
       type: object
       properties:
         map_dscp_to_traffic_class:
-          $ref: '#/components/schemas/Fabric.QosProfile.PacketClassification.Map'
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.QosProfile.PacketClassification.DscpToTrafficClass'
         map_traffic_class_to_queue:
-          $ref: '#/components/schemas/Fabric.QosProfile.PacketClassification.Map'
-    Fabric.QosProfile.PacketClassification.Map:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fabric.QosProfile.PacketClassification.TrafficClassToQueue'
+    Fabric.QosProfile.PacketClassification.DscpToTrafficClass:
       type: object
-      additionalProperties:
-        type: string
+      required:
+      - dscp
+      - traffic_class
+      properties:
+        dscp:
+          type: integer
+        traffic_class:
+          type: integer
+    Fabric.QosProfile.PacketClassification.TrafficClassToQueue:
+      type: object
+      required:
+      - traffic_class
+      - queue
+      properties:
+        traffic_class:
+          type: integer
+        queue:
+          type: integer
     Fabric.QosProfile.Wred:
       description: |-
         WRED (weighted random early detection) configuration
@@ -411,7 +431,7 @@ components:
       description: |-
         PFC (Priority based flow control) configuration
       required:
-      - priority_list
+      - lossless_priority_list
       - headroom_buffer_bytes
       - resume_threshold_bytes
       type: object
@@ -419,7 +439,7 @@ components:
         enabled:
           type: boolean
           default: false
-        priority_list:
+        lossless_priority_list:
           type: array
           items:
             type: integer

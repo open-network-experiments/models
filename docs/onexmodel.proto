@@ -440,7 +440,7 @@ message FabricQosProfileIngressAdmission {
     (fld_meta).description = "Amount of shared buffer space (in bytes) available"
   ];
 
-  repeated string priority_list = 3 [
+  repeated int32 priority_list = 3 [
     (fld_meta).description = "List of priorities for which the buffer sizes should be applied"
   ];
 }
@@ -467,17 +467,37 @@ message FabricQosProfileScheduler {
 message FabricQosProfilePacketClassification {
   option (msg_meta).description = "Description missing in models";
 
-  optional FabricQosProfilePacketClassificationMap map_dscp_to_traffic_class = 1 [
+  repeated FabricQosProfilePacketClassificationDscpToTrafficClass map_dscp_to_traffic_class = 1 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional FabricQosProfilePacketClassificationMap map_traffic_class_to_queue = 2 [
+  repeated FabricQosProfilePacketClassificationTrafficClassToQueue map_traffic_class_to_queue = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message FabricQosProfilePacketClassificationMap {
+message FabricQosProfilePacketClassificationDscpToTrafficClass {
   option (msg_meta).description = "Description missing in models";
+
+  int32 dscp = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 traffic_class = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message FabricQosProfilePacketClassificationTrafficClassToQueue {
+  option (msg_meta).description = "Description missing in models";
+
+  int32 traffic_class = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  int32 queue = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
 }
 
 message FabricQosProfileWred {
@@ -516,7 +536,7 @@ message FabricQosProfilePfc {
     (fld_meta).description = "Description missing in models"
   ];
 
-  repeated int32 priority_list = 2 [
+  repeated int32 lossless_priority_list = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
