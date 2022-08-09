@@ -314,13 +314,13 @@ components:
     Fabric.QosProfile.Pfc:
       description: |-
         PFC (Priority based flow control) configuration
-      required: [priority_list, headroom_buffer_bytes, resume_threshold_bytes]
+      required: [lossless_priority_list, headroom_buffer_bytes, resume_threshold_bytes]
       type: object
       properties:
         enabled:
           type: boolean
           default: false
-        priority_list:
+        lossless_priority_list:
           type: array
           items:
             type: integer

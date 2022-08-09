@@ -52,7 +52,7 @@ def test_qos_wred():
 def test_qos_pfc():
     config = onex.api().config()
     qos_profile = config.fabric.qos_profiles.add(name="pfc")
-    qos_profile.pfc.priority_list = [1,2]
+    qos_profile.pfc.lossless_priority_list = [1,2]
     qos_profile.pfc.headroom_buffer_bytes = 5000
     qos_profile.pfc.resume_threshold_bytes = 3000
     assert config.serialize()
