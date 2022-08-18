@@ -282,15 +282,15 @@ components:
         queue_number:
           type: integer
           minimum: 0
-        egress_buffer_reserved_usage_current:
+        egress_queue_total_usage_current:
           type: integer
           format: int64
           minimum: 0
-        egress_buffer_total_usage_peak:
+        egress_queue_total_usage_peak:
           type: integer
           format: int64
           minimum: 0
-        multicast_buffer_total_usage_peak:
+        multicast_queue_total_usage_peak:
           type: integer
           format: int64
           minimum: 0

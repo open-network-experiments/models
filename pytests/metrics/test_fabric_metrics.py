@@ -70,6 +70,6 @@ def test_per_egress_queue_metrics():
     metric_response = onex.MetricsResponse()
     metric_response.port_metrics.timestamp = 1652915804
     port_metric_response = metric_response.port_metrics.metrics.add(port_name='ToR Switch 1.1 Port 10')
-    port_metric_response.metrics.per_egress_queue_metrics.add(queue_number=0, egress_buffer_reserved_usage_current=0)
-    port_metric_response.metrics.per_egress_queue_metrics.add(queue_number=3, egress_buffer_reserved_usage_current=0, egress_buffer_total_usage_peak=100,multicast_buffer_total_usage_peak=0)
+    port_metric_response.metrics.per_egress_queue_metrics.add(queue_number=0, egress_queue_total_usage_current=0)
+    port_metric_response.metrics.per_egress_queue_metrics.add(queue_number=3, egress_queue_total_usage_current=0, egress_queue_total_usage_peak=100,multicast_queue_total_usage_peak=0)
     metric_response.serialize()
