@@ -1805,15 +1805,15 @@ message PerEgressQueueMetrics {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 egress_buffer_reserved_usage_current = 2 [
+  optional int64 egress_queue_total_usage_current = 2 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 egress_buffer_total_usage_peak = 3 [
+  optional int64 egress_queue_total_usage_peak = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int64 multicast_buffer_total_usage_peak = 4 [
+  optional int64 multicast_queue_total_usage_peak = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 }
