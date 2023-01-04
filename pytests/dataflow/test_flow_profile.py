@@ -1,16 +1,14 @@
 from typing import NamedTuple
 from artifacts.onex_model.onex_model import onex_model
 
-def test_flow_profile_network_parameters():
+def test_flow_profile_network_tcpip_parameters():
     config = onex_model.api().config()
-    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1)
-    eth = fp.ethernet
-    eth.mtu = 1000
+    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1, mtu=1000)
 
-    ip = fp.ip
+    ip = fp.tcpip.ip
     ip.dscp = 123
 
-    tcp = fp.tcp
+    tcp = fp.tcpip.tcp
     tcp.mss = 1500
     tcp.initcwnd = 100
     tcp.receive_buf = 40000
@@ -24,5 +22,17 @@ def test_flow_profile_network_parameters():
 
     tcp.source_port.single_value.value = 2000
     tcp.destination_port.single_value.value = 3000
+
+    assert config.serialize()
+
+
+def test_flow_profile_network_roce_parameters():
+    config = onex_model.api().config()
+    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1, mtu=1000)
+
+    roce = fp.rdma.rocev2
+    roce.verb = "read"
+    roce.bidirectional = True
+    roce.iterations = 100
 
     assert config.serialize()

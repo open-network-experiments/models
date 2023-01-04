@@ -271,54 +271,103 @@ message DataflowFlowProfile {
     (fld_meta).description = "Description missing in models"
   ];
 
-  message L2ProtocolChoice {
-    enum Enum {
-      unspecified = 0;
-      ethernet = 1;
-    }
-  }
-  optional L2ProtocolChoice.Enum l2_protocol_choice = 3 [
-    (fld_meta).description = "layer2 protocol selection"
+  optional int32 mtu = 3 [
+    (fld_meta).default = "1500",
+    (fld_meta).description = "Maximum Transmission Unit"
   ];
 
-  optional DataflowFlowProfileEthernet ethernet = 4 [
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rdma = 1;
+      tcpip = 2;
+    }
+  }
+  optional Choice.Enum choice = 4 [
+    (fld_meta).description = "RDMA traffic or traditional TCP/IP"
+  ];
+
+  optional DataflowFlowProfileRdmaStack rdma = 5 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  message L4ProtocolChoice {
+  optional DataflowFlowProfileTcpIpStack tcpip = 6 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileRdmaStack {
+  option (msg_meta).description = "Description missing in models";
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rocev2 = 1;
+    }
+  }
+  optional Choice.Enum choice = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  optional DataflowFlowProfileRdmaStackRoceV2 rocev2 = 2 [
+    (fld_meta).description = "Description missing in models"
+  ];
+}
+
+message DataflowFlowProfileRdmaStackRoceV2 {
+  option (msg_meta).description = "Description missing in models";
+
+  message Verb {
+    enum Enum {
+      unspecified = 0;
+      write = 1;
+      read = 2;
+    }
+  }
+  optional Verb.Enum verb = 1 [
+    (fld_meta).default = "Verb.Enum.write",
+    (fld_meta).description = "read or write command"
+  ];
+
+  optional bool bidirectional = 2 [
+    (fld_meta).default = "False",
+    (fld_meta).description = "whether data is sent both ways"
+  ];
+
+  optional int32 iterations = 3 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "how many times to send the message"
+  ];
+}
+
+message DataflowFlowProfileTcpIpStack {
+  option (msg_meta).description = "Description missing in models";
+
+  optional DataflowFlowProfileTcpIpStackIp ip = 1 [
+    (fld_meta).description = "Description missing in models"
+  ];
+
+  message Choice {
     enum Enum {
       unspecified = 0;
       tcp = 1;
       udp = 2;
     }
   }
-  optional L4ProtocolChoice.Enum l4_protocol_choice = 5 [
+  optional Choice.Enum choice = 2 [
     (fld_meta).description = "layer4 protocol selection"
   ];
 
-  optional DataflowFlowProfileIp ip = 6 [
+  optional DataflowFlowProfileL4ProtocolTcp tcp = 3 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowFlowProfileTcp tcp = 7 [
-    (fld_meta).description = "Description missing in models"
-  ];
-
-  optional DataflowFlowProfileUdp udp = 8 [
+  optional DataflowFlowProfileL4ProtocolUdp udp = 4 [
     (fld_meta).description = "Description missing in models"
   ];
 }
 
-message DataflowFlowProfileEthernet {
-  option (msg_meta).description = "Description missing in models";
-
-  optional int32 mtu = 1 [
-    (fld_meta).default = "1500",
-    (fld_meta).description = "Maximum Transmission Unit"
-  ];
-}
-
-message DataflowFlowProfileIp {
+message DataflowFlowProfileTcpIpStackIp {
   option (msg_meta).description = "Description missing in models";
 
   optional int32 dscp = 1 [
@@ -326,7 +375,7 @@ message DataflowFlowProfileIp {
   ];
 }
 
-message DataflowFlowProfileTcp {
+message DataflowFlowProfileL4ProtocolTcp {
   option (msg_meta).description = "Description missing in models";
 
   message CongestionAlgorithm {
@@ -435,7 +484,7 @@ message L4PortRangeRange {
   ];
 }
 
-message DataflowFlowProfileUdp {
+message DataflowFlowProfileL4ProtocolUdp {
   option (msg_meta).description = "Description missing in models";
 }
 

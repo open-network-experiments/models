@@ -103,6 +103,7 @@ def init():
     run(
         [
             py() + " -m pip install openapiart==0.1.34",
+            py() + " -m pip install openapi_spec_validator==0.3.0",
             py() + " -m pip install pytest-cov",
         ]
     )
