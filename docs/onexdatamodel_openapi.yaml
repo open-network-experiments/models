@@ -551,43 +551,76 @@ components:
           type: string
         data_size:
           type: integer
-        l2_protocol_choice:
+        mtu:
+          type: integer
           description: |-
-            layer2 protocol selection
+            Maximum Transmission Unit
+          default: 1500
+        choice:
+          description: |-
+            RDMA traffic or traditional TCP/IP
           type: string
           enum:
-          - ethernet
-        ethernet:
-          $ref: '#/components/schemas/Dataflow.FlowProfile.Ethernet'
-        l4_protocol_choice:
+          - rdma
+          - tcpip
+        rdma:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.RdmaStack'
+        tcpip:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.TcpIpStack'
+    Dataflow.FlowProfile.RdmaStack:
+      type: object
+      properties:
+        choice:
+          type: string
+          enum:
+          - rocev2
+        rocev2:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.RdmaStack.RoceV2'
+    Dataflow.FlowProfile.RdmaStack.RoceV2:
+      type: object
+      properties:
+        verb:
+          description: |-
+            read or write command
+          type: string
+          enum:
+          - write
+          - read
+          default: write
+        bidirectional:
+          description: |-
+            whether data is sent both ways
+          type: boolean
+          default: false
+        iterations:
+          type: integer
+          description: |-
+            how many times to send the message
+          default: 1
+    Dataflow.FlowProfile.TcpIpStack:
+      type: object
+      properties:
+        ip:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.TcpIpStack.Ip'
+        choice:
           description: |-
             layer4 protocol selection
           type: string
           enum:
           - tcp
           - udp
-        ip:
-          $ref: '#/components/schemas/Dataflow.FlowProfile.Ip'
         tcp:
-          $ref: '#/components/schemas/Dataflow.FlowProfile.Tcp'
+          $ref: '#/components/schemas/Dataflow.FlowProfile.L4Protocol.Tcp'
         udp:
-          $ref: '#/components/schemas/Dataflow.FlowProfile.Udp'
-    Dataflow.FlowProfile.Ethernet:
-      type: object
-      properties:
-        mtu:
-          type: integer
-          description: |-
-            Maximum Transmission Unit
-          default: 1500
-    Dataflow.FlowProfile.Ip:
+          $ref: '#/components/schemas/Dataflow.FlowProfile.L4Protocol.Udp'
+    Dataflow.FlowProfile.TcpIpStack.Ip:
       type: object
       properties:
         dscp:
           type: integer
           description: |-
             differentiated services code point
-    Dataflow.FlowProfile.Tcp:
+    Dataflow.FlowProfile.L4Protocol.Tcp:
       type: object
       properties:
         congestion_algorithm:
@@ -677,7 +710,7 @@ components:
           type: integer
           default: 1
           minimum: 1
-    Dataflow.FlowProfile.Udp:
+    Dataflow.FlowProfile.L4Protocol.Udp:
       type: object
     Dataflow.WorkloadItem:
       type: object
