@@ -53,7 +53,7 @@ def get_go_deps():
         [
             cmd + " google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1.0",
             cmd + " google.golang.org/protobuf/cmd/protoc-gen-go@v1.25.0",
-            cmd + " golang.org/x/tools/cmd/goimports@latest",
+            cmd + " golang.org/x/tools/cmd/goimports@v0.5.0",
         ]
     )
 
