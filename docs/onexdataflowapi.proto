@@ -271,9 +271,14 @@ message DataflowFlowProfile {
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional int32 mtu = 3 [
-    (fld_meta).default = "1500",
-    (fld_meta).description = "Maximum Transmission Unit"
+  optional bool bidirectional = 3 [
+    (fld_meta).default = "False",
+    (fld_meta).description = "whether data is sent both ways"
+  ];
+
+  optional int32 iterations = 4 [
+    (fld_meta).default = "1",
+    (fld_meta).description = "how many times to send the message"
   ];
 
   message Choice {
@@ -283,15 +288,15 @@ message DataflowFlowProfile {
       tcpip = 2;
     }
   }
-  optional Choice.Enum choice = 4 [
+  optional Choice.Enum choice = 5 [
     (fld_meta).description = "RDMA traffic or traditional TCP/IP"
   ];
 
-  optional DataflowFlowProfileRdmaStack rdma = 5 [
+  optional DataflowFlowProfileRdmaStack rdma = 6 [
     (fld_meta).description = "Description missing in models"
   ];
 
-  optional DataflowFlowProfileTcpIpStack tcpip = 6 [
+  optional DataflowFlowProfileTcpIpStack tcpip = 7 [
     (fld_meta).description = "Description missing in models"
   ];
 }
@@ -327,16 +332,6 @@ message DataflowFlowProfileRdmaStackRoceV2 {
   optional Verb.Enum verb = 1 [
     (fld_meta).default = "Verb.Enum.write",
     (fld_meta).description = "read or write command"
-  ];
-
-  optional bool bidirectional = 2 [
-    (fld_meta).default = "False",
-    (fld_meta).description = "whether data is sent both ways"
-  ];
-
-  optional int32 iterations = 3 [
-    (fld_meta).default = "1",
-    (fld_meta).description = "how many times to send the message"
   ];
 }
 

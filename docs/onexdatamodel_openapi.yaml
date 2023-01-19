@@ -551,11 +551,16 @@ components:
           type: string
         data_size:
           type: integer
-        mtu:
+        bidirectional:
+          description: |-
+            whether data is sent both ways
+          type: boolean
+          default: false
+        iterations:
           type: integer
           description: |-
-            Maximum Transmission Unit
-          default: 1500
+            how many times to send the message
+          default: 1
         choice:
           description: |-
             RDMA traffic or traditional TCP/IP
@@ -587,16 +592,6 @@ components:
           - write
           - read
           default: write
-        bidirectional:
-          description: |-
-            whether data is sent both ways
-          type: boolean
-          default: false
-        iterations:
-          type: integer
-          description: |-
-            how many times to send the message
-          default: 1
     Dataflow.FlowProfile.TcpIpStack:
       type: object
       properties:
@@ -1262,6 +1257,10 @@ components:
           type: integer
           description: |-
             Sets the TX queue size
+        mtu:
+          type: integer
+          description: |-
+            Maximum Transmission Unit
     State:
       type: object
       properties:
