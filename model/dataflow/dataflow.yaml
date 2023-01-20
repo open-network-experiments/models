@@ -28,10 +28,6 @@ components:
           type: string
         data_size:
           type: integer
-        # mtu:
-        #   type: integer
-        #   description: Maximum Transmission Unit
-        #   default: 1500
         bidirectional:
           description: whether data is sent both ways
           type: boolean
