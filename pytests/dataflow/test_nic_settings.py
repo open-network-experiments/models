@@ -12,7 +12,8 @@ def test_nic_parameters():
         management_address="192.168.0.100",
         nic_rx_buffer=1024*1024*1024,
         nic_tx_buffer=1024*1024*1024,
-        nic_speed=100000
+        nic_speed=100000,
+        mtu=1500
     )
 
     config.dataflow.host_management.add(

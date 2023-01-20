@@ -79,3 +79,6 @@ components:
         tx_queue_len: 
           type: integer
           description: Sets the TX queue size
+        mtu:
+          type: integer
+          description: Maximum Transmission Unit

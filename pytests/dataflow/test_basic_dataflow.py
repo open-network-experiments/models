@@ -8,7 +8,9 @@ def test_simple_dataflow():
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
     data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
-    
+    data_transfer.bidirectional = False
+    data_transfer.iterations = 1
+
     scatter = config.dataflow.workload.add(name="Scatter").scatter
     scatter.sources = [ aggregator.name ]
     scatter.destinations = [ compute1.name, compute2.name ]
@@ -36,7 +38,9 @@ def test_alltoall_workload():
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
     data_transfer = config.dataflow.flow_profiles.add(name='data transfer', data_size=1 * 1024 * 1024 * 1024)
-    
+    data_transfer.bidirectional = False
+    data_transfer.iterations = 1
+
     alltoall = config.dataflow.workload.add(name="all to all").all_to_all
     alltoall.nodes = [ aggregator.name, compute1.name, compute2.name ]
     alltoall.flow_profile_name = data_transfer.name
@@ -63,7 +67,7 @@ def test_ml_training():
     storage_host = config.hosts.add(name="Data Storage 1", address="1.1.1.1")
     compute1 = config.hosts.add(name="Compute 1", address="3.3.3.3")
     compute2 = config.hosts.add(name="Compute 2", address="4.4.4.4")
-
+    
     hyperparameters = config.dataflow.flow_profiles.add(name='hyperparameters', data_size=10000)
     image_data = config.dataflow.flow_profiles.add(name='image data', data_size=10000000)
     gradients_exchange = config.dataflow.flow_profiles.add(name='receive and update gradients', data_size=1000000)

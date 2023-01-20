@@ -3,7 +3,7 @@ from artifacts.onex_model.onex_model import onex_model
 
 def test_flow_profile_network_tcpip_parameters():
     config = onex_model.api().config()
-    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1, mtu=1000)
+    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1)
 
     ip = fp.tcpip.ip
     ip.dscp = 123
@@ -28,11 +28,9 @@ def test_flow_profile_network_tcpip_parameters():
 
 def test_flow_profile_network_roce_parameters():
     config = onex_model.api().config()
-    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1, mtu=1000)
+    fp = config.dataflow.flow_profiles.add(name='Test F Profile', data_size=1)
 
     roce = fp.rdma.rocev2
     roce.verb = "read"
-    roce.bidirectional = True
-    roce.iterations = 100
 
     assert config.serialize()
