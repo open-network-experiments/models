@@ -7,7 +7,6 @@
 This ONEx repository produces OpenAPI artifacts that describe APIs and Data Models neccessary for creating open network experiments.
 
 # Fabric example
-
 Here's a simple fabric example, creating a clos fabric with 1 spine, 2 pods and 1 ToR in each pod:
 
 <p align="center">
